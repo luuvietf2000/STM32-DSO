@@ -1,0 +1,152 @@
+#ifndef UI_SRC_STATUSBARLAYOUTCONFIG_C_
+#define UI_SRC_STATUSBARLAYOUTCONFIG_C_
+
+#include "StatusBarLayoutConfig.h"
+
+GraphicsTextWidgetConfig voltagePerDivisionText = {
+	.aligment = VOLTAGE_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {VOLTAGE_PER_DIVISION_TEXT_WIDGET_WIDTH, VOLTAGE_PER_DIVISION_TEXT_WIDGET_HEIGHT},
+			.coordinate = {VOLTAGE_PER_DIVISION_TEXT_WIDGET_X, VOLTAGE_PER_DIVISION_TEXT_WIDGET_Y}
+		},
+		.background = VOLTAGE_PER_DIVISION_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = VOLTAGE_PER_DIVISION_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = VOLTAGE_PER_DIVISION_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = VOLTAGE_PER_DIVISION_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = VOLTAGE_PER_DIVISION_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig timePerDivisionText = {
+	.aligment = TIME_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {TIME_PER_DIVISION_TEXT_WIDGET_WIDTH, TIME_PER_DIVISION_TEXT_WIDGET_HEIGHT},
+			.coordinate = {TIME_PER_DIVISION_TEXT_WIDGET_X, TIME_PER_DIVISION_TEXT_WIDGET_Y}
+		},
+		.background = TIME_PER_DIVISION_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = TIME_PER_DIVISION_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = TIME_PER_DIVISION_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = TIME_PER_DIVISION_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = TIME_PER_DIVISION_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig acquisittionStatusText = {
+	.aligment = ACQUISITTION_STATUS_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {ACQUISITTION_STATUS_TEXT_WIDGET_WIDTH, ACQUISITTION_STATUS_TEXT_WIDGET_HEIGHT},
+			.coordinate = {ACQUISITTION_STATUS_TEXT_WIDGET_X, ACQUISITTION_STATUS_TEXT_WIDGET_Y}
+		},
+		.background = ACQUISITTION_STATUS_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = ACQUISITTION_STATUS_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = ACQUISITTION_STATUS_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = ACQUISITTION_STATUS_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = ACQUISITTION_STATUS_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig zoomScaleText = {
+	.aligment = ZOOM_SCALE_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {ZOOM_SCALE_TEXT_WIDGET_WIDTH, ZOOM_SCALE_TEXT_WIDGET_HEIGHT},
+			.coordinate = {ZOOM_SCALE_TEXT_WIDGET_X, ZOOM_SCALE_TEXT_WIDGET_Y}
+		},
+		.background = ZOOM_SCALE_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = ZOOM_SCALE_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = ZOOM_SCALE_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = ZOOM_SCALE_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = ZOOM_SCALE_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig triggerModeText = {
+	.aligment = TRIGGER_MODE_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {TRIGGER_MODE_TEXT_WIDGET_WIDTH, TRIGGER_MODE_TEXT_WIDGET_HEIGHT},
+			.coordinate = {TRIGGER_MODE_TEXT_WIDGET_X, TRIGGER_MODE_TEXT_WIDGET_Y}
+		},
+		.background = TRIGGER_MODE_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = TRIGGER_MODE_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = TRIGGER_MODE_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = TRIGGER_MODE_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = TRIGGER_MODE_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig triggerEdgeText = {
+	.aligment = TRIGGER_EDGE_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {TRIGGER_EDGE_TEXT_WIDGET_WIDTH, TRIGGER_EDGE_TEXT_WIDGET_HEIGHT},
+			.coordinate = {TRIGGER_EDGE_TEXT_WIDGET_X, TRIGGER_EDGE_TEXT_WIDGET_Y}
+		},
+		.background = TRIGGER_EDGE_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = TRIGGER_EDGE_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = TRIGGER_EDGE_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = TRIGGER_EDGE_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = TRIGGER_EDGE_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+
+GraphicsTextWidgetConfig triggerLevelText = {
+	.aligment = TRIGGER_LEVEL_TEXT_WIDGET_ALIGNMENT,
+	.background = {
+		.pos = {
+			.size = {TRIGGER_LEVEL_TEXT_WIDGET_WIDTH, TRIGGER_LEVEL_TEXT_WIDGET_HEIGHT},
+			.coordinate = {TRIGGER_LEVEL_TEXT_WIDGET_X, TRIGGER_LEVEL_TEXT_WIDGET_Y}
+		},
+		.background = TRIGGER_LEVEL_TEXT_WIDGET_BACKGROUND_COLOR
+	},
+	.outline = {
+		.color = TRIGGER_LEVEL_TEXT_WIDGET_OUTLINE_COLOR,
+		.width = TRIGGER_LEVEL_TEXT_WIDGET_OUTLINE_WIDTH
+	},
+	.textConfig = {
+		.font = {
+			.fontPixel = TRIGGER_LEVEL_TEXT_WIDGET_FONT_SIZE,
+			.fontColor = TRIGGER_LEVEL_TEXT_WIDGET_FONT_COLOR
+		}
+	}
+};
+#endif /* UI_SRC_STATUSBARLAYOUTCONFIG_C_ */

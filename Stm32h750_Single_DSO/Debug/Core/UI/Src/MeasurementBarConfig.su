@@ -1,0 +1,5 @@
+../Core/UI/Src/MeasurementBarConfig.c:11:19:SetVoltageMinWidget	16	static
+../Core/UI/Src/MeasurementBarConfig.c:21:19:SetVoltageMaxWidget	16	static
+../Core/UI/Src/MeasurementBarConfig.c:31:13:VoltageWidgetInit	16	static
+../Core/UI/Src/MeasurementBarConfig.c:35:13:SetVoltageDisplay	48	static
+../Core/UI/Src/MeasurementBarConfig.c:44:19:MeasurementBarInit	16	static

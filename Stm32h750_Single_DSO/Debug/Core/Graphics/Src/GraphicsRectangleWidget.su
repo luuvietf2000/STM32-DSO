@@ -1,0 +1,6 @@
+../Core/Graphics/Src/GraphicsRectangleWidget.c:8:19:GraphicsDrawRectangleWidget	16	static
+../Core/Graphics/Src/GraphicsRectangleWidget.c:18:26:GraphicsDrawRectangleWidgetInterior	56	static
+../Core/Graphics/Src/GraphicsRectangleWidget.c:33:6:GraphicsSetRectangleWidgetSize	16	static
+../Core/Graphics/Src/GraphicsRectangleWidget.c:36:6:GraphicsSetRectangleWidgetCoordinate	16	static
+../Core/Graphics/Src/GraphicsRectangleWidget.c:39:6:GraphicsSetRectangleWidgetColor	16	static
+../Core/Graphics/Src/GraphicsRectangleWidget.c:42:6:GraphicsSetRectangleWidgetOutline	16	static

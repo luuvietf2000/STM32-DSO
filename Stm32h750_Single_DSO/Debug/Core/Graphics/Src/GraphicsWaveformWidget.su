@@ -1,0 +1,12 @@
+../Core/Graphics/Src/GraphicsWaveformWidget.c:12:26:GraphicsWaveformAllocate	16	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:20:19:GraphicsWaveformAllocateLineSet	16	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:24:19:GraphicsWaveformAllocateWaveformPoint	16	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:28:19:GraphicsDrawWaveformWidgetBackground	16	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:32:19:GraphicsDrawWaveformWidgetLineSet	24	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:42:19:GraphicsDrawWaveformWidgetWavePoints	24	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:52:26:GraphicsDrawLines	24	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:60:19:GraphicsDrawWaveformPointLine	16	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:64:19:GraphicsRemoveLineOld	24	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:74:26:GraphicsWaveformChangedLine	64	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:109:19:GraphicsWaveformUpdateNewRange	24	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:113:19:GraphicsWaveformUpdateLine	32	static
