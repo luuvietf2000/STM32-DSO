@@ -1,3 +1,0 @@
-../Core/UI/Src/WaveformConfig.c:8:6:WaveformWidgetInit	5
-../Core/UI/Src/WaveformConfig.c:59:19:WaveformDrawWidgetLineSet	1
-../Core/UI/Src/WaveformConfig.c:63:19:WaveformDrawWidgetPushLine	1

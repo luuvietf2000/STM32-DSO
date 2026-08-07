@@ -1,5 +1,0 @@
-../Core/UI/Src/MeasurementBarConfig.c:11:19:SetVoltageMinWidget	1
-../Core/UI/Src/MeasurementBarConfig.c:21:19:SetVoltageMaxWidget	1
-../Core/UI/Src/MeasurementBarConfig.c:31:13:VoltageWidgetInit	1
-../Core/UI/Src/MeasurementBarConfig.c:35:13:SetVoltageDisplay	2
-../Core/UI/Src/MeasurementBarConfig.c:44:19:MeasurementBarInit	1

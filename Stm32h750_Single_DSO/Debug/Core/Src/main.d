@@ -40,21 +40,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScreen.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/StatusBarConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/StatusBarLayoutConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/LayoutConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Drivers/ST7789/Inc/St7789.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/AsciiDeffaultFont.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScrenBackgroundConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/WaveformLayoutConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/LayoutConfig.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScreen.h
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Task/St7789DriverTask/Inc/St7789Task.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Task/St7789DriverTask/Inc/St7789Queue.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
+ ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
@@ -97,18 +87,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
 ../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScreen.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/StatusBarConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/StatusBarLayoutConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/LayoutConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Drivers/ST7789/Inc/St7789.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/AsciiDeffaultFont.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScrenBackgroundConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/WaveformLayoutConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/LayoutConfig.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/Inc/MainScreen.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Task/St7789DriverTask/Inc/St7789Task.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Task/St7789DriverTask/Inc/St7789Queue.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+../Middlewares/Third_Party/FreeRTOS/Source/include/task.h:

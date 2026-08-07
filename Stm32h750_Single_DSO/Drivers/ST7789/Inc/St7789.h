@@ -7,6 +7,7 @@
 
 //---------------------------------------------------------------------------------//
 
+//---------------------------------------------------------------------------------//
 #define ST7789_CMD_NOP														0x00
 #define ST7789_CMD_SWRESET													0x01
 #define ST7789_CMD_SLPIN													0x10
@@ -131,31 +132,18 @@ typedef struct{
 	uint8_t color[ST7789_COLOR_DEFFAULT_SIZE_BYTE];
 } St7789RgbColor;
 
-typedef struct{
-	uint32_t size;
-	uint8_t *ptr;
-} St7789VaribleMemoryDma;
-
-typedef struct{
-	St7789VaribleMemoryDma dma;
-	uint32_t pixelWidth;
-	SPI_HandleTypeDef *spi;
-	TaskHandle_t task;
-} St7789VaribleLocal;
 
 //---------------------------------------------------------------------------------//
 HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size);
-HAL_StatusTypeDef St7789WriteCommand(uint8_t command);
-void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end);
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi);
 void St7789RstHardware();
 void St7789RstSoftware();
 void St7789SetInterfacePixelFormat(St7789ControlInterfaceColorFormat control, St7789RgbInterfaceColorFormat rgb);
-void St7789Init(St7789Config *_config, uint32_t memorySize);
+void St7789Init(St7789Config *_config);
 void St7789SetMemoryDataAccessControl();
 void St7789SetRowAddress(uint16_t start, uint16_t end);
 void St7789SetColumnAddress(uint16_t start, uint16_t end);
 void St7789ConvertFor18bit(uint8_t *ptr, St7789RgbColor *rgb, const uint8_t *shift);
 void St7789ConvertFor16bit(uint8_t *ptr, St7789RgbColor *rgb);
-
+void St7789RequestStartTransferData();
 #endif

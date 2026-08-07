@@ -22,10 +22,9 @@ C_DEPS :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
-Core/Graphics/Src \
 Core/Src \
 Core/Startup \
-Core/UI/Src \
+Core/Task/St7789DriverTask/Src \
 Drivers/ST7789/Src \
 Drivers/STM32H7xx_HAL_Driver/Src \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \

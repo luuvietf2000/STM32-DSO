@@ -4,15 +4,18 @@
 #include "task.h"
 #include <stdlib.h>
 #include <string.h>
+#include "semphr.h"
 
 //-----------------------------------------------------------------------------------------------------//
-
-St7789VaribleLocal st7789config;
-St7789Config *config;
-
+static StaticSemaphore_t semaphoreBuffer;
+static SemaphoreHandle_t semaphore;
+static St7789Config config;
 //-----------------------------------------------------------------------------------------------------//
 
-void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
+static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end);
+static HAL_StatusTypeDef St7789WriteCommand(uint8_t command);
+//-----------------------------------------------------------------------------------------------------//
+static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
 	const uint8_t mask = 0xFF;
 	const uint8_t shift = 0x08;
 
@@ -27,33 +30,31 @@ void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
 }
 
 
-HAL_StatusTypeDef St7789WriteCommand(uint8_t command){
-	ST7789_PIN_LOW(config->dc);
-	HAL_StatusTypeDef result = HAL_SPI_Transmit(config->spi, &command, sizeof(uint8_t), portMAX_DELAY);
-	ST7789_PIN_HIGH(config->dc);
+static HAL_StatusTypeDef St7789WriteCommand(uint8_t command){
+	ST7789_PIN_LOW(config.dc);
+	HAL_StatusTypeDef result = HAL_SPI_Transmit(config.spi, &command, sizeof(uint8_t), portMAX_DELAY);
+	ST7789_PIN_HIGH(config.dc);
 	return result;
 }
 
 HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size){
-	st7789config.task = xTaskGetCurrentTaskHandle();
-	SCB_CleanDCache_by_Addr((uint32_t*) data, size);
-	HAL_StatusTypeDef result = HAL_SPI_Transmit_DMA(config->spi, data, size);
-	ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+	HAL_StatusTypeDef result = HAL_SPI_Transmit_DMA(config.spi, data, size);
+	xSemaphoreTake(semaphore, portMAX_DELAY);
 	return result;
 }
 
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi){
-	if(hspi == st7789config.spi){
+	if(hspi == config.spi){
 		BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-		vTaskNotifyGiveFromISR(st7789config.task, &xHigherPriorityTaskWoken);
+		xSemaphoreGiveFromISR(semaphore, &xHigherPriorityTaskWoken);
 		portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 	}
 }
 
 void St7789RstHardware(){
-	ST7789_PIN_LOW(config->rst);
+	ST7789_PIN_LOW(config.rst);
 	HAL_Delay(ST7789_RST_HARDWARE_TIME);
-	ST7789_PIN_HIGH(config->rst);
+	ST7789_PIN_HIGH(config.rst);
 	HAL_Delay(ST7789_RST_HARDWARE_TIME);
 }
 
@@ -82,36 +83,21 @@ void St7789SetSleepMode(St7789SleepMode mode){
 	HAL_Delay(ST7789_SLEEP_MODE_DELAY_TIME);
 }
 
-void St7789Init(St7789Config *_config, uint32_t memorySize){
-	config = _config;
+void St7789Init(St7789Config *_config){
 
-	st7789config.dma.ptr = malloc(memorySize * sizeof(uint8_t));
+	semaphore = xSemaphoreCreateBinaryStatic(&semaphoreBuffer);
 
-	st7789config.dma.size = memorySize;
+	config = *_config;
 
-	st7789config.spi = config->spi;
+	St7789RstHardware();
 
-	St7789RstHardware(config);
-
-	St7789SetInterfacePixelFormat(config->format, RGB_INTERFACE_262K);
-
-	switch(config->format){
-		case CONTROL_INTERFACE_FORMAT_18BIT:
-			st7789config.pixelWidth = ST7789_FORMAT_18BIT_BYTE_WIDTH;
-			break;
-		case CONTROL_INTERFACE_FORMAT_16BIT:
-			st7789config.pixelWidth = ST7789_FORMAT_16BIT_BYTE_WIDTH;
-			break;
-		default:
-			st7789config.pixelWidth = ST7789_FORMAT_DEFFAULT_BYTE_WIDTH;
-			break;
-	}
+	St7789SetInterfacePixelFormat(config.format, RGB_INTERFACE_262K);
 
 	St7789WriteCommand(ST7789_CMD_INVOFF);
 
 	St7789SetSleepMode(ST7789_SLEEP_MODE_OUT);
 
-	St7789SetMemoryDataAccessControl(config);
+	St7789SetMemoryDataAccessControl();
 
 	St7789WriteCommand(ST7789_CMD_NORON);
 
@@ -123,19 +109,19 @@ void St7789SetMemoryDataAccessControl(){
 	// color format: RGB
 	// refresh: top -> bot, left -> right
 	uint16_t pixel;
-	switch (config->rotate) {
+	switch (config.rotate) {
 		case ST7789_DISPLAY_NORMAL:
 		case ST7789_DISPLAY_INVERTED:
 			break;
 		case ST7789_DISPLAY_RIGHT:
 		case ST7789_DISPLAY_LEFT:
-			pixel = config->size.row;
-			config->size.row = config->size.column;
-			config->size.column = pixel;
+			pixel = config.size.row;
+			config.size.row = config.size.column;
+			config.size.column = pixel;
 			break;
 	}
 	St7789WriteCommand(ST7789_CMD_MADCPL);
-	St7789WriteData(&config->rotate, sizeof(uint8_t));
+	St7789WriteData(&config.rotate, sizeof(uint8_t));
 }
 
 void St7789SetColumnAddress(uint16_t start, uint16_t end){
@@ -144,6 +130,10 @@ void St7789SetColumnAddress(uint16_t start, uint16_t end){
 
 void St7789SetRowAddress(uint16_t start, uint16_t end){
 	St7789SetAddress(ST7789_CMD_RASET, start, end - ST7789_PIXEL);
+}
+
+void St7789RequestStartTransferData(){
+	St7789WriteCommand(ST7789_CMD_RAMWR);
 }
 
 void St7789ConvertFor18bit(uint8_t *ptr, St7789RgbColor *rgb, const uint8_t *shift){
