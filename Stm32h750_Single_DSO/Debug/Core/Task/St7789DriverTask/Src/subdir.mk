@@ -5,14 +5,17 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c \
 ../Core/Task/St7789DriverTask/Src/St7789Queue.c \
 ../Core/Task/St7789DriverTask/Src/St7789Task.c 
 
 OBJS += \
+./Core/Task/St7789DriverTask/Src/St7789DmaMemory.o \
 ./Core/Task/St7789DriverTask/Src/St7789Queue.o \
 ./Core/Task/St7789DriverTask/Src/St7789Task.o 
 
 C_DEPS += \
+./Core/Task/St7789DriverTask/Src/St7789DmaMemory.d \
 ./Core/Task/St7789DriverTask/Src/St7789Queue.d \
 ./Core/Task/St7789DriverTask/Src/St7789Task.d 
 
@@ -24,7 +27,7 @@ Core/Task/St7789DriverTask/Src/%.o Core/Task/St7789DriverTask/Src/%.su Core/Task
 clean: clean-Core-2f-Task-2f-St7789DriverTask-2f-Src
 
 clean-Core-2f-Task-2f-St7789DriverTask-2f-Src:
-	-$(RM) ./Core/Task/St7789DriverTask/Src/St7789Queue.cyclo ./Core/Task/St7789DriverTask/Src/St7789Queue.d ./Core/Task/St7789DriverTask/Src/St7789Queue.o ./Core/Task/St7789DriverTask/Src/St7789Queue.su ./Core/Task/St7789DriverTask/Src/St7789Task.cyclo ./Core/Task/St7789DriverTask/Src/St7789Task.d ./Core/Task/St7789DriverTask/Src/St7789Task.o ./Core/Task/St7789DriverTask/Src/St7789Task.su
+	-$(RM) ./Core/Task/St7789DriverTask/Src/St7789DmaMemory.cyclo ./Core/Task/St7789DriverTask/Src/St7789DmaMemory.d ./Core/Task/St7789DriverTask/Src/St7789DmaMemory.o ./Core/Task/St7789DriverTask/Src/St7789DmaMemory.su ./Core/Task/St7789DriverTask/Src/St7789Queue.cyclo ./Core/Task/St7789DriverTask/Src/St7789Queue.d ./Core/Task/St7789DriverTask/Src/St7789Queue.o ./Core/Task/St7789DriverTask/Src/St7789Queue.su ./Core/Task/St7789DriverTask/Src/St7789Task.cyclo ./Core/Task/St7789DriverTask/Src/St7789Task.d ./Core/Task/St7789DriverTask/Src/St7789Task.o ./Core/Task/St7789DriverTask/Src/St7789Task.su
 
 .PHONY: clean-Core-2f-Task-2f-St7789DriverTask-2f-Src
 

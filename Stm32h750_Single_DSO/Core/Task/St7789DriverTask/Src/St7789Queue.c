@@ -9,7 +9,7 @@ void St7789QueueInit(){
 	queue.free = xQueueCreate(ST7789_MSG_POOL_ITEM_LENGTH, sizeof(St7789Msg*));
 	queue.ready = xQueueCreate(ST7789_MSG_POOL_ITEM_LENGTH, sizeof(St7789Msg*));
 	for(uint32_t i = 0; i < ST7789_MSG_POOL_ITEM_LENGTH; i++){
-		//St7789FreeQueuePush(pool + i, ST7789_TIMEOUT_NONE);
+		St7789FreeQueuePush(pool + i, ST7789_TIMEOUT_NONE);
 	}
 }
 
@@ -37,12 +37,11 @@ void St7789SetAreaMsgParameter(St7789Msg *msg, uint16_t xStart, uint16_t xEnd, u
 	area->yStart = yStart;
 	area->yEnd = yEnd;
 }
-void St7789TransferDataMsgParameter( St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart, uint32_t blockIndexEnd){
+void St7789TransferDataMsgParameter(St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart){
     msg->type = ST7789_TRANSFER_DATA;
     St7789TransferDataMsg *transfer = &msg->transferData;
     transfer->data = data;
     transfer->dataSize = dataSize;
     transfer->transferCount = transferCount;
     transfer->blockIndexStart = blockIndexStart;
-    transfer->blockIndexEnd = blockIndexEnd;
 }

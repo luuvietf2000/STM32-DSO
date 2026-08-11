@@ -139,6 +139,8 @@ int main(void) {
 
 	/* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
+	St7789QueueInit();
+	St7789DmaMemoryInit();
 	/* USER CODE END RTOS_QUEUES */
 
 	/* Create the thread(s) */
@@ -348,7 +350,18 @@ static void St7789Setup(St7789Config *config) {
 void UiControllerCallback(void *argument) {
 	/* USER CODE BEGIN 5 */
 	/* Infinite loop */
+	St7789Msg *msg;
+	St7789DmaMemorySetTaskSleep();
+	uint32_t index;
+	uint32_t size;
 	for (;;) {
+		for(uint32_t i = 0; i < 3; i++){
+			St7789FreeQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
+			uint8_t *data = St7789DmaMemoryAlloc(300, 100, &index, &size);
+			St7789TransferDataMsgParameter(msg, data, size, 1, index);
+			St7789ReadyQueuePush(msg, ST7789_TIMEOUT_FOREVER);
+		}
+		index = 1000;
 		osDelay(1000);
 	}
 	/* USER CODE END 5 */
@@ -381,20 +394,16 @@ void St7789DriverCallbackl(void *argument) {
 	/* USER CODE BEGIN St7789DriverCallbackl */
 	/* Infinite loop */
 	St7789Setup(&tft7789);
-	St7789QueueInit();
-	/*
 	St7789Msg *msg;
-	St7789Msg mes[2];
-	St7789SetAreaMsgParameter(mes, 0, 320, 0, 240);
-	St7789ReadyQueuePush(mes, ST7789_TIMEOUT_FOREVER);
-	for(uint16_t i = 0; i < 640; i++)
-		*(dmatest + i) = 255;
-	St7789TransferDataMsgParameter(mes + 1, dmatest, 640, 240, 0, 1);
-	St7789ReadyQueuePush(mes + 1, ST7789_TIMEOUT_FOREVER);
-	*/
 	for (;;) {
 		St7789ReadyQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
-		St7789TaskHandle(msg);
+		//St7789TaskHandle(msg);
+		if(msg->type == ST7789_TRANSFER_DATA){
+			St7789DmaMemoryFree(
+				msg->transferData.blockIndexStart,
+				msg->transferData.dataSize
+			);
+		}
 		St7789FreeQueuePush(msg, ST7789_TIMEOUT_FOREVER);
 	}
 	/* USER CODE END St7789DriverCallbackl */

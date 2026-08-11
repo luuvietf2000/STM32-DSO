@@ -6,6 +6,7 @@
 "./Core/Src/sysmem.o"
 "./Core/Src/system_stm32h7xx.o"
 "./Core/Startup/startup_stm32h750vbtx.o"
+"./Core/Task/St7789DriverTask/Src/St7789DmaMemory.o"
 "./Core/Task/St7789DriverTask/Src/St7789Queue.o"
 "./Core/Task/St7789DriverTask/Src/St7789Task.o"
 "./Drivers/ST7789/Src/St7789.o"

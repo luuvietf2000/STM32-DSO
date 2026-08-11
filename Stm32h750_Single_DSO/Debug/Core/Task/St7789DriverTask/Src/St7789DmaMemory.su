@@ -1,0 +1,13 @@
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:32:6:St7789DmaMemorySetTaskSleep	8	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:35:13:St7789DmaMemoryTaskWake	16	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:43:13:St7789DmaMemorySetBlock	24	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:49:13:St7789DmaMemoryBlockFreeListInit	24	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:59:13:St7789DmaMemoryBlockNotUsedListInit	24	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:63:6:St7789DmaMemoryInit	8	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:70:6:St7789DmaMemoryFree	16	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:77:13:St7789DmaMemoryMergeBlock	32	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:124:13:St7789DmaMemoryPushBlockNotUsed	16	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:129:30:St7789DmaMemoryGetBlockNotUsed	16	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:135:17:St7789DmaMemoryAllocBlock	32	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:157:17:St7789DmaMemoryGetSizeAvailable	40	static
+../Core/Task/St7789DriverTask/Src/St7789DmaMemory.c:184:10:St7789DmaMemoryAlloc	32	static
