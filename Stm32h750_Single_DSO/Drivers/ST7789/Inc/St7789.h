@@ -72,6 +72,11 @@
 //---------------------------------------------------------------------------------//
 
 typedef enum{
+	ST7789_CLEAR_D_CACHE,
+	ST7789_CLEAR_NOT_D_CACHE
+} St7789ClearCacheEnum;
+
+typedef enum{
 	RGB_DONT_CARE,
 	RGB_INTERFACE_65K														= 0x05,
 	RGB_INTERFACE_262K														= 0x06
@@ -134,7 +139,7 @@ typedef struct{
 
 
 //---------------------------------------------------------------------------------//
-HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size);
+HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size, St7789ClearCacheEnum cacheMode);
 void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi);
 void St7789RstHardware();
 void St7789RstSoftware();

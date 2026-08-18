@@ -26,7 +26,7 @@ static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
 		ST7789_GET_FIELD(end, 0, mask)
 	};
 	St7789WriteCommand(cmd);
-	St7789WriteData(parameter, sizeof(parameter));
+	St7789WriteData(parameter, sizeof(parameter), ST7789_CLEAR_D_CACHE);
 }
 
 
@@ -37,7 +37,9 @@ static HAL_StatusTypeDef St7789WriteCommand(uint8_t command){
 	return result;
 }
 
-HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size){
+HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size, St7789ClearCacheEnum cacheMode){
+	if(cacheMode == ST7789_CLEAR_D_CACHE)
+		SCB_CleanDCache_by_Addr((uint32_t*) data, size);
 	HAL_StatusTypeDef result = HAL_SPI_Transmit_DMA(config.spi, data, size);
 	xSemaphoreTake(semaphore, portMAX_DELAY);
 	return result;
@@ -68,7 +70,7 @@ void St7789SetInterfacePixelFormat(St7789ControlInterfaceColorFormat control, St
 	parameter |= ST7789_FIELD(control, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_S, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_M);
 	parameter |= ST7789_FIELD(rgb, ST7789_RGB_INTERFACE_COLOR_FORMAT_S, ST7789_RGB_INTERFACE_COLOR_FORMAT_M);
 	St7789WriteCommand(ST7789_CMD_COLMOD);
-	St7789WriteData(&parameter, sizeof(parameter));
+	St7789WriteData(&parameter, sizeof(parameter), ST7789_CLEAR_D_CACHE);
 }
 
 void St7789SetSleepMode(St7789SleepMode mode){
@@ -121,7 +123,7 @@ void St7789SetMemoryDataAccessControl(){
 			break;
 	}
 	St7789WriteCommand(ST7789_CMD_MADCPL);
-	St7789WriteData(&config.rotate, sizeof(uint8_t));
+	St7789WriteData(&config.rotate, sizeof(uint8_t), ST7789_CLEAR_D_CACHE);
 }
 
 void St7789SetColumnAddress(uint16_t start, uint16_t end){

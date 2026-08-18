@@ -1,5 +1,5 @@
-../Core/Task/St7789DriverTask/Src/St7789Queue.c:8:6:St7789QueueInit	2
 ../Core/Task/St7789DriverTask/Src/St7789Queue.c:16:6:St7789FreeQueuePush	1
+../Core/Task/St7789DriverTask/Src/St7789Queue.c:8:6:St7789QueueInit	2
 ../Core/Task/St7789DriverTask/Src/St7789Queue.c:20:6:St7789FreeQueuePop	1
 ../Core/Task/St7789DriverTask/Src/St7789Queue.c:24:6:St7789ReadyQueuePush	1
 ../Core/Task/St7789DriverTask/Src/St7789Queue.c:28:6:St7789ReadyQueuePop	1

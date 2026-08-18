@@ -15,6 +15,7 @@ static void St7789DmaMemoryTaskWake();
 static void St7789DmaMemorySetBlock(St7789DmaMemoryBlock *current, uint32_t start, uint32_t end, St7789DmaMemoryBlock *pre, St7789DmaMemoryBlock *next);
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------//
+__attribute__((aligned(32)))
 static uint8_t dmaMemory[ST7789_DMA_MEMORY];
 static St7789DmaMemoryBlock poolBlock[ST7789_MSG_POOL_ITEM_LENGTH];
 static St7789DmaMemoryBlock *headBlockFree;
@@ -24,20 +25,18 @@ static uint32_t fallback;
 static StaticSemaphore_t mutexBuffer;
 static SemaphoreHandle_t mutex;
 static St7789TaskStatus taskSleepStatus;
-static TaskHandle_t taskSleep;
+static StaticSemaphore_t semaphoreBuffer;
+static SemaphoreHandle_t semaphore;
 
 //------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
 
-void St7789DmaMemorySetTaskSleep(){
-	taskSleep = xTaskGetCurrentTaskHandle();
-}
 static void St7789DmaMemoryTaskWake(uint32_t size){
 	if(size < fallback)
 		return;
 	if(taskSleepStatus == ST7789_TASK_SLEEP){
 		taskSleepStatus = ST7789_TASK_WAKE;
-		xTaskNotifyGive(taskSleep);
+		xSemaphoreGive(semaphore);
 	}
 }
 static void St7789DmaMemorySetBlock(St7789DmaMemoryBlock *current, uint32_t start, uint32_t end, St7789DmaMemoryBlock *pre, St7789DmaMemoryBlock *next){
@@ -62,6 +61,7 @@ static void St7789DmaMemoryBlockNotUsedListInit(uint32_t index){
 }
 void St7789DmaMemoryInit(){
 	mutex = xSemaphoreCreateMutexStatic(&mutexBuffer);
+	semaphore = xSemaphoreCreateBinaryStatic(&semaphoreBuffer);
 	taskSleepStatus = ST7789_TASK_WAKE;
 	St7789DmaMemoryBlockFreeListInit(ST7789_DMA_MEMORY_FREE_BLOCK_INDEX_IN_POOL);
 	St7789DmaMemoryBlockNotUsedListInit(ST7789_DMA_MEMORY_FREE_BLOCK_INDEX_IN_POOL);
@@ -71,8 +71,6 @@ void St7789DmaMemoryFree(uint32_t start, uint32_t size){
 	xSemaphoreTake(mutex, ST7789_TIMEOUT_FOREVER);
 	St7789DmaMemoryMergeBlock(start, start + size - ST7789_DMA_MEMORY_ONE_INDEX);
 	xSemaphoreGive(mutex);
-
-
 }
 static void St7789DmaMemoryMergeBlock(uint32_t start, uint32_t end){
 	St7789DmaMemoryBlock *current = headBlockFree;
@@ -167,7 +165,7 @@ static uint32_t St7789DmaMemoryGetSizeAvailable(St7789DmaMemoryBlock ** block, u
 			allocationSize = preferredSize;
 			*block = current;
 		} else if(
-				UINT32_MAX == allocationSize || (
+				(UINT32_MAX == allocationSize && size >= fallbackSize)|| (
 						ST7789_DMA_MEMORY_IS_IN_RANGE(size, fallbackSize, preferredSize)
 						&& ST7789_DMA_MEMORY_IS_IN_RANGE(allocationSize, fallbackSize, preferredSize)
 						&& allocationSize > size
@@ -193,8 +191,9 @@ uint8_t* St7789DmaMemoryAlloc(uint32_t preferredSize, uint32_t fallbackSize, uin
 		if(*size == 0){
 			fallback = fallbackSize;
 			taskSleepStatus = ST7789_TASK_SLEEP;
-			ulTaskNotifyTake(pdTRUE, ST7789_TIMEOUT_FOREVER);
+			xSemaphoreTake(semaphore, ST7789_TIMEOUT_FOREVER);
 		}
+
 	}
 	return dmaMemory + *index;
 }

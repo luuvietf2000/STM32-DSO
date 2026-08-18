@@ -1,0 +1,3 @@
+../Core/Src/UiDisplayBridge.c:8:6:GraphicsSetAreaRequest	40	static
+../Core/Src/UiDisplayBridge.c:15:10:GraphicsGetPointerMemory	16	static
+../Core/Src/UiDisplayBridge.c:20:6:GraphicsTransfer	32	static

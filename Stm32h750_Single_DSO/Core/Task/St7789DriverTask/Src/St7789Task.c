@@ -22,7 +22,9 @@ static void St7789HandleSetAreaMsg(St7789SetAreaMsg *area){
 }
 
 static void St7789HandleTransferData(St7789TransferDataMsg *transferData){
+	St7789ClearCacheEnum cacheClearMode;
 	for(uint32_t count = 0; count < transferData->transferCount; count++){
-		St7789WriteData(transferData->data, transferData->dataSize);
+		cacheClearMode = count == 0 ? ST7789_CLEAR_D_CACHE : ST7789_CLEAR_NOT_D_CACHE;
+		St7789WriteData(transferData->data, transferData->dataSize, cacheClearMode);
 	}
 }

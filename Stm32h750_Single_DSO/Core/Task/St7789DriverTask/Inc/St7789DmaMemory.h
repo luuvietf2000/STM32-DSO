@@ -24,7 +24,6 @@ typedef struct St7789DmaMemoryBlock{
 //------------------------------------------------------------------------------------------------//
 void St7789DmaMemoryFree(uint32_t start, uint32_t size);
 void St7789DmaMemoryInit();
-void St7789DmaMemorySetTaskSleep();
 uint8_t* St7789DmaMemoryAlloc(uint32_t preferredSize, uint32_t fallbackSize, uint32_t *index, uint32_t *size);
 
 #endif /* TASK_ST7789DRIVERTASK_INC_ST7789DMAMEMORY_H_ */

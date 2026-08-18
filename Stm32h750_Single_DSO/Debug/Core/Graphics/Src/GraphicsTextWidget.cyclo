@@ -1,0 +1,3 @@
+../Core/Graphics/Src/GraphicsTextWidget.c:55:13:ConvertBitMask8bit	5
+../Core/Graphics/Src/GraphicsTextWidget.c:77:13:CalculatorTextDisplaySize	2
+../Core/Graphics/Src/GraphicsTextWidget.c:12:6:GraphicsDrawTextWidget	6

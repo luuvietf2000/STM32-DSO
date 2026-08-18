@@ -24,6 +24,9 @@
 /* USER CODE BEGIN Includes */
 #include "St7789.h"
 #include "St7789Task.h"
+#include "UiDisplayBridge.h"
+#include "GraphicsRectangleWidget.h"
+#include "GraphicsTextWidget.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +48,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+DMA2D_HandleTypeDef hdma2d;
+
 SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_tx;
 
@@ -58,11 +63,11 @@ const osThreadAttr_t MainController_attributes = { .name = "MainController",
 		.stack_size = 256 * 4, .priority = (osPriority_t) osPriorityLow, };
 /* Definitions for St7789Driver */
 osThreadId_t St7789DriverHandle;
-const osThreadAttr_t St7789Driver_attributes = { .name = "St7789Driver",
-		.stack_size = 256 * 4, .priority = (osPriority_t) osPriorityNormal, };
+const osThreadAttr_t St7789Driver_attributes =
+		{ .name = "St7789Driver", .stack_size = 256 * 4, .priority =
+				(osPriority_t) osPriorityAboveNormal, };
 /* USER CODE BEGIN PV */
 St7789Config tft7789;
-uint8_t dmatest[1000];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -70,9 +75,10 @@ void SystemClock_Config(void);
 static void MPU_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
+static void MX_DMA2D_Init(void);
 void UiControllerCallback(void *argument);
 void MainControllerCallback(void *argument);
-void St7789DriverCallbackl(void *argument);
+void St7789DriverCallback(void *argument);
 
 /* USER CODE BEGIN PFP */
 static void St7789Setup(St7789Config *config);
@@ -80,7 +86,11 @@ static void St7789Setup(St7789Config *config);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void EnableDwt(){
+	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
+	DWT->CYCCNT = 0;
+	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
+}
 /* USER CODE END 0 */
 
 /**
@@ -90,10 +100,6 @@ static void St7789Setup(St7789Config *config);
 int main(void) {
 
 	/* USER CODE BEGIN 1 */
-	/*
-	SCB_EnableICache();
-	SCB_EnableDCache();
-	*/
 	/* USER CODE END 1 */
 
 	/* MPU Configuration--------------------------------------------------------*/
@@ -105,6 +111,10 @@ int main(void) {
 	HAL_Init();
 
 	/* USER CODE BEGIN Init */
+
+	SCB_InvalidateICache();
+	SCB_EnableICache();
+	SCB_EnableDCache();
 	/* USER CODE END Init */
 
 	/* Configure the system clock */
@@ -118,8 +128,9 @@ int main(void) {
 	MX_GPIO_Init();
 	MX_DMA_Init();
 	MX_SPI1_Init();
+	MX_DMA2D_Init();
 	/* USER CODE BEGIN 2 */
-
+	EnableDwt();
 	/* USER CODE END 2 */
 
 	/* Init scheduler */
@@ -153,7 +164,7 @@ int main(void) {
 			&MainController_attributes);
 
 	/* creation of St7789Driver */
-	St7789DriverHandle = osThreadNew(St7789DriverCallbackl, NULL,
+	St7789DriverHandle = osThreadNew(St7789DriverCallback, NULL,
 			&St7789Driver_attributes);
 
 	/* USER CODE BEGIN RTOS_THREADS */
@@ -236,6 +247,33 @@ void SystemClock_Config(void) {
 }
 
 /**
+ * @brief DMA2D Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_DMA2D_Init(void) {
+
+	/* USER CODE BEGIN DMA2D_Init 0 */
+
+	/* USER CODE END DMA2D_Init 0 */
+
+	/* USER CODE BEGIN DMA2D_Init 1 */
+
+	/* USER CODE END DMA2D_Init 1 */
+	hdma2d.Instance = DMA2D;
+	hdma2d.Init.Mode = DMA2D_R2M;
+	hdma2d.Init.ColorMode = DMA2D_OUTPUT_RGB565;
+	hdma2d.Init.OutputOffset = 0;
+	if (HAL_DMA2D_Init(&hdma2d) != HAL_OK) {
+		Error_Handler();
+	}
+	/* USER CODE BEGIN DMA2D_Init 2 */
+
+	/* USER CODE END DMA2D_Init 2 */
+
+}
+
+/**
  * @brief SPI1 Initialization Function
  * @param None
  * @retval None
@@ -266,9 +304,9 @@ void MX_SPI1_Init(void) {
 	hspi1.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
 	hspi1.Init.FifoThreshold = SPI_FIFO_THRESHOLD_08DATA;
 	hspi1.Init.TxCRCInitializationPattern =
-			SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
+	SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
 	hspi1.Init.RxCRCInitializationPattern =
-			SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
+	SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
 	hspi1.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
 	hspi1.Init.MasterInterDataIdleness = SPI_MASTER_INTERDATA_IDLENESS_00CYCLE;
 	hspi1.Init.MasterReceiverAutoSusp = SPI_MASTER_RX_AUTOSUSP_DISABLE;
@@ -350,18 +388,29 @@ static void St7789Setup(St7789Config *config) {
 void UiControllerCallback(void *argument) {
 	/* USER CODE BEGIN 5 */
 	/* Infinite loop */
-	St7789Msg *msg;
-	St7789DmaMemorySetTaskSleep();
-	uint32_t index;
-	uint32_t size;
+	GraphicsInit(&hdma2d);
+	GraphicsRectangleWidget rectangle;
+	rectangle.x = 0;
+	rectangle.y = 0;
+	rectangle.height = 240;
+	rectangle.width = 320;
+	rectangle.color = GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF);
+	GraphicsDrawRectangleWidget(&rectangle);
+
+	GraphicsTextWidget text;
+	text.x = 0;
+	text.y = 0;
+	text.height = 240;
+	text.width = 320;
+	text.fontPixel = 1;
+	text.background = GRAPHICS_SET_COLOR(0xff, 0, 0xff);
+	text.textColor = GRAPHICS_SET_COLOR(0, 0xff, 0xff);
+	char content[] = "Hello world!";
+	text.content = content;
+	text.aligment = GRAPHICS_ALIGNMENT_CENTER;
+	GraphicsDrawTextWidget(&text);
+
 	for (;;) {
-		for(uint32_t i = 0; i < 3; i++){
-			St7789FreeQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
-			uint8_t *data = St7789DmaMemoryAlloc(300, 100, &index, &size);
-			St7789TransferDataMsgParameter(msg, data, size, 1, index);
-			St7789ReadyQueuePush(msg, ST7789_TIMEOUT_FOREVER);
-		}
-		index = 1000;
 		osDelay(1000);
 	}
 	/* USER CODE END 5 */
@@ -383,30 +432,28 @@ void MainControllerCallback(void *argument) {
 	/* USER CODE END MainControllerCallback */
 }
 
-/* USER CODE BEGIN Header_St7789DriverCallbackl */
+/* USER CODE BEGIN Header_St7789DriverCallback */
 /**
  * @brief Function implementing the St7789Driver thread.
  * @param argument: Not used
  * @retval None
  */
-/* USER CODE END Header_St7789DriverCallbackl */
-void St7789DriverCallbackl(void *argument) {
-	/* USER CODE BEGIN St7789DriverCallbackl */
+/* USER CODE END Header_St7789DriverCallback */
+void St7789DriverCallback(void *argument) {
+	/* USER CODE BEGIN St7789DriverCallback */
 	/* Infinite loop */
 	St7789Setup(&tft7789);
 	St7789Msg *msg;
 	for (;;) {
 		St7789ReadyQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
-		//St7789TaskHandle(msg);
-		if(msg->type == ST7789_TRANSFER_DATA){
-			St7789DmaMemoryFree(
-				msg->transferData.blockIndexStart,
-				msg->transferData.dataSize
-			);
+		St7789TaskHandle(msg);
+		if (msg->type == ST7789_TRANSFER_DATA) {
+			St7789DmaMemoryFree(msg->transferData.blockIndexStart,
+					msg->transferData.dataSize);
 		}
 		St7789FreeQueuePush(msg, ST7789_TIMEOUT_FOREVER);
 	}
-	/* USER CODE END St7789DriverCallbackl */
+	/* USER CODE END St7789DriverCallback */
 }
 
 /* MPU Configuration */
