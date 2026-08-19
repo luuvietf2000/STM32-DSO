@@ -5,20 +5,50 @@
 
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawRectangleWidget(GraphicsRectangleWidget *rectangle){
-	GraphicsSetMode(GRAPHICS_DMA2D_MODE_FILL_COLOR);
-	GraphicsSetAreaRequest(
-		rectangle->x,
-		rectangle->x + rectangle->width,
-		rectangle->y,
-		rectangle->y + rectangle->height
+	if(rectangle->borderWidth != 0){
+		// border top
+		GraphicsDrawRectangle(
+			rectangle->x,
+			rectangle->y,
+			rectangle->x + rectangle->width,
+			rectangle->y + rectangle->borderWidth,
+			rectangle->borderColor
+		);
+
+		// border left
+		GraphicsDrawRectangle(
+		    rectangle->x,
+		    rectangle->y + rectangle->borderWidth,
+		    rectangle->borderWidth,
+		    rectangle->height - 2 * rectangle->borderWidth,
+		    rectangle->borderColor
+		);
+
+		// border bottom
+		GraphicsDrawRectangle(
+		    rectangle->x,
+		    rectangle->y + rectangle->height - rectangle->borderWidth,
+		    rectangle->width,
+		    rectangle->borderWidth,
+		    rectangle->borderColor
+		);
+
+		// border right
+		GraphicsDrawRectangle(
+		    rectangle->x + rectangle->width - rectangle->borderWidth,
+		    rectangle->y + rectangle->borderWidth,
+		    rectangle->borderWidth,
+		    rectangle->height - 2 * rectangle->borderWidth,
+		    rectangle->borderColor
+		);
+	}
+	GraphicsDrawRectangle(
+		rectangle->x + rectangle->borderWidth,
+		rectangle->y + rectangle->borderWidth,
+		rectangle->width - 2 * rectangle->borderWidth,
+		rectangle->height - 2 * rectangle->borderWidth,
+		rectangle->color
 	);
-	uint32_t prefecrredSize = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(rectangle->width, rectangle->height));
-	uint32_t fallbackSize = GRAPHICS_GET_MAX(rectangle->width, rectangle->height) * GRAPHICS_PIXEL_PER_BYTE;
-	uint8_t *data = NULL;
-	uint32_t size = GraphicsGetPointerMemory(&data, prefecrredSize, fallbackSize);
-	GraphicsFillColor(rectangle->color, data, size);
-	uint32_t transferCount = prefecrredSize / size;
-	GraphicsTransfer(data, size, transferCount);
 }
 
 

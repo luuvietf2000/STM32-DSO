@@ -1,10 +1,10 @@
-../Core/Src/main.c:480:6:MPU_Config	1
+../Core/Src/main.c:481:6:MPU_Config	1
 ../Core/Src/main.c:359:13:MX_GPIO_Init	1
 ../Core/Src/main.c:341:13:MX_DMA_Init	1
 ../Core/Src/main.c:404:6:UiControllerCallback	1
-../Core/Src/main.c:443:6:MainControllerCallback	1
+../Core/Src/main.c:444:6:MainControllerCallback	1
 ../Core/Src/main.c:386:13:St7789Setup	1
-../Core/Src/main.c:460:6:St7789DriverCallback	2
+../Core/Src/main.c:461:6:St7789DriverCallback	2
 ../Core/Src/main.c:97:6:EnableDwt	1
 ../Core/Src/main.c:522:6:Error_Handler	1
 ../Core/Src/main.c:266:13:MX_DMA2D_Init	1

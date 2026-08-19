@@ -26,7 +26,12 @@ static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
 		ST7789_GET_FIELD(end, 0, mask)
 	};
 	St7789WriteCommand(cmd);
-	St7789WriteData(parameter, sizeof(parameter));
+	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+		HAL_SPI_Transmit(config.spi, parameter, 4, portMAX_DELAY);
+	#else
+		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) parameter, 4);
+		St7789WriteData(parameter, sizeof(parameter));
+	#endif
 }
 
 
@@ -68,7 +73,12 @@ void St7789SetInterfacePixelFormat(St7789ControlInterfaceColorFormat control, St
 	parameter |= ST7789_FIELD(control, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_S, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_M);
 	parameter |= ST7789_FIELD(rgb, ST7789_RGB_INTERFACE_COLOR_FORMAT_S, ST7789_RGB_INTERFACE_COLOR_FORMAT_M);
 	St7789WriteCommand(ST7789_CMD_COLMOD);
-	St7789WriteData(&parameter, sizeof(parameter));
+	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+		HAL_SPI_Transmit(config.spi, &parameter, 1, portMAX_DELAY);
+	#else
+		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) &parameter, 1);
+		St7789WriteData(&parameter, 1);
+	#endif
 }
 
 void St7789SetSleepMode(St7789SleepMode mode){
@@ -121,7 +131,12 @@ void St7789SetMemoryDataAccessControl(){
 			break;
 	}
 	St7789WriteCommand(ST7789_CMD_MADCPL);
-	St7789WriteData(&config.rotate, sizeof(uint8_t));
+	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+		HAL_SPI_Transmit(config.spi, &config.rotate, 1, portMAX_DELAY);
+	#else
+		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) &config.rotate, 1);
+		St7789WriteData(&config.rotate, 1);
+	#endif
 }
 
 void St7789SetColumnAddress(uint16_t start, uint16_t end){

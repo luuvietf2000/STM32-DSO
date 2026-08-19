@@ -44,8 +44,8 @@ typedef enum {
 } GraphicsAlignment;
 
 typedef enum{
-	GRAPHICS_DMA2D_MODE_FILL_COLOR,
-	GRAPHICS_DMA2D_MODE_BLEND_BG
+	GRAPHICS_DMA2D_MODE_FILL_COLOR							= DMA2D_R2M,
+	GRAPHICS_DMA2D_MODE_BLEND_BG							= DMA2D_M2M_BLEND_BG
 } GraphicsDma2dMode;
 
 //----------------------------------------------------------------------------------------------------------/
@@ -56,11 +56,12 @@ typedef struct{
 } GraphicsPoint;
 
 //----------------------------------------------------------------------------------------------------------/
-void GraphicsSetMode(GraphicsDma2dMode mode);
 extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
 extern uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32_t faillbackSize);
 extern void GraphicsTransfer(uint8_t *data, uint32_t size, uint32_t transferCount);
 //------------------------------------------------------------------------------------//
+void GraphicsSetMode(GraphicsDma2dMode mode);
+void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color);
 void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t size);
 void GraphicsInit(DMA2D_HandleTypeDef *dma2d);
 void GraphicsFillColor(uint32_t color, uint8_t *address, uint32_t size);

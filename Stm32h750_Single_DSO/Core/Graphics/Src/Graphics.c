@@ -11,8 +11,8 @@ static void GraphicsSleepTask();
 static void GraphicsSetDma2dModeBlendBg();
 static void GraphicsSetDma2dModeFill();
 //----------------------------------------------------------------------------------------------------------//
-__attribute__((aligned(32)))
-uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
+__attribute__((section(".dma_buffer")))
+uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE - 1];
 static DMA2D_HandleTypeDef *graphicsDma2d;
 static StaticSemaphore_t semaphoreBuffer;
 static SemaphoreHandle_t graphicsSemaphore;
@@ -20,13 +20,34 @@ static SemaphoreHandle_t graphicsSemaphore;
 
 void GraphicsSetMode(GraphicsDma2dMode mode){
 	switch(mode){
+		case GRAPHICS_DMA2D_MODE_FILL_COLOR:
+			GraphicsSetDma2dModeFill();
+			break;
 		case GRAPHICS_DMA2D_MODE_BLEND_BG:
 			GraphicsSetDma2dModeBlendBg();
 			break;
-		case GRAPHICS_DMA2D_MODE_FILL_COLOR:
+		default:
 			break;
 	}
 }
+
+void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color){
+	GraphicsSetMode(GRAPHICS_DMA2D_MODE_FILL_COLOR);
+	GraphicsSetAreaRequest(
+		x,
+		x + width,
+		y,
+		y + height
+	);
+	uint32_t prefecrredSize = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(width, height));
+	uint32_t fallbackSize = GRAPHICS_GET_MAX(width, height) * GRAPHICS_PIXEL_PER_BYTE;
+	uint8_t *data = NULL;
+	uint32_t size = GraphicsGetPointerMemory(&data, prefecrredSize, fallbackSize);
+	GraphicsFillColor(color, data, size);
+	uint32_t transferCount = prefecrredSize / size;
+	GraphicsTransfer(data, size, transferCount);
+}
+
 
 static void GraphicsSetDma2dModeFill(){
 	if(graphicsDma2d->Init.Mode = DMA2D_R2M)
@@ -92,6 +113,10 @@ void GraphiscsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, u
 		case GRAPHICS_ALIGNMENT_BOTTOM_RIGHT:
 			x = GRAPHICS_RIGHT(columnParent, columnChild);
 			y = GRAPHICS_RIGHT(rowParent, rowChild);
+			break;
+		default:
+			x = 0;
+			y = 0;
 			break;
 	}
 	*xDisplay = x + xSet;

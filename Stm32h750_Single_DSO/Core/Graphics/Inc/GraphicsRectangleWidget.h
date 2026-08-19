@@ -10,6 +10,8 @@ typedef struct{
 	uint32_t width;
 	uint32_t height;
 	uint32_t color;
+	uint32_t borderColor;
+	uint32_t borderWidth;
 } GraphicsRectangleWidget;
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawRectangleWidget(GraphicsRectangleWidget *rectangle);

@@ -6,8 +6,10 @@
 #include "task.h"
 
 //---------------------------------------------------------------------------------//
-
+#define ST7789_NOT_USING_D_CACHE_MODE										ST7789_USING_D_CACHE
 //---------------------------------------------------------------------------------//
+#define ST7789_NOT_USING_D_CACHE											0
+#define ST7789_USING_D_CACHE												1
 #define ST7789_CMD_NOP														0x00
 #define ST7789_CMD_SWRESET													0x01
 #define ST7789_CMD_SLPIN													0x10

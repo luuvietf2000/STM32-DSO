@@ -15,7 +15,7 @@ static void St7789DmaMemoryTaskWake();
 static void St7789DmaMemorySetBlock(St7789DmaMemoryBlock *current, uint32_t start, uint32_t end, St7789DmaMemoryBlock *pre, St7789DmaMemoryBlock *next);
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------//
-__attribute__((aligned(32)))
+__attribute__((section(".dma_buffer")))
 static uint8_t dmaMemory[ST7789_DMA_MEMORY];
 static St7789DmaMemoryBlock poolBlock[ST7789_MSG_POOL_ITEM_LENGTH];
 static St7789DmaMemoryBlock *headBlockFree;

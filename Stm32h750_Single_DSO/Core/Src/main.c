@@ -411,17 +411,18 @@ void UiControllerCallback(void *argument)
 	rectangle.y = 0;
 	rectangle.height = 240;
 	rectangle.width = 320;
-	rectangle.color = GRAPHICS_SET_COLOR(0x2F, 0, 0xFF);
+	rectangle.color = GRAPHICS_SET_COLOR(0, 0, 0xFF);
+	rectangle.borderWidth = 10;
+	rectangle.borderColor = GRAPHICS_SET_COLOR(0xFF, 0, 0);
 	GraphicsDrawRectangleWidget(&rectangle);
-
 	GraphicsTextWidget text;
 	text.x = 0;
 	text.y = 0;
 	text.height = 240;
 	text.width = 320;
-	text.fontPixel = 10;
-	text.background = GRAPHICS_SET_COLOR(0, 0, 0xFF);
-	text.textColor = GRAPHICS_SET_COLOR(0xFF, 0, 0);
+	text.fontPixel = 2;
+	text.background = GRAPHICS_SET_COLOR(0, 0, 0);
+	text.textColor = GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF);
 	char content[] = "Hello ST7789!";
 	text.content = content;
 	text.aligment = GRAPHICS_ALIGNMENT_CENTER;
@@ -507,7 +508,6 @@ void MPU_Config(void)
   MPU_InitStruct.Size = MPU_REGION_SIZE_16KB;
   MPU_InitStruct.SubRegionDisable = 0x0;
   MPU_InitStruct.AccessPermission = MPU_REGION_FULL_ACCESS;
-  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
 
   HAL_MPU_ConfigRegion(&MPU_InitStruct);
   /* Enables the MPU */
