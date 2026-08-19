@@ -394,7 +394,7 @@ void UiControllerCallback(void *argument) {
 	rectangle.y = 0;
 	rectangle.height = 240;
 	rectangle.width = 320;
-	rectangle.color = GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF);
+	rectangle.color = GRAPHICS_SET_COLOR(0, 0x8F, 0xFF);
 	GraphicsDrawRectangleWidget(&rectangle);
 
 	GraphicsTextWidget text;
@@ -402,10 +402,10 @@ void UiControllerCallback(void *argument) {
 	text.y = 0;
 	text.height = 240;
 	text.width = 320;
-	text.fontPixel = 1;
-	text.background = GRAPHICS_SET_COLOR(0xff, 0, 0xff);
-	text.textColor = GRAPHICS_SET_COLOR(0, 0xff, 0xff);
-	char content[] = "Hello world!";
+	text.fontPixel = 10;
+	text.background = GRAPHICS_SET_COLOR(0, 0x8F, 0xFF);
+	text.textColor = GRAPHICS_SET_COLOR(0x5F, 0, 0);
+	char content[] = "Hello ST7789!";
 	text.content = content;
 	text.aligment = GRAPHICS_ALIGNMENT_CENTER;
 	GraphicsDrawTextWidget(&text);

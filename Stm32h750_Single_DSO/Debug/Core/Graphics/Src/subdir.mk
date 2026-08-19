@@ -7,17 +7,20 @@
 C_SRCS += \
 ../Core/Graphics/Src/Graphics.c \
 ../Core/Graphics/Src/GraphicsRectangleWidget.c \
-../Core/Graphics/Src/GraphicsTextWidget.c 
+../Core/Graphics/Src/GraphicsTextWidget.c \
+../Core/Graphics/Src/GraphicsWaveformWidget.c 
 
 OBJS += \
 ./Core/Graphics/Src/Graphics.o \
 ./Core/Graphics/Src/GraphicsRectangleWidget.o \
-./Core/Graphics/Src/GraphicsTextWidget.o 
+./Core/Graphics/Src/GraphicsTextWidget.o \
+./Core/Graphics/Src/GraphicsWaveformWidget.o 
 
 C_DEPS += \
 ./Core/Graphics/Src/Graphics.d \
 ./Core/Graphics/Src/GraphicsRectangleWidget.d \
-./Core/Graphics/Src/GraphicsTextWidget.d 
+./Core/Graphics/Src/GraphicsTextWidget.d \
+./Core/Graphics/Src/GraphicsWaveformWidget.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
@@ -27,7 +30,7 @@ Core/Graphics/Src/%.o Core/Graphics/Src/%.su Core/Graphics/Src/%.cyclo: ../Core/
 clean: clean-Core-2f-Graphics-2f-Src
 
 clean-Core-2f-Graphics-2f-Src:
-	-$(RM) ./Core/Graphics/Src/Graphics.cyclo ./Core/Graphics/Src/Graphics.d ./Core/Graphics/Src/Graphics.o ./Core/Graphics/Src/Graphics.su ./Core/Graphics/Src/GraphicsRectangleWidget.cyclo ./Core/Graphics/Src/GraphicsRectangleWidget.d ./Core/Graphics/Src/GraphicsRectangleWidget.o ./Core/Graphics/Src/GraphicsRectangleWidget.su ./Core/Graphics/Src/GraphicsTextWidget.cyclo ./Core/Graphics/Src/GraphicsTextWidget.d ./Core/Graphics/Src/GraphicsTextWidget.o ./Core/Graphics/Src/GraphicsTextWidget.su
+	-$(RM) ./Core/Graphics/Src/Graphics.cyclo ./Core/Graphics/Src/Graphics.d ./Core/Graphics/Src/Graphics.o ./Core/Graphics/Src/Graphics.su ./Core/Graphics/Src/GraphicsRectangleWidget.cyclo ./Core/Graphics/Src/GraphicsRectangleWidget.d ./Core/Graphics/Src/GraphicsRectangleWidget.o ./Core/Graphics/Src/GraphicsRectangleWidget.su ./Core/Graphics/Src/GraphicsTextWidget.cyclo ./Core/Graphics/Src/GraphicsTextWidget.d ./Core/Graphics/Src/GraphicsTextWidget.o ./Core/Graphics/Src/GraphicsTextWidget.su ./Core/Graphics/Src/GraphicsWaveformWidget.cyclo ./Core/Graphics/Src/GraphicsWaveformWidget.d ./Core/Graphics/Src/GraphicsWaveformWidget.o ./Core/Graphics/Src/GraphicsWaveformWidget.su
 
 .PHONY: clean-Core-2f-Graphics-2f-Src
 

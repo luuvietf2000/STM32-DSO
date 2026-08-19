@@ -8,7 +8,8 @@
 //----------------------------------------------------------------------------------------------------------//
 static void Dma2dTransferCompleteCallback(DMA2D_HandleTypeDef *ptr);
 static void GraphicsSleepTask();
-static void GraphicsSetDma2dModeBlend();
+static void GraphicsSetDma2dModeBlendBg();
+static void GraphicsSetDma2dModeFill();
 //----------------------------------------------------------------------------------------------------------//
 uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
 static DMA2D_HandleTypeDef *graphicsDma2d;
@@ -19,14 +20,25 @@ static SemaphoreHandle_t graphicsSemaphore;
 void GraphicsSetMode(GraphicsDma2dMode mode){
 	switch(mode){
 		case GRAPHICS_DMA2D_MODE_BLEND_BG:
-			GraphicsSetDma2dModeBlend();
+			GraphicsSetDma2dModeBlendBg();
 			break;
 		case GRAPHICS_DMA2D_MODE_FILL_COLOR:
 			break;
 	}
 }
 
-static void GraphicsSetDma2dModeBlend(){
+static void GraphicsSetDma2dModeFill(){
+	if(graphicsDma2d->Init.Mode = DMA2D_R2M)
+		return;
+	graphicsDma2d->Init.Mode = DMA2D_R2M;
+	MODIFY_REG(graphicsDma2d->Instance->CR, DMA2D_CR_MODE, DMA2D_R2M);
+	graphicsDma2d->Init.ColorMode = DMA2D_OUTPUT_RGB565;
+	MODIFY_REG(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_CM, DMA2D_OUTPUT_RGB565);
+	graphicsDma2d->Init.LineOffsetMode = 0;
+	MODIFY_REG(graphicsDma2d->Instance->OOR, DMA2D_OOR_LO, 0);
+}
+
+static void GraphicsSetDma2dModeBlendBg(){
 	if(graphicsDma2d->Init.Mode == DMA2D_M2M_BLEND_BG)
 		return;
 	graphicsDma2d->Init.Mode = DMA2D_M2M_BLEND_BG;
@@ -93,6 +105,7 @@ void GraphicsFillColor(uint32_t color, uint8_t *address, uint32_t size){
 
 void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t size){
 	WRITE_REG(graphicsDma2d->Instance->FGCOLR, foreground);
+	SCB_CleanDCache_by_Addr((uint32_t*) bitMask, size);
 	HAL_DMA2D_BlendingStart_IT(graphicsDma2d, (uint32_t) bitMask, background, (uint32_t) destination, size, 1);
 	GraphicsSleepTask();
 }

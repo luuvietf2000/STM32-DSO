@@ -1,6 +1,7 @@
 "./Core/Graphics/Src/Graphics.o"
 "./Core/Graphics/Src/GraphicsRectangleWidget.o"
 "./Core/Graphics/Src/GraphicsTextWidget.o"
+"./Core/Graphics/Src/GraphicsWaveformWidget.o"
 "./Core/Src/UiDisplayBridge.o"
 "./Core/Src/freertos.o"
 "./Core/Src/main.o"

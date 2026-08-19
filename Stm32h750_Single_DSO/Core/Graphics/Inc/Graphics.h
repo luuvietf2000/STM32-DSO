@@ -47,6 +47,14 @@ typedef enum{
 	GRAPHICS_DMA2D_MODE_FILL_COLOR,
 	GRAPHICS_DMA2D_MODE_BLEND_BG
 } GraphicsDma2dMode;
+
+//----------------------------------------------------------------------------------------------------------/
+
+typedef struct{
+	uint32_t start;
+	uint32_t end;
+} GraphicsPoint;
+
 //----------------------------------------------------------------------------------------------------------/
 void GraphicsSetMode(GraphicsDma2dMode mode);
 extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);

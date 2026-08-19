@@ -5,6 +5,7 @@
 
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawRectangleWidget(GraphicsRectangleWidget *rectangle){
+	GraphicsSetMode(GRAPHICS_DMA2D_MODE_FILL_COLOR);
 	GraphicsSetAreaRequest(
 		rectangle->x,
 		rectangle->x + rectangle->width,
@@ -17,8 +18,6 @@ void GraphicsDrawRectangleWidget(GraphicsRectangleWidget *rectangle){
 	uint32_t size = GraphicsGetPointerMemory(&data, prefecrredSize, fallbackSize);
 	GraphicsFillColor(rectangle->color, data, size);
 	uint32_t transferCount = prefecrredSize / size;
-	//SCB_CleanDCache_by_Addr((uint32_t*) data, size);
-	//SCB_InvalidateDCache_by_Addr((uint32_t *)data, size);
 	GraphicsTransfer(data, size, transferCount);
 }
 

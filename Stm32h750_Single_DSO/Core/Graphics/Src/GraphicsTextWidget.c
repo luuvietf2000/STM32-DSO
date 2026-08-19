@@ -9,7 +9,6 @@ static void ConvertBitMask8bit(uint8_t *data, GraphicsTextWidget *text, uint32_t
 
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawTextWidget(GraphicsTextWidget *text){
-	start = DWT->CYCCNT;
 	GraphicsSetMode(GRAPHICS_DMA2D_MODE_BLEND_BG);
 	uint32_t xDisplay, yDisplay;
 	uint32_t columnDisplay, rowDisplay;
@@ -43,12 +42,9 @@ void GraphicsDrawTextWidget(GraphicsTextWidget *text){
 		size = GraphicsGetPointerMemory(&data, size, fallbackSize);
 		row = i + (prefecrredSize == size ? rowDisplay : 1);
 		ConvertBitMask8bit(buffer, text, i, columnDisplay, row);
-		SCB_CleanDCache_by_Addr((uint32_t*) buffer, (row - i - 1) * columnDisplay);
 		GraphicsConvertColors(text->textColor, text->background, buffer, data, size / GRAPHICS_PIXEL_PER_BYTE);
-		//SCB_CleanDCache_by_Addr((uint32_t*) data, size);
 		GraphicsTransfer(data, size, GRAPHICS_TEXT_TRANSFER_COUNT);
 	}
-	us = DWT->CYCCNT;
 }
 
 static void ConvertBitMask8bit(uint8_t *data, GraphicsTextWidget *text, uint32_t rowCurrent, uint32_t columnDisplay, uint32_t rowDisplay){

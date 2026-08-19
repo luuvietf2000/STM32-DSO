@@ -1,8 +1,8 @@
-../Core/Graphics/Src/Graphics.c:29:13:GraphicsSetDma2dModeBlend	0	static
-../Core/Graphics/Src/Graphics.c:116:13:GraphicsSleepTask	8	static
-../Core/Graphics/Src/Graphics.c:108:13:Dma2dTransferCompleteCallback	16	static,ignoring_inline_asm
-../Core/Graphics/Src/Graphics.c:19:6:GraphicsSetMode	8	static
-../Core/Graphics/Src/Graphics.c:44:6:GraphiscsSetAlignment	8	static
-../Core/Graphics/Src/Graphics.c:89:6:GraphicsFillColor	16	static
-../Core/Graphics/Src/Graphics.c:94:6:GraphicsConvertColors	16	static
-../Core/Graphics/Src/Graphics.c:100:6:GraphicsInit	16	static
+../Core/Graphics/Src/Graphics.c:41:13:GraphicsSetDma2dModeBlendBg	0	static
+../Core/Graphics/Src/Graphics.c:129:13:GraphicsSleepTask	8	static
+../Core/Graphics/Src/Graphics.c:121:13:Dma2dTransferCompleteCallback	16	static,ignoring_inline_asm
+../Core/Graphics/Src/Graphics.c:20:6:GraphicsSetMode	8	static
+../Core/Graphics/Src/Graphics.c:56:6:GraphiscsSetAlignment	8	static
+../Core/Graphics/Src/Graphics.c:101:6:GraphicsFillColor	16	static
+../Core/Graphics/Src/Graphics.c:106:6:GraphicsConvertColors	24	static,ignoring_inline_asm
+../Core/Graphics/Src/Graphics.c:113:6:GraphicsInit	16	static
