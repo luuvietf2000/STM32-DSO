@@ -2157,11 +2157,6 @@ static void DMA2D_SetConfig(DMA2D_HandleTypeDef *hdma2d, uint32_t pdata, uint32_
       tmp4 = (tmp4 >> 4U);
       tmp  = ((tmp3 << 4U) | (tmp2 << 8U) | (tmp1 << 12U) | tmp4);
     }
-    /*
-    tmp1 = 0xff & tmp;
-    tmp2 = 0xff00 & tmp;
-    tmp = (tmp1 << 8) | (tmp2 >> 8);
-    */
     /* Write to DMA2D OCOLR register */
     WRITE_REG(hdma2d->Instance->OCOLR, tmp);
   }

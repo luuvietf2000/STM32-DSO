@@ -11,6 +11,7 @@ static void GraphicsSleepTask();
 static void GraphicsSetDma2dModeBlendBg();
 static void GraphicsSetDma2dModeFill();
 //----------------------------------------------------------------------------------------------------------//
+__attribute__((aligned(32)))
 uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
 static DMA2D_HandleTypeDef *graphicsDma2d;
 static StaticSemaphore_t semaphoreBuffer;
@@ -105,7 +106,6 @@ void GraphicsFillColor(uint32_t color, uint8_t *address, uint32_t size){
 
 void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t size){
 	WRITE_REG(graphicsDma2d->Instance->FGCOLR, foreground);
-	SCB_CleanDCache_by_Addr((uint32_t*) bitMask, size);
 	HAL_DMA2D_BlendingStart_IT(graphicsDma2d, (uint32_t) bitMask, background, (uint32_t) destination, size, 1);
 	GraphicsSleepTask();
 }

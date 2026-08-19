@@ -1,8 +1,8 @@
-../Core/Graphics/Src/Graphics.c:41:13:GraphicsSetDma2dModeBlendBg	2
+../Core/Graphics/Src/Graphics.c:42:13:GraphicsSetDma2dModeBlendBg	2
 ../Core/Graphics/Src/Graphics.c:129:13:GraphicsSleepTask	1
 ../Core/Graphics/Src/Graphics.c:121:13:Dma2dTransferCompleteCallback	3
-../Core/Graphics/Src/Graphics.c:20:6:GraphicsSetMode	2
-../Core/Graphics/Src/Graphics.c:56:6:GraphiscsSetAlignment	10
-../Core/Graphics/Src/Graphics.c:101:6:GraphicsFillColor	1
-../Core/Graphics/Src/Graphics.c:106:6:GraphicsConvertColors	3
+../Core/Graphics/Src/Graphics.c:21:6:GraphicsSetMode	2
+../Core/Graphics/Src/Graphics.c:57:6:GraphiscsSetAlignment	10
+../Core/Graphics/Src/Graphics.c:102:6:GraphicsFillColor	1
+../Core/Graphics/Src/Graphics.c:107:6:GraphicsConvertColors	1
 ../Core/Graphics/Src/Graphics.c:113:6:GraphicsInit	1
