@@ -1,5 +1,5 @@
 #include <UiDisplayBridge.h>
-
+#include "stdio.h"
 //----------------------------------------------------------------------------------------------------------//
 static uint32_t size;
 static uint32_t index;

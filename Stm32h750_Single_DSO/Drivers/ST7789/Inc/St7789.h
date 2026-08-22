@@ -6,8 +6,10 @@
 #include "task.h"
 
 //---------------------------------------------------------------------------------//
-#define ST7789_NOT_USING_D_CACHE_MODE										ST7789_USING_D_CACHE
+#define ST7789_D_CACHE_MODE													ST7789_USING_D_CACHE
+
 //---------------------------------------------------------------------------------//
+#define ST7789_TRANFER_COUNT_MIN											1
 #define ST7789_NOT_USING_D_CACHE											0
 #define ST7789_USING_D_CACHE												1
 #define ST7789_CMD_NOP														0x00

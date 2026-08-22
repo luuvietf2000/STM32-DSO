@@ -9,7 +9,7 @@ void St7789QueueInit(){
 	queue.free = xQueueCreate(ST7789_MSG_POOL_ITEM_LENGTH, sizeof(St7789Msg*));
 	queue.ready = xQueueCreate(ST7789_MSG_POOL_ITEM_LENGTH, sizeof(St7789Msg*));
 	for(uint32_t i = 0; i < ST7789_MSG_POOL_ITEM_LENGTH; i++){
-		St7789FreeQueuePush(pool + i, ST7789_TIMEOUT_NONE);
+		St7789FreeQueuePush(pool + i, ST7789_TIMEOUT_FOREVER);
 	}
 }
 

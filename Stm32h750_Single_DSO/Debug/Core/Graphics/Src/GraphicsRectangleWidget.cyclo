@@ -1,1 +1,2 @@
 ../Core/Graphics/Src/GraphicsRectangleWidget.c:7:6:GraphicsDrawRectangleWidget	2
+../Core/Graphics/Src/GraphicsRectangleWidget.c:54:6:GraphicsRectangleSetParameter	1

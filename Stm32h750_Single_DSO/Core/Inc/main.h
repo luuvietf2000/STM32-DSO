@@ -58,8 +58,8 @@ void MX_SPI1_Init(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define ST7789_DC_Pin GPIO_PIN_2
-#define ST7789_DC_GPIO_Port GPIOA
+#define S7789_DC_Pin GPIO_PIN_2
+#define S7789_DC_GPIO_Port GPIOA
 #define ST7789_RESET_Pin GPIO_PIN_6
 #define ST7789_RESET_GPIO_Port GPIOA
 

@@ -33,7 +33,8 @@ Core/Graphics/Src/GraphicsWaveformWidget.o: \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_pwr_ex.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h \
  ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -68,3 +69,4 @@ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_spi_ex.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h:

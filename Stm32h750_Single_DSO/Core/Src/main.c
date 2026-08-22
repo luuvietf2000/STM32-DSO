@@ -27,6 +27,8 @@
 #include "UiDisplayBridge.h"
 #include "GraphicsRectangleWidget.h"
 #include "GraphicsTextWidget.h"
+#include "GraphicsWaveformWidget.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -164,7 +166,6 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
 	St7789QueueInit();
-	St7789DmaMemoryInit();
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -317,7 +318,7 @@ void MX_SPI1_Init(void)
   hspi1.Init.CRCPolynomial = 0x0;
   hspi1.Init.NSSPMode = SPI_NSS_PULSE_ENABLE;
   hspi1.Init.NSSPolarity = SPI_NSS_POLARITY_LOW;
-  hspi1.Init.FifoThreshold = SPI_FIFO_THRESHOLD_08DATA;
+  hspi1.Init.FifoThreshold = SPI_FIFO_THRESHOLD_01DATA;
   hspi1.Init.TxCRCInitializationPattern = SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
   hspi1.Init.RxCRCInitializationPattern = SPI_CRC_INITIALIZATION_ALL_ZERO_PATTERN;
   hspi1.Init.MasterSSIdleness = SPI_MASTER_SS_IDLENESS_00CYCLE;
@@ -368,10 +369,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ST7789_DC_Pin|ST7789_RESET_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, S7789_DC_Pin|ST7789_RESET_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : ST7789_DC_Pin ST7789_RESET_Pin */
-  GPIO_InitStruct.Pin = ST7789_DC_Pin|ST7789_RESET_Pin;
+  /*Configure GPIO pins : S7789_DC_Pin ST7789_RESET_Pin */
+  GPIO_InitStruct.Pin = S7789_DC_Pin|ST7789_RESET_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -388,7 +389,7 @@ static void St7789Setup(St7789Config *config) {
 	config->size = (St7789Size ) { ST7789_COLUMN_SIZE, ST7789_ROW_SIZE };
 	config->format = CONTROL_INTERFACE_FORMAT_16BIT;
 	config->rst = (St7789Gpio ) { GPIOA, ST7789_RESET_Pin };
-	config->dc = (St7789Gpio ) { GPIOA, ST7789_DC_Pin };
+	config->dc = (St7789Gpio ) { GPIOA, S7789_DC_Pin };
 	config->rotate = ST7789_DISPLAY_RIGHT;
 	St7789Init(config);
 }
@@ -406,27 +407,45 @@ void UiControllerCallback(void *argument)
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
+	St7789DmaMemoryInit();
 	GraphicsRectangleWidget rectangle;
 	rectangle.x = 0;
 	rectangle.y = 0;
 	rectangle.height = 240;
 	rectangle.width = 320;
-	rectangle.color = GRAPHICS_SET_COLOR(0, 0, 0xFF);
-	rectangle.borderWidth = 10;
+	rectangle.color = GRAPHICS_SET_COLOR(0xFF, 0, 0xFF);
+	rectangle.borderWidth = 0;
 	rectangle.borderColor = GRAPHICS_SET_COLOR(0xFF, 0, 0);
 	GraphicsDrawRectangleWidget(&rectangle);
+
 	GraphicsTextWidget text;
 	text.x = 0;
 	text.y = 0;
 	text.height = 240;
 	text.width = 320;
-	text.fontPixel = 2;
+	text.fontPixel = 10;
 	text.background = GRAPHICS_SET_COLOR(0, 0, 0);
 	text.textColor = GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF);
 	char content[] = "Hello ST7789!";
 	text.content = content;
 	text.aligment = GRAPHICS_ALIGNMENT_CENTER;
 	GraphicsDrawTextWidget(&text);
+
+	GraphicsWaveformWidget waveform;
+	GraphicsWaveformSetParameter(
+		&waveform,
+		0,
+		0,
+		320,
+		240,
+		GRAPHICS_SET_COLOR(0x2F, 0x2F, 0x2F),
+		10,
+		10,
+		GRAPHICS_SET_COLOR(0, 0xFF, 0xFF),
+		10,
+		GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF)
+	);
+	GraphicsDrawWaveformWidget(&waveform);
 
 	for (;;) {
 		osDelay(1000);
@@ -467,10 +486,6 @@ void St7789DriverCallback(void *argument)
 	for (;;) {
 		St7789ReadyQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
 		St7789TaskHandle(msg);
-		if (msg->type == ST7789_TRANSFER_DATA) {
-			St7789DmaMemoryFree(msg->transferData.blockIndexStart,
-					msg->transferData.dataSize);
-		}
 		St7789FreeQueuePush(msg, ST7789_TIMEOUT_FOREVER);
 	}
   /* USER CODE END St7789DriverCallback */

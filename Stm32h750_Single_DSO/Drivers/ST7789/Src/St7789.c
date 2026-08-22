@@ -3,15 +3,13 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include <stdlib.h>
-#include <string.h>
 #include "semphr.h"
 
 //-----------------------------------------------------------------------------------------------------//
+static St7789Config config;
 static StaticSemaphore_t semaphoreBuffer;
 static SemaphoreHandle_t semaphore;
-static St7789Config config;
 //-----------------------------------------------------------------------------------------------------//
-
 static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end);
 static HAL_StatusTypeDef St7789WriteCommand(uint8_t command);
 //-----------------------------------------------------------------------------------------------------//
@@ -26,10 +24,10 @@ static void St7789SetAddress(uint8_t cmd, uint16_t start, uint16_t end){
 		ST7789_GET_FIELD(end, 0, mask)
 	};
 	St7789WriteCommand(cmd);
-	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+	#if (ST7789_D_CACHE_MODE == ST7789_USING_D_CACHE)
 		HAL_SPI_Transmit(config.spi, parameter, 4, portMAX_DELAY);
 	#else
-		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) parameter, 4);
+		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) parameter, sizeof(parameter));
 		St7789WriteData(parameter, sizeof(parameter));
 	#endif
 }
@@ -43,8 +41,13 @@ static HAL_StatusTypeDef St7789WriteCommand(uint8_t command){
 }
 
 HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size){
+	ulTaskNotifyTake(pdTRUE, 0);
 	HAL_StatusTypeDef result = HAL_SPI_Transmit_DMA(config.spi, data, size);
-	xSemaphoreTake(semaphore, portMAX_DELAY);
+    if (result != HAL_OK)
+    {
+        return result;
+    }
+    xSemaphoreTake(semaphore, portMAX_DELAY);
 	return result;
 }
 
@@ -73,7 +76,7 @@ void St7789SetInterfacePixelFormat(St7789ControlInterfaceColorFormat control, St
 	parameter |= ST7789_FIELD(control, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_S, ST7789_CONTROL_INTERFACE_COLOR_FORMAT_M);
 	parameter |= ST7789_FIELD(rgb, ST7789_RGB_INTERFACE_COLOR_FORMAT_S, ST7789_RGB_INTERFACE_COLOR_FORMAT_M);
 	St7789WriteCommand(ST7789_CMD_COLMOD);
-	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+	#if (ST7789_D_CACHE_MODE == ST7789_USING_D_CACHE)
 		HAL_SPI_Transmit(config.spi, &parameter, 1, portMAX_DELAY);
 	#else
 		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) &parameter, 1);
@@ -94,7 +97,6 @@ void St7789SetSleepMode(St7789SleepMode mode){
 }
 
 void St7789Init(St7789Config *_config){
-
 	semaphore = xSemaphoreCreateBinaryStatic(&semaphoreBuffer);
 
 	config = *_config;
@@ -131,7 +133,7 @@ void St7789SetMemoryDataAccessControl(){
 			break;
 	}
 	St7789WriteCommand(ST7789_CMD_MADCPL);
-	#if (ST7789_NOT_USING_D_CACHE_MODE == ST7789_NOT_USING_D_CACHE)
+	#if (ST7789_D_CACHE_MODE == ST7789_USING_D_CACHE)
 		HAL_SPI_Transmit(config.spi, &config.rotate, 1, portMAX_DELAY);
 	#else
 		SCB_CleanInvalidateDCache_by_Addr((uint32_t*) &config.rotate, 1);

@@ -11,7 +11,7 @@ static St7789DmaMemoryBlock* St7789DmaMemoryGetBlockNotUsed();
 static uint32_t St7789DmaMemoryAllocBlock(St7789DmaMemoryBlock *block, uint32_t allocationSize);
 static void St7789DmaMemoryMergeBlock(uint32_t start, uint32_t end);
 static uint32_t St7789DmaMemoryGetSizeAvailable(St7789DmaMemoryBlock ** block, uint32_t preferredSize, uint32_t fallbackSize);
-static void St7789DmaMemoryTaskWake();
+static void St7789DmaMemoryTaskWake(uint32_t size);
 static void St7789DmaMemorySetBlock(St7789DmaMemoryBlock *current, uint32_t start, uint32_t end, St7789DmaMemoryBlock *pre, St7789DmaMemoryBlock *next);
 //------------------------------------------------------------------------------------------------//
 //------------------------------------------------------------------------//
@@ -27,10 +27,8 @@ static SemaphoreHandle_t mutex;
 static St7789TaskStatus taskSleepStatus;
 static StaticSemaphore_t semaphoreBuffer;
 static SemaphoreHandle_t semaphore;
-
 //------------------------------------------------------------------------//
 //------------------------------------------------------------------------------------------------//
-
 static void St7789DmaMemoryTaskWake(uint32_t size){
 	if(size < fallback)
 		return;
@@ -116,7 +114,7 @@ static void St7789DmaMemoryMergeBlock(uint32_t start, uint32_t end){
 		if(current != NULL)
 			current->per = block;
 	}
-	St7789DmaMemoryTaskWake(block->end - block->start + ST7789_DMA_MEMORY_ONE_INDEX);
+	St7789DmaMemoryTaskWake(current->end - current->start + ST7789_DMA_MEMORY_ONE_INDEX);
 }
 
 static void St7789DmaMemoryPushBlockNotUsed(St7789DmaMemoryBlock *block){
@@ -185,15 +183,15 @@ uint8_t* St7789DmaMemoryAlloc(uint32_t preferredSize, uint32_t fallbackSize, uin
 	while(*size == 0){
 		xSemaphoreTake(mutex, ST7789_TIMEOUT_FOREVER);
 		*size = St7789DmaMemoryGetSizeAvailable(&block, preferredSize, fallbackSize);
-		if(*size != 0)
+		if(*size != 0){
 			*index = St7789DmaMemoryAllocBlock(block, *size);
-		xSemaphoreGive(mutex);
-		if(*size == 0){
+			xSemaphoreGive(mutex);
+		} else{
 			fallback = fallbackSize;
 			taskSleepStatus = ST7789_TASK_SLEEP;
-			xSemaphoreTake(semaphore, ST7789_TIMEOUT_FOREVER);
+			xSemaphoreGive(mutex);
+			xSemaphoreTake(semaphore, portMAX_DELAY);
 		}
-
 	}
 	return dmaMemory + *index;
 }

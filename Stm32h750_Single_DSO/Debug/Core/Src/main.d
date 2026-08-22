@@ -53,7 +53,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
 ../Core/Inc/stm32h7xx_hal_conf.h:
@@ -110,3 +111,4 @@ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h:

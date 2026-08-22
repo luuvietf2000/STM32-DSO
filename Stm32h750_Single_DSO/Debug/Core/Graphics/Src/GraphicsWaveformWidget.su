@@ -1,0 +1,2 @@
+../Core/Graphics/Src/GraphicsWaveformWidget.c:6:6:GraphicsDrawWaveformWidget	80	static
+../Core/Graphics/Src/GraphicsWaveformWidget.c:69:6:GraphicsWaveformSetParameter	0	static
