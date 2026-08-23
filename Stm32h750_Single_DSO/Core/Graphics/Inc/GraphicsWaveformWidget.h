@@ -25,7 +25,7 @@ typedef struct{
 	uint32_t divisionLineColor;
 	uint32_t borderWidth;
 	uint32_t borderColor;
-	GraphicsWaveformPoints pointLines;
+	GraphicsWaveformPoints *pointLines;
 } GraphicsWaveformWidget;
 //----------------------------------------------------------------------------------------------------------//
 

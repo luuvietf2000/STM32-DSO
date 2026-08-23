@@ -51,9 +51,22 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/UiDisplayBridge.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h \
- D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreen.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/LayoutMacro.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBar.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarConfig.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarLayout.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarVar.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBar.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarVar.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarLayout.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarConfig.h \
+ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/Waveform/Waveform.h \
  D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h
 ../Core/Inc/main.h:
 ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -108,7 +121,20 @@ D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Task/St7789DriverTask/Inc/St77
 ../Core/Inc/UiDisplayBridge.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsConf.h:
-D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsRectangleWidget.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreen.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/LayoutMacro.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBar.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarConfig.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarLayout.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/StatusBar/StatusBarVar.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsTextWidget.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/Graphics.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBar.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarVar.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarLayout.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MainScreenLayout.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/MeasurementBar/MeasurementBarConfig.h:
+D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/UI/MainScreenUI/Waveform/Waveform.h:
 D:/Code/STM32/STM32-DSO/Stm32h750_Single_DSO/Core/Graphics/Inc/GraphicsWaveformWidget.h:

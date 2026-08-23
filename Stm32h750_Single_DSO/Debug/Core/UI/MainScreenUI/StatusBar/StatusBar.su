@@ -1,0 +1,14 @@
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:66:20:GetContentTriggerEdge	0	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:70:20:GetContentTriggerMode	0	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:74:20:GetContentAcquisittionStatus	0	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:120:13:GetContentValuePerDiv	24	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:95:13:GetContentTimePerDiv	16	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:110:13:GetContentVoltagePerDiv	16	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:61:13:SetTextWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:33:6:SetTriggerLevelWidget	24	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:46:6:SetTriggerEdgeWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:51:6:SetAcquisittionStatusWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:56:6:SetTriggerModeWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:78:6:SetZoomModeTextWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:90:6:SetTimePerDivWidget	8	static
+../Core/UI/MainScreenUI/StatusBar/StatusBar.c:105:6:SetVoltagePerDivWidget	8	static

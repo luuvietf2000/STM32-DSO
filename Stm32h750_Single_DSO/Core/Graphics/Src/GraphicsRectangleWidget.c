@@ -10,8 +10,8 @@ void GraphicsDrawRectangleWidget(GraphicsRectangleWidget *rectangle){
 		GraphicsDrawRectangle(
 			rectangle->x,
 			rectangle->y,
-			rectangle->x + rectangle->width,
-			rectangle->y + rectangle->borderWidth,
+			rectangle->width,
+			rectangle->borderWidth,
 			rectangle->borderColor
 		);
 

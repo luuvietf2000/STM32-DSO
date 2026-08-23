@@ -25,9 +25,7 @@
 #include "St7789.h"
 #include "St7789Task.h"
 #include "UiDisplayBridge.h"
-#include "GraphicsRectangleWidget.h"
-#include "GraphicsTextWidget.h"
-#include "GraphicsWaveformWidget.h"
+#include "MainScreen.h"
 #include "stdio.h"
 /* USER CODE END Includes */
 
@@ -166,6 +164,7 @@ int main(void)
   /* USER CODE BEGIN RTOS_QUEUES */
 	/* add queues, ... */
 	St7789QueueInit();
+	St7789DmaMemoryInit();
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */
@@ -407,46 +406,20 @@ void UiControllerCallback(void *argument)
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
-	St7789DmaMemoryInit();
-	GraphicsRectangleWidget rectangle;
-	rectangle.x = 0;
-	rectangle.y = 0;
-	rectangle.height = 240;
-	rectangle.width = 320;
-	rectangle.color = GRAPHICS_SET_COLOR(0xFF, 0, 0xFF);
-	rectangle.borderWidth = 0;
-	rectangle.borderColor = GRAPHICS_SET_COLOR(0xFF, 0, 0);
-	GraphicsDrawRectangleWidget(&rectangle);
-
-	GraphicsTextWidget text;
-	text.x = 0;
-	text.y = 0;
-	text.height = 240;
-	text.width = 320;
-	text.fontPixel = 10;
-	text.background = GRAPHICS_SET_COLOR(0, 0, 0);
-	text.textColor = GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF);
-	char content[] = "Hello ST7789!";
-	text.content = content;
-	text.aligment = GRAPHICS_ALIGNMENT_CENTER;
-	GraphicsDrawTextWidget(&text);
-
-	GraphicsWaveformWidget waveform;
-	GraphicsWaveformSetParameter(
-		&waveform,
-		0,
-		0,
-		320,
-		240,
-		GRAPHICS_SET_COLOR(0x2F, 0x2F, 0x2F),
-		10,
-		10,
-		GRAPHICS_SET_COLOR(0, 0xFF, 0xFF),
-		10,
-		GRAPHICS_SET_COLOR(0xFF, 0xFF, 0xFF)
-	);
-	GraphicsDrawWaveformWidget(&waveform);
-
+	StatusBarConfig statusBarConfig = {
+		.voltage = 1,
+		.time = 1,
+		.aquisittionState = ACQUISITTION_RUN,
+		.zoomScale = 100,
+		.triggerMode = TRIGGER_AUTO,
+		.triggerEdge = TRIGGER_RISSING_EDGE,
+		.triggerLevel = 1
+	};
+	MeasurementBarConfig measurementBarConfig = {
+		.voltageMax = 1000,
+		.voltageMin = 1
+	};
+	MainScrrenInit(&statusBarConfig, &measurementBarConfig);
 	for (;;) {
 		osDelay(1000);
 	}

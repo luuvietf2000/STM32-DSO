@@ -26,6 +26,10 @@ Core/Graphics/Src \
 Core/Src \
 Core/Startup \
 Core/Task/St7789DriverTask/Src \
+Core/UI/MainScreenUI \
+Core/UI/MainScreenUI/MeasurementBar \
+Core/UI/MainScreenUI/StatusBar \
+Core/UI/MainScreenUI/Waveform \
 Drivers/ST7789/Src \
 Drivers/STM32H7xx_HAL_Driver/Src \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2 \

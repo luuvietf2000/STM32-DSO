@@ -1,0 +1,3 @@
+../Core/UI/MainScreenUI/MainScreen.c:27:13:StatusBarInit	8	static
+../Core/UI/MainScreenUI/MainScreen.c:22:13:MeasurementBarInit	8	static
+../Core/UI/MainScreenUI/MainScreen.c:37:6:MainScrrenInit	16	static

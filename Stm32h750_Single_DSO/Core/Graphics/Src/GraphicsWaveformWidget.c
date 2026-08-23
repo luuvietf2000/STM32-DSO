@@ -24,10 +24,12 @@ void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
 	uint32_t contentHeight = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->height, waveform->borderWidth);
 	uint16_t lines;
 
+
 	if(waveform->divisionXLine != 0){
 		uint32_t column;
 		// Draw Division X Lines
 		lines = contentWidth / waveform->divisionXLine;
+		lines -= (contentWidth % waveform->divisionXLine ? 0 : 1);
 		for(uint32_t line = 0; line < lines; line++){
 			column = contentX + waveform->divisionXLine * (line + 1);
 			GraphicsRectangleSetParameter(
@@ -48,6 +50,7 @@ void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
 		uint32_t row;
 		// Draw Division Y Lines
 		lines = contentHeight / waveform->divisionYLine;
+		lines -= (contentHeight % waveform->divisionYLine ? 0 : 1);
 		for(uint32_t line = 0; line < lines; line++){
 			row = contentY + waveform->divisionYLine * (line + 1);
 			GraphicsRectangleSetParameter(
@@ -63,6 +66,7 @@ void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
 			GraphicsDrawRectangleWidget(&rec);
 		}
 	}
+
 
 }
 
