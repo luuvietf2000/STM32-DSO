@@ -1,3 +1,0 @@
-../Core/Task/St7789DriverTask/Src/St7789Task.c:18:13:St7789HandleSetAreaMsg	8	static
-../Core/Task/St7789DriverTask/Src/St7789Task.c:24:13:St7789HandleTransferData	16	static
-../Core/Task/St7789DriverTask/Src/St7789Task.c:7:6:St7789TaskHandle	8	static

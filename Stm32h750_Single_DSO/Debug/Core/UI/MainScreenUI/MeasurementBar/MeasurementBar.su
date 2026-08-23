@@ -1,3 +1,0 @@
-../Core/UI/MainScreenUI/MeasurementBar/MeasurementBar.c:28:13:SetVoltageDisplay	24	static
-../Core/UI/MainScreenUI/MeasurementBar/MeasurementBar.c:8:6:SetVoltageMinWidget	8	static
-../Core/UI/MainScreenUI/MeasurementBar/MeasurementBar.c:18:6:SetVoltageMaxWidget	8	static

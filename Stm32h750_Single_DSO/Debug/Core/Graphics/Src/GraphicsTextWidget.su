@@ -1,3 +1,0 @@
-../Core/Graphics/Src/GraphicsTextWidget.c:50:13:ConvertBitMask8bit	28	static
-../Core/Graphics/Src/GraphicsTextWidget.c:72:13:CalculatorTextDisplaySize	16	static
-../Core/Graphics/Src/GraphicsTextWidget.c:11:6:GraphicsDrawTextWidget	80	static

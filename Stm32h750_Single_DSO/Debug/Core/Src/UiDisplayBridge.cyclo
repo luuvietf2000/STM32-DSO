@@ -1,3 +1,0 @@
-../Core/Src/UiDisplayBridge.c:8:6:GraphicsSetAreaRequest	1
-../Core/Src/UiDisplayBridge.c:15:10:GraphicsGetPointerMemory	1
-../Core/Src/UiDisplayBridge.c:20:6:GraphicsTransfer	1
