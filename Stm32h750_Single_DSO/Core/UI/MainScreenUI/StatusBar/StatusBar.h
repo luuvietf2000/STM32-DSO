@@ -9,7 +9,7 @@
 typedef enum{
 	TRIGGER_AUTO,
 	TRIIGGER_NORMAL,
-	TRIGGER_SINGEL
+	TRIGGER_SINGLE
 } TriggerModeState;
 
 typedef enum{

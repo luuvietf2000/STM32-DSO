@@ -67,6 +67,31 @@ void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
 		}
 	}
 
+	waveform->pointLines->pointDisplay = 0;
+}
+
+void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start, uint32_t end){
+	uint32_t contentHeight = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->height, waveform->borderWidth);
+	if(end < start || (end - start) > contentHeight)
+		return;
+	uint32_t contentX = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->x, waveform->borderWidth);
+	uint32_t contentY = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->y, waveform->borderWidth);
+
+	if(waveform->pointLines->pointDisplay < waveform->pointLines->pointCount){
+		GraphicsRectangleWidget rec;
+		GraphicsRectangleSetParameter(
+			&rec,
+			contentX + waveform->pointLines->pointDisplay,
+			contentY + start,
+			GRAPHICS_WAVEFORM_POINT_LINE_SIZE,
+			end - start,
+			waveform->pointLines->pointColor,
+			0,
+			0
+		);
+		GraphicsDrawRectangleWidget(&rec);
+		waveform->pointLines->pointDisplay++;
+	}
 
 }
 

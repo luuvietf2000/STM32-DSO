@@ -46,9 +46,9 @@ void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t heig
 	uint32_t prefecrredSize = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(width, height));
 	uint32_t fallbackSize = GRAPHICS_GET_MAX(width, height) * GRAPHICS_PIXEL_PER_BYTE;
 	uint8_t *data = NULL;
-	uint32_t size = GraphicsGetPointerMemory(&data, prefecrredSize, fallbackSize);
+	uint32_t size = GraphicsGetPointerMemory(&data, GRAPHICS_ALIGN_TO_4(prefecrredSize), GRAPHICS_ALIGN_TO_4(fallbackSize));
 	GraphicsFillColor(color, data, size / GRAPHICS_PIXEL_PER_BYTE);
-	uint32_t transferCount = prefecrredSize / size;
+	uint32_t transferCount = prefecrredSize / size + GRAPHICS_CEIL_UP(prefecrredSize, size);
 	GraphicsTransfer(data, size, transferCount);
 }
 

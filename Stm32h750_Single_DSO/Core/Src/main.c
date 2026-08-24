@@ -420,6 +420,24 @@ void UiControllerCallback(void *argument)
 		.voltageMin = 1
 	};
 	MainScrrenInit(&statusBarConfig, &measurementBarConfig);
+	statusBarConfig = (StatusBarConfig) {
+			.voltage = 100,
+			.time = 1000,
+			.aquisittionState = ACQUISITTION_STOP,
+			.zoomScale = 1,
+			.triggerMode = TRIGGER_SINGLE,
+			.triggerEdge = TRIGGER_FALLING_EDGE,
+			.triggerLevel = 1500
+	};
+	StatusBarRequestChanged(&statusBarConfig);
+	measurementBarConfig = (MeasurementBarConfig){
+			.voltageMax = 100,
+			.voltageMin = 9500
+	};
+	MeasurementBarRequestChanged(&measurementBarConfig);
+	for(uint32_t i = 0; i < 200; i++){
+		WaveformPushPoint(1, 99);
+	}
 	for (;;) {
 		osDelay(1000);
 	}

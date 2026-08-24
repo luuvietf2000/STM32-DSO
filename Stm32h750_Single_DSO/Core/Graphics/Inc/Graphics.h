@@ -21,6 +21,8 @@
 #define GRAPHICS_RGB888_RED_COLOR_MASK														0xFF0000
 #define GRAPHICS_RGB888_GREEN_COLOR_MASK													0x00FF00
 #define GRAPHICS_RGB888_BLUE_COLOR_MASK														0x0000FF
+#define GRAPHICS_ALIGN_TO_4(x)																(x % 4 == 0 ? x : x + GRAPHICS_PIXEL_PER_BYTE)
+#define GRAPHICS_CEIL_UP(size, up)															(size % up == 0 ? 0 : 1)
 //----------------------------------------------------------------------------------------------------------//
 typedef enum
 {
@@ -58,7 +60,7 @@ typedef struct{
 //----------------------------------------------------------------------------------------------------------/
 extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
 extern uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32_t faillbackSize);
-extern void GraphicsTransfer(uint8_t *data, uint32_t size, uint32_t transferCount);
+void GraphicsTransfer(uint8_t *data, uint32_t dataSize, uint32_t transferCount);
 //------------------------------------------------------------------------------------//
 void GraphicsSetMode(GraphicsDma2dMode mode);
 void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color);

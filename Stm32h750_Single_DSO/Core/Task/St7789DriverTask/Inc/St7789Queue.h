@@ -26,6 +26,7 @@ typedef struct{
 	uint32_t dataSize;
 	uint16_t transferCount;
 	uint32_t blockIndexStart;
+	uint32_t sizeAlloc;
 } St7789TransferDataMsg;
 
 typedef struct{
@@ -48,5 +49,5 @@ void St7789FreeQueuePop(St7789Msg **msg, TickType_t tick);
 void St7789ReadyQueuePush(St7789Msg *msg, TickType_t tick);
 void St7789ReadyQueuePop(St7789Msg **msg, TickType_t tick);
 void St7789SetAreaMsgParameter(St7789Msg *msg, uint16_t xStart, uint16_t xEnd, uint16_t yStart, uint16_t yEnd);
-void St7789TransferDataMsgParameter(St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart);
+void St7789TransferDataMsgParameter(St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart, uint32_t sizeAlloc);
 #endif /* TASK_ST7789DRIVERTASK_INC_ST7789QUEUE_H_ */

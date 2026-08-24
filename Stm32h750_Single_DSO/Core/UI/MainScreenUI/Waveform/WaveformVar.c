@@ -6,8 +6,9 @@ static GraphicsPoint points[WAVEFORM_CONTENT_WIDTH];
 
 static GraphicsWaveformPoints pointLines = {
 	.points = points,
-	.pointCount = 0,
-	.pointColor = WAVEFORM_POINT_BACKGROUND
+	.pointCount = WAVEFORM_CONTENT_WIDTH,
+	.pointColor = WAVEFORM_POINT_BACKGROUND,
+	.pointDisplay = 0
 };
 
 const GraphicsWaveformWidget waveformWidget = {

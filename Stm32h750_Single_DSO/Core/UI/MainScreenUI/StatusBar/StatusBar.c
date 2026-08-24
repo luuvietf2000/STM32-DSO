@@ -124,7 +124,7 @@ static void GetContentValuePerDiv(uint32_t value, char *buffer, uint16_t size, c
 	    snprintf(buffer, size, "%03lu%s", displayValue, miniUintText);
 	} else if(value % STATUS_BAR_LEVEL_UNIT == 0){
 	    displayValue = value / STATUS_BAR_LEVEL_UNIT;
-	    snprintf(buffer, size, "%04lu%s", displayValue, uintText);
+	    snprintf(buffer, size, "%03lu%s", displayValue, uintText);
 	} else{
 		float displayFloat = (float) value / STATUS_BAR_LEVEL_UNIT;
 		snprintf(buffer, size, "%04.2f%s", displayFloat, uintText);

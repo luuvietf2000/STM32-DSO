@@ -8,3 +8,7 @@
 void WaveformInit(){
 	GraphicsDrawWaveformWidget((GraphicsWaveformWidget*) &waveformWidget);
 }
+void WaveformPushPoint(uint32_t start, uint32_t end){
+	GraphicsWaveformPushPoint((GraphicsWaveformWidget*) &waveformWidget, start, end);
+}
+
