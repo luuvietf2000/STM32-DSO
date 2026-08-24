@@ -435,8 +435,9 @@ void UiControllerCallback(void *argument)
 			.voltageMin = 9500
 	};
 	MeasurementBarRequestChanged(&measurementBarConfig);
-	for(uint32_t i = 0; i < 200; i++){
-		WaveformPushPoint(1, 99);
+	WaveformPushPoint(0, 118);
+	for(uint32_t i = 0; i < 300; i++){
+		WaveformPushPoint(1, 118);
 	}
 	for (;;) {
 		osDelay(1000);

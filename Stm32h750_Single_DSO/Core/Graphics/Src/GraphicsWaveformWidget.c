@@ -1,12 +1,81 @@
 #include "GraphicsWaveformWidget.h"
 #include "GraphicsRectangleWidget.h"
+#include "Graphics.h"
+//----------------------------------------------------------------------------------------------------------//
+static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, GraphicsPoint *new, GraphicsPoint *old, uint32_t contentX, uint32_t contentY, uint32_t x);
+static void GraphicWaveformDrawBackground(GraphicsWaveformWidget *waveform);
+static void GraphicsWaveformCaculatorContentSize(GraphicsWaveformWidget *waveform, uint32_t *contentX, uint32_t *contentWidth, uint32_t *contentY, uint32_t *contentHeight);
+static void GraphicsWaveformDrawDivisionYLine(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentWidth, uint32_t contentY, uint32_t contentHeight);
+static void GraphicsWaveformDrawDivisionXLine(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentWidth, uint32_t contentY, uint32_t contentHeight);
 //----------------------------------------------------------------------------------------------------------//
 
-//----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
-	GraphicsRectangleWidget rec;
-	// Draw background
+	GraphicWaveformDrawBackground(waveform);
+	uint32_t contentX, contentY, contentWidth, contentHeight;
+	GraphicsWaveformCaculatorContentSize(waveform, &contentX, &contentWidth, &contentY, &contentHeight);
+	if(waveform->divisionXLine != 0){
+		GraphicsWaveformDrawDivisionXLine(waveform, contentX, contentWidth, contentY, contentHeight);
+	}
 
+	if(waveform->divisionYLine != 0){
+		GraphicsWaveformDrawDivisionYLine(waveform, contentX, contentWidth, contentY, contentHeight);
+	}
+
+	waveform->pointLines->pointDisplay = 0;
+}
+
+static void GraphicsWaveformCaculatorContentSize(GraphicsWaveformWidget *waveform, uint32_t *contentX, uint32_t *contentWidth, uint32_t *contentY, uint32_t *contentHeight){
+	*contentX = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->x, waveform->borderWidth);
+	*contentY = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->y, waveform->borderWidth);
+	*contentWidth = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->width, waveform->borderWidth);
+	*contentHeight = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->height, waveform->borderWidth);
+}
+
+static void GraphicsWaveformDrawDivisionYLine(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentWidth, uint32_t contentY, uint32_t contentHeight){
+	GraphicsRectangleWidget rec;
+	uint32_t row, lines;
+	// Draw Division Y Lines
+	lines = contentHeight / waveform->divisionYLine;
+	lines -= (contentHeight % waveform->divisionYLine ? 0 : 1);
+	for(uint32_t line = 0; line < lines; line++){
+		row = contentY + waveform->divisionYLine * (line + 1);
+		GraphicsRectangleSetParameter(
+			&rec,
+			contentX,
+			row,
+			contentWidth,
+			GRAPHICS_WAVEFORM_DIVISION_SIZE,
+			waveform->divisionLineColor,
+			0,
+			0
+		);
+		GraphicsDrawRectangleWidget(&rec);
+	}
+}
+static void GraphicsWaveformDrawDivisionXLine(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentWidth, uint32_t contentY, uint32_t contentHeight){
+	GraphicsRectangleWidget rec;
+	uint32_t column, lines;
+	// Draw Division X Lines
+	lines = contentWidth / waveform->divisionXLine;
+	lines -= (contentWidth % waveform->divisionXLine ? 0 : 1);
+	for(uint32_t line = 0; line < lines; line++){
+		column = contentX + waveform->divisionXLine * (line + 1);
+		GraphicsRectangleSetParameter(
+			&rec,
+			column,
+			contentY,
+			GRAPHICS_WAVEFORM_DIVISION_SIZE,
+			contentHeight,
+			waveform->divisionLineColor,
+			0,
+			0
+		);
+		GraphicsDrawRectangleWidget(&rec);
+	}
+}
+
+static void GraphicWaveformDrawBackground(GraphicsWaveformWidget *waveform){
+	GraphicsRectangleWidget rec;
 	GraphicsRectangleSetParameter(
 		&rec,
 		waveform->x,
@@ -18,56 +87,6 @@ void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform){
 		waveform->borderWidth
 	);
 	GraphicsDrawRectangleWidget(&rec);
-	uint32_t contentX = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->x, waveform->borderWidth);
-	uint32_t contentY = GRAPHICS_WAVEFORM_CONTENT_POS(waveform->y, waveform->borderWidth);
-	uint32_t contentWidth = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->width, waveform->borderWidth);
-	uint32_t contentHeight = GRAPHICS_WAVEFORM_CONTENT_SIZE(waveform->height, waveform->borderWidth);
-	uint16_t lines;
-
-
-	if(waveform->divisionXLine != 0){
-		uint32_t column;
-		// Draw Division X Lines
-		lines = contentWidth / waveform->divisionXLine;
-		lines -= (contentWidth % waveform->divisionXLine ? 0 : 1);
-		for(uint32_t line = 0; line < lines; line++){
-			column = contentX + waveform->divisionXLine * (line + 1);
-			GraphicsRectangleSetParameter(
-				&rec,
-				column,
-				contentY,
-				GRAPHICS_WAVEFORM_DIVISION_SIZE,
-				contentHeight,
-				waveform->divisionLineColor,
-				0,
-				0
-			);
-			GraphicsDrawRectangleWidget(&rec);
-		}
-	}
-
-	if(waveform->divisionYLine != 0){
-		uint32_t row;
-		// Draw Division Y Lines
-		lines = contentHeight / waveform->divisionYLine;
-		lines -= (contentHeight % waveform->divisionYLine ? 0 : 1);
-		for(uint32_t line = 0; line < lines; line++){
-			row = contentY + waveform->divisionYLine * (line + 1);
-			GraphicsRectangleSetParameter(
-				&rec,
-				contentX,
-				row,
-				contentWidth,
-				GRAPHICS_WAVEFORM_DIVISION_SIZE,
-				waveform->divisionLineColor,
-				0,
-				0
-			);
-			GraphicsDrawRectangleWidget(&rec);
-		}
-	}
-
-	waveform->pointLines->pointDisplay = 0;
 }
 
 void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start, uint32_t end){
@@ -91,8 +110,32 @@ void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start,
 		);
 		GraphicsDrawRectangleWidget(&rec);
 		waveform->pointLines->pointDisplay++;
-	}
+	} else{
 
+	}
+}
+
+static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, GraphicsPoint *new, GraphicsPoint *old, uint32_t contentX, uint32_t contentY, uint32_t x){
+	uint32_t yStart = GRAPHICS_GET_MIN(new->start, old->start);
+	uint32_t yEnd = GRAPHICS_GET_MAX(new->end, new->end);
+	uint32_t prefecrredSize = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(GRAPHICS_WAVEFORM_POINT_LINE_SIZE, yEnd - yStart));
+	uint8_t *data = NULL;
+	GraphicsGetPointerMemory(&data, prefecrredSize, prefecrredSize);
+	uint32_t flag = x % waveform->divisionXLine == 0;
+	if(flag){
+		uint32_t color = flag == 0 ? waveform->divisionLineColor : waveform->background;
+		GraphicsDma2dSetOffsetPixel(0);
+		GraphicsDma2dFillModeStart(prefecrredSize / GRAPHICS_PIXEL_PER_BYTE, 1, data, color);
+	}
+	if(flag != 0){
+		uint32_t lines = (yEnd - yStart) % waveform->divisionYLine;
+		GraphicsDma2dSetOffsetPixel(waveform->divisionYLine);
+		GraphicsDma2dFillModeStart(lines, 1, data + GRAPHICS_GET_PIXEL_BYTE(x % waveform->divisionYLine), waveform->divisionLineColor);
+	}
+	GraphicsDma2dSetOffsetPixel(0);
+	uint32_t pixelNewSize = new->end - new->start;
+	GraphicsDma2dFillModeStart(pixelNewSize, 1, data, waveform->pointLines->pointColor);
+	GraphicsTransfer(data, prefecrredSize, GRAPHICS_WAVEFORM_POINT_LINE_SIZE);
 }
 
 void GraphicsWaveformSetParameter(

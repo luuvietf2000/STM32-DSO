@@ -20,7 +20,7 @@
 #define WAVEFORM_DIVISION_PIXEL						20
 #define WAVEFORM_LINE_SET_BACKGROUND				GRAPHICS_SET_COLOR(0x20, 0x20, 0x20)
 
-#define WAVEFORM_POINT_BACKGROUND					GRAPHICS_SET_COLOR(0xFF, 0xFF, 0)
+#define WAVEFORM_POINT_BACKGROUND					GRAPHICS_SET_COLOR(0x00, 0x00, 0xFF)
 //----------------------------------------------------------------------------------------------------//
 
 #endif /* UI_MAINSCREENUI_WAVEFORM_WAVEFORMLAYOUT_H_ */

@@ -37,12 +37,11 @@ void St7789SetAreaMsgParameter(St7789Msg *msg, uint16_t xStart, uint16_t xEnd, u
 	area->yStart = yStart;
 	area->yEnd = yEnd;
 }
-void St7789TransferDataMsgParameter(St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart, uint32_t sizeAlloc){
+void St7789TransferDataMsgParameter(St7789Msg *msg, uint8_t *data, uint32_t dataSize, uint16_t transferCount, uint32_t blockIndexStart){
     msg->type = ST7789_TRANSFER_DATA;
     St7789TransferDataMsg *transfer = &msg->transferData;
     transfer->data = data;
     transfer->dataSize = dataSize;
     transfer->transferCount = transferCount;
     transfer->blockIndexStart = blockIndexStart;
-    transfer->sizeAlloc = sizeAlloc;
 }

@@ -11,8 +11,11 @@
 																							| blue << (GRAPHICS_COLOR_BLUE * GRAPHICS_COLOR_BYTE)))
 	#define GRAPHICS_PIXEL_PER_BYTE															2
 	#define GRAPHICS_CONVERT_COLOR(red, green, blue)										(((red >> 19U) << 11U) | ((green >> 10U) << 5U) | (blue >> 3U))
+	#define GRAPHICS_SWAP_BYTE(color)														((uint16_t)((color >> 8U) | (color << 8U)))
 #endif
-
+#define GRAPHICS_RGB888_RED																	0xFF0000
+#define GRAPHICS_RGB888_GREEN     															0x00FF00U
+#define GRAPHICS_RGB888_BLUE      															0x0000FFU
 #define GRAPHICS_GET_PIXEL(column, row)														(column * row)
 #define GRAPHICS_GET_PIXEL_BYTE(size)														(size * GRAPHICS_PIXEL_PER_BYTE)
 #define GRAPHICS_GET_MAX(one, two)															(one > two ? one : two)
@@ -47,9 +50,14 @@ typedef enum {
 
 typedef enum{
 	GRAPHICS_DMA2D_MODE_FILL_COLOR							= DMA2D_R2M,
-	GRAPHICS_DMA2D_MODE_BLEND_BG							= DMA2D_M2M_BLEND_BG
+	GRAPHICS_DMA2D_MODE_BLEND_BG							= DMA2D_M2M_BLEND_BG,
+	GRAPHICS_DMA2D_MODE_BLEND_CLUT_BG
 } GraphicsDma2dMode;
 
+typedef enum{
+	GRAPHICS_DMA2D_USING_CLUT                               = DMA2D_INPUT_L8,
+	GRAPHICS_DMA2D_NOT_USING_CLUT							= DMA2D_INPUT_A8
+} GraphicsDma2dClutMode;
 //----------------------------------------------------------------------------------------------------------/
 
 typedef struct{
@@ -62,9 +70,12 @@ extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uin
 extern uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32_t faillbackSize);
 void GraphicsTransfer(uint8_t *data, uint32_t dataSize, uint32_t transferCount);
 //------------------------------------------------------------------------------------//
+void GraphicsDma2dSetOffsetPixel(uint32_t size);
+void GraphicsDma2dFillModeStart(uint32_t height, uint32_t width, uint8_t *address, uint32_t color);
+void GraphicsSetManualClutBg(uint32_t *color, uint32_t size);
 void GraphicsSetMode(GraphicsDma2dMode mode);
 void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color);
-void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t size);
+void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t width, uint32_t height);
 void GraphicsInit(DMA2D_HandleTypeDef *dma2d);
 void GraphicsFillColor(uint32_t color, uint8_t *address, uint32_t size);
 void GraphiscsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, uint32_t rowParent, uint32_t columnChild, uint32_t rowChild, uint32_t xSet, uint32_t ySet, uint32_t *xDisplay, uint32_t *yDisplay);

@@ -20,6 +20,6 @@ uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32
 void GraphicsTransfer(uint8_t *data, uint32_t dataSize, uint32_t transferCount){
 	St7789Msg *msg = NULL;
 	St7789FreeQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
-	St7789TransferDataMsgParameter(msg, data, dataSize, transferCount, index, sizeAlloc);
+	St7789TransferDataMsgParameter(msg, data, dataSize, transferCount, index);
 	St7789ReadyQueuePush(msg, ST7789_TIMEOUT_FOREVER);
 }

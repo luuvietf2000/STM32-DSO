@@ -25,5 +25,5 @@ static void St7789HandleTransferData(St7789TransferDataMsg *transferData){
 	for(uint32_t count = 0; count < transferData->transferCount; count++){
 		St7789WriteData(transferData->data, transferData->dataSize);
 	}
-	St7789DmaMemoryFree(transferData->blockIndexStart, transferData->sizeAlloc);
+	St7789DmaMemoryFree(transferData->blockIndexStart, transferData->dataSize);
 }

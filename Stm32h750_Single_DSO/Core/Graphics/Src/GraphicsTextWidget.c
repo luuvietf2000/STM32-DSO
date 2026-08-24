@@ -38,19 +38,12 @@ void GraphicsDrawTextWidget(GraphicsTextWidget *text){
 	uint8_t *data = NULL;
 	uint32_t size = prefecrredSize;
 	uint32_t row = 0;
-	uint32_t byteTransfer = 0;
 	for(uint32_t i = 0; i < prefecrredSize / size; i++){
-		size = GraphicsGetPointerMemory(&data, GRAPHICS_ALIGN_TO_4(size), GRAPHICS_ALIGN_TO_4(fallbackSize));
-		if(GRAPHICS_ALIGN_TO_4(prefecrredSize) == size){
-			row += rowDisplay;
-			byteTransfer = prefecrredSize;
-		} else{
-			row ++;
-			byteTransfer = fallbackSize;
-		}
+		size = GraphicsGetPointerMemory(&data, size, fallbackSize);
+		row = i + (prefecrredSize == size ? rowDisplay : 1);
 		ConvertBitMask8bit(buffer, text, i, columnDisplay, row);
-		GraphicsConvertColors(text->textColor, text->background, buffer, data, size / GRAPHICS_PIXEL_PER_BYTE);
-		GraphicsTransfer(data, byteTransfer, GRAPHICS_TEXT_TRANSFER_COUNT);
+		GraphicsConvertColors(text->textColor, text->background, buffer, data, size / GRAPHICS_PIXEL_PER_BYTE, 1);
+		GraphicsTransfer(data, size, GRAPHICS_TEXT_TRANSFER_COUNT);
 	}
 }
 
