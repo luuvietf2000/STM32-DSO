@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------------------------//
 typedef enum{
 	ST7789_SET_AREA,
+	ST7789_SET_ROW,
 	ST7789_TRANSFER_DATA
 } St7789MsgType;
 
@@ -43,6 +44,7 @@ typedef struct{
 } St7789TaskQueue;
 //------------------------------------------------------------------------------------------------//
 void St7789QueueInit();
+void St7789SetRowMsgParameter(St7789Msg *msg, uint16_t start, uint16_t row);
 void St7789FreeQueuePush(St7789Msg *msg, TickType_t tick);
 void St7789FreeQueuePop(St7789Msg **msg, TickType_t tick);
 void St7789ReadyQueuePush(St7789Msg *msg, TickType_t tick);

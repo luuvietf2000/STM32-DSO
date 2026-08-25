@@ -23,10 +23,11 @@ static StaticSemaphore_t semaphoreBuffer;
 static SemaphoreHandle_t graphicsSemaphore;
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDma2dSetOffsetPixel(uint32_t size){
-	if(graphicsDma2d->Init.OutputOffset == 0)
+	if(graphicsDma2d->Init.OutputOffset == size)
 		return;
 	CLEAR_BIT(graphicsDma2d->Instance->CR, DMA2D_CR_LOM);
 	MODIFY_REG(graphicsDma2d->Instance->OOR, DMA2D_OOR_LO, size);
+	graphicsDma2d->Init.OutputOffset = size;
 }
 static uint32_t GraphicsSwapByte(uint32_t color){
 	uint32_t red = color & GRAPHICS_RGB888_RED;
@@ -72,7 +73,6 @@ void GraphicsSetMode(GraphicsDma2dMode mode){
 
 void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color){
 	GraphicsSetMode(GRAPHICS_DMA2D_MODE_FILL_COLOR);
-	GraphicsDma2dSetOffsetPixel(0);
 	GraphicsSetAreaRequest(
 		x,
 		x + width,
@@ -83,7 +83,7 @@ void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t heig
 	uint32_t fallbackSize = GRAPHICS_GET_MAX(width, height) * GRAPHICS_PIXEL_PER_BYTE;
 	uint8_t *data = NULL;
 	uint32_t size = GraphicsGetPointerMemory(&data, prefecrredSize, fallbackSize);
-	GraphicsDma2dFillModeStart(size / GRAPHICS_PIXEL_PER_BYTE, 1, data, color);
+	GraphicsDma2dFillModeStart(GRAPHICS_ONE_PIXEL, size / GRAPHICS_PIXEL_PER_BYTE, data, color);
 	uint32_t transferCount = prefecrredSize / size;
 	GraphicsTransfer(data, size, transferCount);
 }
@@ -163,7 +163,7 @@ void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bi
 	WRITE_REG(graphicsDma2d->Instance->BGCOLR, background);
 	MODIFY_REG(graphicsDma2d->Instance->NLR, (DMA2D_NLR_NL | DMA2D_NLR_PL), (height | (width << DMA2D_NLR_PL_Pos)));
 	WRITE_REG(graphicsDma2d->Instance->OMAR, (uint32_t) destination);
-	WRITE_REG(graphicsDma2d->Instance->FGMAR, bitMask);
+	WRITE_REG(graphicsDma2d->Instance->FGMAR, (uint32_t) bitMask);
 	__HAL_DMA2D_ENABLE_IT(graphicsDma2d, DMA2D_IT_TC | DMA2D_IT_TE | DMA2D_IT_CE);
 	__HAL_DMA2D_ENABLE(graphicsDma2d);
 	GraphicsSleepTask();

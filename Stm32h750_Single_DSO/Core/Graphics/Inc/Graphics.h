@@ -26,6 +26,7 @@
 #define GRAPHICS_RGB888_BLUE_COLOR_MASK														0x0000FF
 #define GRAPHICS_ALIGN_TO_4(x)																(x % 4 == 0 ? x : x + GRAPHICS_PIXEL_PER_BYTE)
 #define GRAPHICS_CEIL_UP(size, up)															(size % up == 0 ? 0 : 1)
+#define GRAPHICS_ONE_PIXEL																	1
 //----------------------------------------------------------------------------------------------------------//
 typedef enum
 {
@@ -66,6 +67,7 @@ typedef struct{
 } GraphicsPoint;
 
 //----------------------------------------------------------------------------------------------------------/
+extern void GraphicsSetRowRequest(uint16_t rowStart, uint16_t rowEnd);
 extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
 extern uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32_t faillbackSize);
 void GraphicsTransfer(uint8_t *data, uint32_t dataSize, uint32_t transferCount);

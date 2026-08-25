@@ -29,6 +29,13 @@ void St7789ReadyQueuePop(St7789Msg **msg, TickType_t tick){
 	xQueueReceive(queue.ready, msg, tick);
 }
 
+void St7789SetRowMsgParameter(St7789Msg *msg, uint16_t start, uint16_t row){
+	msg->type = ST7789_SET_ROW;
+	St7789SetAreaMsg *area = &msg->area;
+	area->yStart = start;
+	area->yEnd = row;
+}
+
 void St7789SetAreaMsgParameter(St7789Msg *msg, uint16_t xStart, uint16_t xEnd, uint16_t yStart, uint16_t yEnd){
 	msg->type = ST7789_SET_AREA;
 	St7789SetAreaMsg *area = &msg->area;

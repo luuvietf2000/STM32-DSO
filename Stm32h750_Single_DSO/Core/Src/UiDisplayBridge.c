@@ -5,6 +5,13 @@ static uint32_t sizeAlloc;
 static uint32_t index;
 //----------------------------------------------------------------------------------------------------------//
 
+void GraphicsSetRowRequest(uint16_t rowStart, uint16_t rowEnd){
+	St7789Msg *msg = NULL;
+	St7789FreeQueuePop(&msg, ST7789_TIMEOUT_FOREVER);
+	St7789SetRowMsgParameter(msg, rowStart, rowEnd);
+	St7789ReadyQueuePush(msg, ST7789_TIMEOUT_FOREVER);
+}
+
 void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd){
 	St7789Msg *msg = NULL;
 	St7789FreeQueuePop(&msg, ST7789_TIMEOUT_FOREVER);

@@ -57,7 +57,7 @@ DMA_HandleTypeDef hdma_spi1_tx;
 osThreadId_t UiControllerHandle;
 const osThreadAttr_t UiController_attributes = {
   .name = "UiController",
-  .stack_size = 256 * 4,
+  .stack_size = 512 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for MainController */
@@ -401,6 +401,7 @@ static void St7789Setup(St7789Config *config) {
  * @retval None
  */
 /* USER CODE END Header_UiControllerCallback */
+GraphicsPoint testPoint[300];
 void UiControllerCallback(void *argument)
 {
   /* USER CODE BEGIN 5 */
@@ -435,10 +436,15 @@ void UiControllerCallback(void *argument)
 			.voltageMin = 9500
 	};
 	MeasurementBarRequestChanged(&measurementBarConfig);
-	WaveformPushPoint(0, 118);
 	for(uint32_t i = 0; i < 300; i++){
-		WaveformPushPoint(1, 118);
+		WaveformPushPoint(0, 200);
+		testPoint[i].start = i % 198;
+		testPoint[i].end = 200;
 	}
+	for(uint32_t i = 0; i < 300; i++){
+		WaveformPushPoint(0, 1 + i % 199);
+	}
+	WaveforomUpdate(testPoint, 300);
 	for (;;) {
 		osDelay(1000);
 	}
