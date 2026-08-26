@@ -2,7 +2,7 @@
 #include "GraphicsRectangleWidget.h"
 #include "Graphics.h"
 //----------------------------------------------------------------------------------------------------------//
-static void GraphicsWaveformAddPoint(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentY, uint32_t start, uint32_t end);
+static void GraphicsWaveformAddPoint(GraphicsWaveformWidget *waveform, uint32_t x, uint32_t contentX, uint32_t contentY, uint32_t start, uint32_t end);
 static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, GraphicsPoint *new, GraphicsPoint *old, uint32_t contentX, uint32_t contentY, uint32_t x);
 static void GraphicWaveformDrawBackground(GraphicsWaveformWidget *waveform);
 static void GraphicsWaveformCaculatorContentSize(GraphicsWaveformWidget *waveform, uint32_t *contentX, uint32_t *contentWidth, uint32_t *contentY, uint32_t *contentHeight);
@@ -90,11 +90,11 @@ static void GraphicWaveformDrawBackground(GraphicsWaveformWidget *waveform){
 	GraphicsDrawRectangleWidget(&rec);
 }
 
-static void GraphicsWaveformAddPoint(GraphicsWaveformWidget *waveform, uint32_t contentX, uint32_t contentY, uint32_t start, uint32_t end){
+static void GraphicsWaveformAddPoint(GraphicsWaveformWidget *waveform, uint32_t x, uint32_t contentX, uint32_t contentY, uint32_t start, uint32_t end){
     GraphicsRectangleWidget rec;
     GraphicsRectangleSetParameter(
         &rec,
-        contentX + waveform->pointLines->pointDisplay,
+        contentX + x,
         contentY + start,
         GRAPHICS_WAVEFORM_POINT_LINE_SIZE,
         end - start,
@@ -114,12 +114,7 @@ void GraphicsWaveformUpdate(GraphicsWaveformWidget *waveform, GraphicsPoint *new
 	GraphicsPoint *ptr = waveform->pointLines->points;
 	size = GRAPHICS_GET_MIN(size, waveform->pointLines->pointCount);
 	for(uint32_t i = 0; i < size; i++){
-		/*
-	}
 		if(i < waveform->pointLines->pointDisplay){
-			GraphicsWaveformAddPoint(waveform, contentX, contentY, (new + i)->start, (new + i)->end);
-		} else{
-		*/
 			GraphicsWaveformUpdatePoint(
 				waveform,
 				new + i,
@@ -128,7 +123,9 @@ void GraphicsWaveformUpdate(GraphicsWaveformWidget *waveform, GraphicsPoint *new
 				contentY,
 				i
 			);
-		//}
+		} else{
+			GraphicsWaveformAddPoint(waveform, i, contentX, contentY, (new + i)->start, (new + i)->end);
+		}
 	}
 	waveform->pointLines->pointDisplay = size;
 }
@@ -140,7 +137,7 @@ void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start,
 		return;
 
 	if(waveform->pointLines->pointDisplay < waveform->pointLines->pointCount){
-		GraphicsWaveformAddPoint(waveform, contentX, contentY, start, end);
+		GraphicsWaveformAddPoint(waveform, waveform->pointLines->pointDisplay, contentX, contentY, start, end);
 		waveform->pointLines->pointDisplay++;
 	} else{
 		GraphicsPoint new;
@@ -188,11 +185,11 @@ static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, Graphi
 	uint32_t pixelStart;
 	GraphicsGetPointerMemory(&data, prefecrredSize, prefecrredSize);
 	if(yStart != new->start || yEnd != new->end){
-		uint32_t isDivisionX  = x % waveform->divisionXLine;
+		uint32_t isDivisionX = x % waveform->divisionXLine;
 		uint32_t color = (isDivisionX == 0 && x != 0 ) ? waveform->divisionLineColor : waveform->background;
 		GraphicsDma2dFillModeStart(GRAPHICS_WAVEFORM_ONE_PIXEL, prefecrredSize / GRAPHICS_PIXEL_PER_BYTE, data, color);
 		uint32_t first = ((yStart + waveform->divisionYLine - GRAPHICS_WAVEFORM_ONE_PIXEL) / waveform->divisionYLine) * waveform->divisionYLine;
-		if(isDivisionX != 0 && first < yEnd){
+		if((isDivisionX != 0 || x == 0) && first < yEnd){
 			if(first == 0)
 				first += waveform->divisionYLine;
 			if(first < yEnd){

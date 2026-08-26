@@ -438,12 +438,16 @@ void UiControllerCallback(void *argument)
 	MeasurementBarRequestChanged(&measurementBarConfig);
 	for(uint32_t i = 0; i < 300; i++){
 		WaveformPushPoint(0, 200);
-		testPoint[i].start = i % 198;
-		testPoint[i].end = 200;
 	}
+	for(uint32_t i = 0; i < 300; i++){
+		testPoint[i].start = 0;
+		testPoint[i].end = 1 + i % 199;
+	}
+	/*
 	for(uint32_t i = 0; i < 300; i++){
 		WaveformPushPoint(0, 1 + i % 199);
 	}
+	*/
 	WaveforomUpdate(testPoint, 300);
 	for (;;) {
 		osDelay(1000);
