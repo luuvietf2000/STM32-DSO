@@ -25,7 +25,7 @@ typedef struct{
 
 //----------------------------------------------------------------------------------------------------------//
 extern void WaveformPushPoint(uint32_t start, uint32_t end);
-extern void WaveforomUpdate(GraphicsPoint *point, uint32_t size);
+extern void WaveformUpdate(GraphicsPoint *point, uint32_t size);
 //-------------------------------------------------------------------//
 void MainScrrenInit(StatusBarConfig *statusBarParameter, MeasurementBarConfig *measurementBarParameter);
 void StatusBarRequestChanged(StatusBarConfig *statusBarParameter);

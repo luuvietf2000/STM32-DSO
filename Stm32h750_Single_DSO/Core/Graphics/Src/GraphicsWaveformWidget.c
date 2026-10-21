@@ -126,6 +126,7 @@ void GraphicsWaveformUpdate(GraphicsWaveformWidget *waveform, GraphicsPoint *new
 		} else{
 			GraphicsWaveformAddPoint(waveform, i, contentX, contentY, (new + i)->start, (new + i)->end);
 		}
+		*(ptr + i) = *(new + i);
 	}
 	waveform->pointLines->pointDisplay = size;
 }
@@ -195,7 +196,7 @@ static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, Graphi
 			if(first < yEnd){
 				uint32_t lines = (yEnd - GRAPHICS_WAVEFORM_ONE_PIXEL - first) / waveform->divisionYLine + 1;
 				pixelStart = first - yStart;
-				GraphicsDma2dSetOffsetPixel(waveform->divisionYLine);
+				GraphicsDma2dSetOffsetPixel(waveform->divisionYLine - GRAPHICS_WAVEFORM_ONE_PIXEL);
 				GraphicsDma2dFillModeStart(lines, GRAPHICS_WAVEFORM_ONE_PIXEL, data + GRAPHICS_GET_PIXEL_BYTE(pixelStart), waveform->divisionLineColor);
 			}
 		}

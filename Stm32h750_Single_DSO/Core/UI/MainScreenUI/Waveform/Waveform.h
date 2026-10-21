@@ -7,5 +7,6 @@
 extern const GraphicsWaveformWidget waveformWidget;
 //----------------------------------------------------------------------------------------------------------//
 void WaveformInit();
-
+void WaveformUpdate(GraphicsPoint *point, uint32_t size);
+void WaveformPushPoint(uint32_t start, uint32_t end);
 #endif /* UI_MAINSCREENUI_WAVEFORM_WAVEFORM_H_ */

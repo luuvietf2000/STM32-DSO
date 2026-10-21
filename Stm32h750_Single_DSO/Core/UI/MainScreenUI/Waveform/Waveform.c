@@ -12,7 +12,7 @@ void WaveformPushPoint(uint32_t start, uint32_t end){
 	GraphicsWaveformPushPoint((GraphicsWaveformWidget*) &waveformWidget, start, end);
 }
 
-void WaveforomUpdate(GraphicsPoint *point, uint32_t size){
+void WaveformUpdate(GraphicsPoint *point, uint32_t size){
 	GraphicsWaveformUpdate((GraphicsWaveformWidget*) &waveformWidget, point, size);
 }
 

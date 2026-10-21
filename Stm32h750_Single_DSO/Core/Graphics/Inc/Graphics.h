@@ -59,14 +59,14 @@ typedef enum{
 	GRAPHICS_DMA2D_USING_CLUT                               = DMA2D_INPUT_L8,
 	GRAPHICS_DMA2D_NOT_USING_CLUT							= DMA2D_INPUT_A8
 } GraphicsDma2dClutMode;
-//----------------------------------------------------------------------------------------------------------/
+//----------------------------------------------------------------------------------------------------------//
 
 typedef struct{
 	uint32_t start;
 	uint32_t end;
 } GraphicsPoint;
 
-//----------------------------------------------------------------------------------------------------------/
+//----------------------------------------------------------------------------------------------------------//
 extern void GraphicsSetRowRequest(uint16_t rowStart, uint16_t rowEnd);
 extern void GraphicsSetAreaRequest(uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
 extern uint32_t GraphicsGetPointerMemory(uint8_t **data, uint32_t preferredSize, uint32_t faillbackSize);

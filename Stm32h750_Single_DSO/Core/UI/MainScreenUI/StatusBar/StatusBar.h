@@ -18,8 +18,8 @@ typedef enum{
 } TriggerEdgeState;
 
 typedef enum{
-	ACQUISITTION_RUN,
-	ACQUISITTION_STOP
+	ACQUISITTION_RUN_STATE,
+	ACQUISITTION_STOP_STATE
 } AcquisittionState;
 //-----------------------------------------------------------------------------------------------------------------//
 
