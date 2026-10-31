@@ -5,6 +5,6 @@
 //----------------------------------------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------------------------------------//
-void UiControllerTaskHandle(UiControllerMsg *msg, UiControllerContent *arg);
+void UiControllerTaskHandle(UiControllerMsg *msg);
 
 #endif /* TASK_UICONTROLLERTASK_INC_UICONTROLLERTASK_H_ */

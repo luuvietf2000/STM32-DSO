@@ -21,6 +21,8 @@ typedef struct{
 typedef struct{
 	GraphicsPoint *point;
 	uint32_t size;
+	float voltageMax;
+	float voltageMin;
 } UicontrollerMsgWaveformDraw;
 
 typedef union{
@@ -35,7 +37,7 @@ typedef struct{
 //----------------------------------------------------------------------------------------------------------//
 void UiControllerPushMainScreenInitMsg(StatusBarConfig *statusBarParameter, MeasurementBarConfig *measurementBarParameter);
 void UiControllerQueueInit();
-void UiControllerMsgSend(void (*callback)(UiControllerMsg *msg, UiControllerContent *arg), UiControllerContent *arg, TickType_t tick);
-void UiControllerMsgRead(void (*callback)(UiControllerMsg *msg, UiControllerContent *arg), UiControllerContent *arg, TickType_t tick);
-void UiControllerPushWaveformDrawMsg(GraphicsPoint *point, uint32_t size);
+void UiControllerMsgSend(UiControllerContent *arg, UiControllerMsgType type, TickType_t tick);
+void UiControllerMsgRead(void (*callback)(UiControllerMsg *msg), TickType_t tick);
+void UiControllerPushWaveformDrawMsg(GraphicsPoint *point, uint32_t size, float voltageMax, float voltageMin);
 #endif /* TASK_UICONTROLLERTASK_INC_UICONTROLLERTASKQUEUE_H_ */

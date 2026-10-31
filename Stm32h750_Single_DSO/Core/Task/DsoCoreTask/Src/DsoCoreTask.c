@@ -1,20 +1,22 @@
 #include "DsoCoreTask.h"
-#include "AcquisittionTask.h"
 #include "UiControllerTask.h"
 #include "Timer.h"
 #include "UiControllerTaskConf.h"
 #include "UiControllerTaskWaveformQueue.h"
+#include "Acquisittion.h"
+#include "Dso_Core_Acquisittion_Buffer.h"
+#include "MdmaCopy.h"
 //----------------------------------------------------------------------------------------------------------//
-#define DSO_TIMER_CHANNEL																	TIMER_CHANNEL_1
+#define DSO_CORE_TASK_MDMA_BLOCK_COUNT																1
+#define DSO_CORE_TASK_MDMA_BLOCK_BUFFER_LENGTH(length)												(length*sizeof(uint16_t))
 //----------------------------------------------------------------------------------------------------------//
 static void DsoCoreAdcStart();
 static void DsoCoreAdcStop();
 static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim);
 static void DsoCoreUpdateUi();
-
-static uint32_t iTest = 0;
+static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param);
 //----------------------------------------------------------------------------------------------------------//
-void DsoCoreHandle(DsoCoreMsg *msg, DsoCoreMsgParam *arg){
+void DsoCoreHandle(DsoCoreMsg *msg){
 	switch(msg->type){
 		case DSO_CORE_MSG_ADC_START:
 			DsoCoreAdcStart();
@@ -24,35 +26,45 @@ void DsoCoreHandle(DsoCoreMsg *msg, DsoCoreMsgParam *arg){
 			break;
 		case DSO_CORE_MSG_UPDATE_UI:
 			DsoCoreUpdateUi();
+		case DSO_CORE_MSG_ACQUISITTION_COPY_BUFFER:
+			DsoCoreAcquisittionCopyBuffer(&msg->param.acquisittionCopyBufferParam);
 			break;
 	}
 }
 
-void DsoCoreInit(TIM_HandleTypeDef *htim){
-	TimerInit(htim);
+void DsoCoreInit(){
+	AcquisittionSetupCallback(DsoCoreSendAcquisittionCopyBufferRequest);
 	UiControllerPushMainScreenInitMsg(&statusBarConfig, &measurementBarConfig);
-	TimerSetFunctionUpdateEvent(DsoCoreUpdateUiSignal);
-	TimerStart();
+	TimerSetUpdateMainScreenCallback(DsoCoreUpdateUiSignal);
+	TimerUpdateMainScreenStart();
+	TimerTriggerAdcStart();
+}
+
+static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param){
+	uint16_t *desPtr = DsoCoreGetAcquisitionBufferNextWritePtr(param->size);
+	MdmaContinuousMemory(
+		(uint32_t*)param->ptr,
+		(uint32_t*)desPtr,
+		DSO_CORE_TASK_MDMA_BLOCK_BUFFER_LENGTH(param->size),
+		DSO_CORE_TASK_MDMA_BLOCK_COUNT
+	);
 }
 
 static void DsoCoreUpdateUi(){
 	GraphicsPoint *point;
 	// Get graphics point from Acquisition
 	UiControllerWaveformFreeQueuePop(&point, UI_CONTROLLER_TASK_WAVEFORM_QUEUE_TIME_FOREVER);
-	for(uint32_t i = 0; i < UI_CONTROLLER_TASK_WAVEFORM_BUFFER_LENGTH; i++){
-		point[i].start = 0;
-		point[i].end = 1 + iTest % 150;
-	}
-	iTest++;
-	UiControllerPushWaveformDrawMsg(point, UI_CONTROLLER_TASK_WAVEFORM_BUFFER_LENGTH);
+	float voltageMax, voltageMin;
+	DsoCoreProcessAcquisitionBufferChunk(point, &voltageMax, &voltageMin);
+	UiControllerPushWaveformDrawMsg(point, UI_CONTROLLER_TASK_WAVEFORM_BUFFER_LENGTH, voltageMax, voltageMax);
 }
 
 static void DsoCoreAdcStart(){
-	TimerEnableCCx(DSO_TIMER_CHANNEL);
+	TimerTriggerAdcStart();
 }
 
 static void DsoCoreAdcStop(){
-	TimerDisableCCx(DSO_TIMER_CHANNEL);
+	TimerTriggerAdcStop();
 }
 
 static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim){
@@ -65,4 +77,5 @@ static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim){
 	}
 	portYIELD_FROM_ISR(priority);
 }
+
 

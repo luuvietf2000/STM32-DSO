@@ -4,18 +4,14 @@
 #include "stm32h7xx_hal.h"
 
 //----------------------------------------------------------------------------------------------------------//
-#define TIMER_CHANNEL_IT_1																			TIM_IT_CC1
-#define TIMER_CHANNEL_1																				TIM_CHANNEL_1
 //----------------------------------------------------------------------------------------------------------//
 
-void TimerInit(TIM_HandleTypeDef *htim);
-HAL_StatusTypeDef TimerStart();
-HAL_StatusTypeDef TimerStop();
-void TimerEnableCCxInterrupt(uint32_t interrupt);
-void TimerDisableCCxInterrupt(uint32_t interrupt);
-void TimerSetFunctionCompareMatchEvent(void (*ptr)(TIM_HandleTypeDef *htim));
-void TimerSetFunctionUpdateEvent(void (*ptr)(TIM_HandleTypeDef *htim));
-HAL_StatusTypeDef TimerEnableCCx(uint32_t channel);
-HAL_StatusTypeDef TimerDisableCCx(uint32_t channel);
+void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc, uint32_t _channelTriggerAdc);
+HAL_StatusTypeDef TimerUpdateMainScreenStart(void);
+HAL_StatusTypeDef TimerUpdateMainScreenStop(void);
+HAL_StatusTypeDef TimerTriggerAdcStart(void);
+HAL_StatusTypeDef TimerTriggerAdcStop(void);
+void TimerSetUpdateMainScreenCallback(void (*callback)(TIM_HandleTypeDef *htim));
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
 
 #endif /* TIMER_INC_TIMER_H_ */

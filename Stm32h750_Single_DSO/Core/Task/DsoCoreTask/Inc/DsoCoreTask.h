@@ -8,6 +8,6 @@
 extern MeasurementBarConfig measurementBarConfig;
 extern StatusBarConfig statusBarConfig;
 //----------------------------------------------------------------------------------------------------------//
-void DsoCoreHandle(DsoCoreMsg *msg, DsoCoreMsgParam *arg);
-void DsoCoreInit(TIM_HandleTypeDef *htim);
+void DsoCoreHandle(DsoCoreMsg *msg);
+void DsoCoreInit();
 #endif /* TASK_DSOCORETASK_INC_DSOCORETASK_H_ */

@@ -10,8 +10,6 @@ static void UiControllerFreeQueuePush(UiControllerMsg *msg, TickType_t tick);
 static void UiControllerFreeQueuePop(UiControllerMsg **msg, TickType_t tick);
 static void UiControllerReadyQueuePush(UiControllerMsg *msg, TickType_t tick);
 static void UiControllerReadyQueuePop(UiControllerMsg **msg, TickType_t tick);
-static void UiControllerSetMainScreenInitMsg(UiControllerMsg *msg, UiControllerContent *arg);
-static void UiControllerSetWaveformMsg(UiControllerMsg *msg, UiControllerContent *arg);
 //----------------------------------------------------------------------------------------------------------//
 void UiControllerQueueInit(){
     ready = xQueueCreate(UI_CONTROLLER_TASK_QUEUE_LENGTH, sizeof(UiControllerMsg*));
@@ -22,14 +20,16 @@ void UiControllerQueueInit(){
     UiControllerWaveformQueueInit();
 }
 
-void UiControllerPushWaveformDrawMsg(GraphicsPoint *point, uint32_t size){
+void UiControllerPushWaveformDrawMsg(GraphicsPoint *point, uint32_t size, float voltageMax, float voltageMin){
 	UiControllerContent param = {
 		.waveformParam = {
 			.point = point,
-			.size = size
+			.size = size,
+			.voltageMax = voltageMax,
+			.voltageMin = voltageMin
 		}
 	};
-	UiControllerMsgSend(UiControllerSetWaveformMsg, &param, UI_CONTROLLER_TASK_TIME_FOREVER);
+	UiControllerMsgSend(&param, UI_CONTROLLER_MSG_WAVEFORM_DRAW, UI_CONTROLLER_TASK_TIME_FOREVER);
 }
 
 void UiControllerPushMainScreenInitMsg(StatusBarConfig *statusBarParameter, MeasurementBarConfig *measurementBarParameter){
@@ -39,20 +39,21 @@ void UiControllerPushMainScreenInitMsg(StatusBarConfig *statusBarParameter, Meas
 			.measurementBarConfig = *measurementBarParameter
 		}
 	};
-	UiControllerMsgSend(UiControllerSetMainScreenInitMsg, &param, UI_CONTROLLER_TASK_TIME_FOREVER);
+	UiControllerMsgSend(&param, UI_CONTROLLER_MSG_MAIN_SCREEN_INIT, UI_CONTROLLER_TASK_TIME_FOREVER);
 }
 
-void UiControllerMsgRead(void (*callback)(UiControllerMsg *msg, UiControllerContent *arg), UiControllerContent *arg, TickType_t tick){
+void UiControllerMsgRead(void (*callback)(UiControllerMsg *msg), TickType_t tick){
     UiControllerMsg *msg;
     UiControllerReadyQueuePop(&msg, tick);
-    callback(msg, arg);
+    callback(msg);
     UiControllerFreeQueuePush(msg, tick);
 }
 
-void UiControllerMsgSend(void (*callback)(UiControllerMsg *msg, UiControllerContent *arg), UiControllerContent *arg, TickType_t tick){
+void UiControllerMsgSend(UiControllerContent *arg, UiControllerMsgType type, TickType_t tick){
     UiControllerMsg *msg;
     UiControllerFreeQueuePop(&msg, tick);
-    callback(msg, arg);
+    msg->type = type;
+    msg->param = *arg;
     UiControllerReadyQueuePush(msg, tick);
 }
 
@@ -72,12 +73,3 @@ static void UiControllerReadyQueuePop(UiControllerMsg **msg, TickType_t tick){
     xQueueReceive(ready, msg, tick);
 }
 
-static void UiControllerSetMainScreenInitMsg(UiControllerMsg *msg, UiControllerContent *arg){
-	msg->type = UI_CONTROLLER_MSG_MAIN_SCREEN_INIT;
-	msg->param = *arg;
-}
-
-static void UiControllerSetWaveformMsg(UiControllerMsg *msg, UiControllerContent *arg){
-	msg->type = UI_CONTROLLER_MSG_WAVEFORM_DRAW;
-	msg->param = *arg;
-}

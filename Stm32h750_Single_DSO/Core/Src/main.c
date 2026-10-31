@@ -27,9 +27,11 @@
 #include "UiDisplayBridge.h"
 #include "MainScreen.h"
 #include "stdio.h"
-#include "AcquisittionTask.h"
 #include "DsoCoreTask.h"
 #include "UiControllerTask.h"
+#include "Timer.h"
+#include "MdmaCopy.h"
+#include "Acquisittion.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -59,6 +61,7 @@ SPI_HandleTypeDef hspi1;
 DMA_HandleTypeDef hdma_spi1_tx;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 
 MDMA_HandleTypeDef hmdma_mdma_channel0_sw_0;
 /* Definitions for UiController */
@@ -82,13 +85,6 @@ const osThreadAttr_t St7789Driver_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityRealtime,
 };
-/* Definitions for AcquisittionTsk */
-osThreadId_t AcquisittionTskHandle;
-const osThreadAttr_t AcquisittionTsk_attributes = {
-  .name = "AcquisittionTsk",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityRealtime1,
-};
 /* USER CODE BEGIN PV */
 St7789Config tft7789;
 /* USER CODE END PV */
@@ -102,10 +98,10 @@ static void MX_MDMA_Init(void);
 static void MX_ADC3_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_DMA2D_Init(void);
+static void MX_TIM2_Init(void);
 void UiControllerCallback(void *argument);
 void DsoCoreTaskCallback(void *argument);
 void St7789DriverCallback(void *argument);
-void AcquisittionTaskCallback(void *argument);
 
 /* USER CODE BEGIN PFP */
 static void St7789DriverSetup(St7789Config *config);
@@ -167,8 +163,11 @@ int main(void)
   MX_ADC3_Init();
   MX_TIM1_Init();
   MX_DMA2D_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
 	EnableDwt();
+	TimerInit(&htim1, &htim2, TIM_CHANNEL_2);
+	AcquisittionInit(&hadc3);
   /* USER CODE END 2 */
 
   /* Init scheduler */
@@ -190,7 +189,6 @@ int main(void)
 	/* add queues, ... */
 	St7789QueueInit();
 	St7789DmaMemoryInit();
-	AcquisittionQueueInit();
 	DsoCoreQueueInit();
 	UiControllerQueueInit();
   /* USER CODE END RTOS_QUEUES */
@@ -204,9 +202,6 @@ int main(void)
 
   /* creation of St7789Driver */
   St7789DriverHandle = osThreadNew(St7789DriverCallback, NULL, &St7789Driver_attributes);
-
-  /* creation of AcquisittionTsk */
-  AcquisittionTskHandle = osThreadNew(AcquisittionTaskCallback, NULL, &AcquisittionTsk_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
 	/* add threads, ... */
@@ -318,7 +313,7 @@ static void MX_ADC3_Init(void)
   hadc3.Init.ContinuousConvMode = DISABLE;
   hadc3.Init.NbrOfConversion = 1;
   hadc3.Init.DiscontinuousConvMode = DISABLE;
-  hadc3.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T1_CC1;
+  hadc3.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T2_CC2;
   hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
   hadc3.Init.ConversionDataManagement = ADC_CONVERSIONDATA_DR;
   hadc3.Init.Overrun = ADC_OVR_DATA_PRESERVED;
@@ -506,6 +501,64 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 159;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 0;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_OC_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_TIMING;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_OC_ConfigChannel(&htim2, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * Enable DMA controller clock
   */
 static void MX_DMA_Init(void)
@@ -623,14 +676,13 @@ static void St7789DriverSetup(St7789Config *config) {
  * @retval None
  */
 /* USER CODE END Header_UiControllerCallback */
-GraphicsPoint testPoint[300];
 void UiControllerCallback(void *argument)
 {
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
 	for (;;) {
-		UiControllerMsgRead(UiControllerTaskHandle, NULL,
+		UiControllerMsgRead(UiControllerTaskHandle,
 				UI_CONTROLLER_TASK_TIME_FOREVER);
 	}
   /* USER CODE END 5 */
@@ -647,9 +699,10 @@ void DsoCoreTaskCallback(void *argument)
 {
   /* USER CODE BEGIN DsoCoreTaskCallback */
 	/* Infinite loop */
-	//DsoCoreInit(&htim1);
+	DsoCoreInit();
+	MdmaCopyInit(&hmdma_mdma_channel0_sw_0);
 	for (;;) {
-		DsoCoreMsgRead(DsoCoreHandle, NULL, DSO_CORE_TIME_FOREVER);
+		DsoCoreMsgRead(DsoCoreHandle, DSO_CORE_TIME_FOREVER);
 	}
   /* USER CODE END DsoCoreTaskCallback */
 }
@@ -673,27 +726,6 @@ void St7789DriverCallback(void *argument)
 		St7789FreeQueuePush(msg, ST7789_TIMEOUT_FOREVER);
 	}
   /* USER CODE END St7789DriverCallback */
-}
-
-/* USER CODE BEGIN Header_AcquisittionTaskCallback */
-/**
- * @brief Function implementing the AcquisittionTsk thread.
- * @param argument: Not used
- * @retval None
- */
-/* USER CODE END Header_AcquisittionTaskCallback */
-void AcquisittionTaskCallback(void *argument)
-{
-  /* USER CODE BEGIN AcquisittionTaskCallback */
-	/* Infinite loop */
-	AcquisittionInit(&htim1, &hadc3);
-	AcquisittionMsg *msg;
-	for (;;) {
-		AcquisitionReadyQueuePop(&msg, ACQUISITTION_TIMEOUT_FOREVER);
-		AcquisittionTaskHandle(msg);
-		AcquisitionFreeQueuePush(msg, ACQUISITTION_TIMEOUT_FOREVER);
-	}
-  /* USER CODE END AcquisittionTaskCallback */
 }
 
  /* MPU Configuration */

@@ -131,44 +131,53 @@ void GraphicsWaveformUpdate(GraphicsWaveformWidget *waveform, GraphicsPoint *new
 	waveform->pointLines->pointDisplay = size;
 }
 
-void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start, uint32_t end){
+void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, GraphicsPoint *points, uint32_t size){
 	uint32_t contentX, contentY, contentWidth, contentHeight;
 	GraphicsWaveformCaculatorContentSize(waveform, &contentX, &contentWidth, &contentY, &contentHeight);
-	if(end < start || (end - start) > contentHeight)
+	if(size == 0 || size > waveform->pointLines->pointCount)
 		return;
 
 	if(waveform->pointLines->pointDisplay < waveform->pointLines->pointCount){
-		GraphicsWaveformAddPoint(waveform, waveform->pointLines->pointDisplay, contentX, contentY, start, end);
-		waveform->pointLines->pointDisplay++;
+		for(uint32_t i = 0; (i < size) && (waveform->pointLines->pointDisplay < waveform->pointLines->pointCount); i++){
+			GraphicsWaveformAddPoint(
+				waveform,
+				waveform->pointLines->pointDisplay,
+				contentX,
+				contentY,
+				(points + i)->start,
+				(points + i)->end
+			);
+			*(waveform->pointLines->points + waveform->pointLines->pointDisplay) = *(points + i);
+			waveform->pointLines->pointDisplay++;
+		}
 	} else{
-		GraphicsPoint new;
-		new.start = start;
-		new.end = end;
 		GraphicsPoint *ptr;
-		for(uint32_t i = 0; i < waveform->pointLines->pointCount - 1; i++){
+		uint32_t index = (waveform->pointLines->pointCount - size);
+		for(uint32_t i = 0; i < index; i++){
 			ptr = waveform->pointLines->points + i;
 			GraphicsWaveformUpdatePoint(
 				waveform,
-				ptr + 1,
+				ptr + size,
 				ptr,
 				contentX,
 				contentY,
 				i
 			);
-			ptr->start = (ptr + 1)->start;
-			ptr->end = (ptr + 1)->end;
+			*ptr = *(ptr + size);
 		}
-		ptr = waveform->pointLines->points + waveform->pointLines->pointCount - 1;
-		GraphicsWaveformUpdatePoint(
-			waveform,
-			&new,
-			ptr,
-			contentX,
-			contentY,
-			waveform->pointLines->pointCount - 1
-		);
-		ptr->start = start;
-		ptr->end = end;
+
+		for(uint32_t i = 0; i < size; i++){
+			ptr = waveform->pointLines->points + index + i;
+			GraphicsWaveformUpdatePoint(
+				waveform,
+				points + i,
+				ptr,
+				contentX,
+				contentY,
+				index + i
+			);
+			*ptr = *(points + i);
+		}
 	}
 }
 

@@ -4,7 +4,7 @@
 static void UiControllerMainScreenInit(UiControllerMsg *msg);
 static void UiControllerWaveformDraw(UiControllerMsg *msg);
 //----------------------------------------------------------------------------------------------------------//
-void UiControllerTaskHandle(UiControllerMsg *msg, UiControllerContent *arg){
+void UiControllerTaskHandle(UiControllerMsg *msg){
 	switch(msg->type){
 		case UI_CONTROLLER_MSG_MAIN_SCREEN_INIT:
 			UiControllerMainScreenInit(msg);

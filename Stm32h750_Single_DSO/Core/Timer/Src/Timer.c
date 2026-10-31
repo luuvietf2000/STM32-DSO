@@ -1,58 +1,43 @@
 #include "Timer.h"
 
 //----------------------------------------------------------------------------------------------------------//
-static TIM_HandleTypeDef *tim;
-static void (*compareMatchEvent)(TIM_HandleTypeDef *htim);
-static void (*updateEvent)(TIM_HandleTypeDef *htim);
+static TIM_HandleTypeDef *timerUpdateMainScreen;
+static TIM_HandleTypeDef *timerTriggerAdc;
+static uint32_t channelTriggerAdc;
+static void (*timerUpdateMainScreenCallback)(TIM_HandleTypeDef *htim);
 //----------------------------------------------------------------------------------------------------------//
-void TimerInit(TIM_HandleTypeDef *htim){
-	tim = htim;
+void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc, uint32_t _channelTriggerAdc){
+	timerUpdateMainScreen = _timerUpdateMainScreen;
+	timerTriggerAdc = _timerTriggerAdc;
+	channelTriggerAdc = _channelTriggerAdc;
 }
 
-HAL_StatusTypeDef TimerStart(){
-	HAL_StatusTypeDef result = HAL_TIM_Base_Start_IT(tim);
+HAL_StatusTypeDef TimerUpdateMainScreenStart(){
+	HAL_StatusTypeDef result = HAL_TIM_Base_Start_IT(timerUpdateMainScreen);
 	return result;
 }
 
-HAL_StatusTypeDef TimerStop(){
-	HAL_StatusTypeDef result = HAL_TIM_Base_Stop_IT(tim);
+HAL_StatusTypeDef TimerUpdateMainScreenStop(){
+	HAL_StatusTypeDef result = HAL_TIM_Base_Stop_IT(timerUpdateMainScreen);
 	return result;
 }
 
-HAL_StatusTypeDef TimerEnableCCx(uint32_t channel){
-	HAL_StatusTypeDef result = HAL_TIM_OC_Start(tim, channel);
+HAL_StatusTypeDef TimerTriggerAdcStart(){
+	HAL_StatusTypeDef result = HAL_TIM_OC_Start(timerTriggerAdc, channelTriggerAdc);
 	return result;
 }
 
-HAL_StatusTypeDef TimerDisableCCx(uint32_t channel){
-	HAL_StatusTypeDef result = HAL_TIM_OC_Stop(tim, channel);
+HAL_StatusTypeDef TimerTriggerAdcStop(){
+	HAL_StatusTypeDef result = HAL_TIM_OC_Stop(timerTriggerAdc, channelTriggerAdc);
 	return result;
 }
 
-void TimerEnableCCxInterrupt(uint32_t interrupt){
-	__HAL_TIM_ENABLE_IT(tim, interrupt);
-}
-
-void TimerDisableCCxInterrupt(uint32_t interrupt){
-	__HAL_TIM_DISABLE_IT(tim, interrupt);
-}
-
-void TimerSetFunctionCompareMatchEvent(void (*ptr)(TIM_HandleTypeDef *htim)){
-	compareMatchEvent = ptr;
-}
-
-void TimerSetFunctionUpdateEvent(void (*ptr)(TIM_HandleTypeDef *htim)){
-	updateEvent = ptr;
-}
-
-void HAL_TIM_OC_DelayElapsedCallback(TIM_HandleTypeDef *htim){
-	if(htim == tim){
-		compareMatchEvent(htim);
-	}
+void TimerSetUpdateMainScreenCallback(void (*callback)(TIM_HandleTypeDef *htim)){
+	timerUpdateMainScreenCallback = callback;
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	if(htim == tim){
-		updateEvent(htim);
+	if(htim == timerUpdateMainScreen){
+		timerUpdateMainScreenCallback(htim);
 	}
 }

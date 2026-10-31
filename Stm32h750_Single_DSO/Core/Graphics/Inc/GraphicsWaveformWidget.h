@@ -34,5 +34,5 @@ typedef struct{
 void GraphicsWaveformUpdate(GraphicsWaveformWidget *waveform, GraphicsPoint *new, uint32_t size);
 void GraphicsWaveformSetParameter(GraphicsWaveformWidget *waveform, uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t background, uint32_t divisionXLine, uint32_t divisionYLine, uint32_t divisionLineColor, uint32_t borderWidth, uint32_t borderColor);
 void GraphicsDrawWaveformWidget(GraphicsWaveformWidget *waveform);
-void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, uint32_t start, uint32_t end);
+void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, GraphicsPoint *points, uint32_t size);
 #endif /* GRAPHICS_INC_GRAPHICSWAVEFORMWIDGET_H_ */
