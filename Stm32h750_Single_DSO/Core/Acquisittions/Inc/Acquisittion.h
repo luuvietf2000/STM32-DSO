@@ -5,7 +5,7 @@
 #include "stm32h7xx_hal.h"
 //---------------------------------------------------------------------------//
 void AcquisittionInit(ADC_HandleTypeDef *_adc);
-void AcquisittionStart();
+HAL_StatusTypeDef AcquisittionStart();
 void AcquisittionStop();
 void AcquisittionSetupCallback(void (*functionCallback)(uint16_t *ptr, uint16_t size));
 

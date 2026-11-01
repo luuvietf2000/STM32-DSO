@@ -26,6 +26,7 @@ void DsoCoreHandle(DsoCoreMsg *msg){
 			break;
 		case DSO_CORE_MSG_UPDATE_UI:
 			DsoCoreUpdateUi();
+			break;
 		case DSO_CORE_MSG_ACQUISITTION_COPY_BUFFER:
 			DsoCoreAcquisittionCopyBuffer(&msg->param.acquisittionCopyBufferParam);
 			break;
@@ -37,7 +38,7 @@ void DsoCoreInit(){
 	UiControllerPushMainScreenInitMsg(&statusBarConfig, &measurementBarConfig);
 	TimerSetUpdateMainScreenCallback(DsoCoreUpdateUiSignal);
 	TimerUpdateMainScreenStart();
-	TimerTriggerAdcStart();
+	DsoCoreAdcStart();
 }
 
 static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param){
@@ -60,11 +61,13 @@ static void DsoCoreUpdateUi(){
 }
 
 static void DsoCoreAdcStart(){
+	AcquisittionStart();
 	TimerTriggerAdcStart();
 }
 
 static void DsoCoreAdcStop(){
 	TimerTriggerAdcStop();
+	AcquisittionStop();
 }
 
 static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim){

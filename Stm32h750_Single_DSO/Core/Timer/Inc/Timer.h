@@ -6,7 +6,7 @@
 //----------------------------------------------------------------------------------------------------------//
 //----------------------------------------------------------------------------------------------------------//
 
-void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc, uint32_t _channelTriggerAdc);
+void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc);
 HAL_StatusTypeDef TimerUpdateMainScreenStart(void);
 HAL_StatusTypeDef TimerUpdateMainScreenStop(void);
 HAL_StatusTypeDef TimerTriggerAdcStart(void);

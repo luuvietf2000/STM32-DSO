@@ -3,13 +3,11 @@
 //----------------------------------------------------------------------------------------------------------//
 static TIM_HandleTypeDef *timerUpdateMainScreen;
 static TIM_HandleTypeDef *timerTriggerAdc;
-static uint32_t channelTriggerAdc;
 static void (*timerUpdateMainScreenCallback)(TIM_HandleTypeDef *htim);
 //----------------------------------------------------------------------------------------------------------//
-void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc, uint32_t _channelTriggerAdc){
+void TimerInit(TIM_HandleTypeDef *_timerUpdateMainScreen, TIM_HandleTypeDef *_timerTriggerAdc){
 	timerUpdateMainScreen = _timerUpdateMainScreen;
 	timerTriggerAdc = _timerTriggerAdc;
-	channelTriggerAdc = _channelTriggerAdc;
 }
 
 HAL_StatusTypeDef TimerUpdateMainScreenStart(){
@@ -23,12 +21,12 @@ HAL_StatusTypeDef TimerUpdateMainScreenStop(){
 }
 
 HAL_StatusTypeDef TimerTriggerAdcStart(){
-	HAL_StatusTypeDef result = HAL_TIM_OC_Start(timerTriggerAdc, channelTriggerAdc);
+	HAL_StatusTypeDef result = HAL_TIM_Base_Start(timerTriggerAdc);
 	return result;
 }
 
 HAL_StatusTypeDef TimerTriggerAdcStop(){
-	HAL_StatusTypeDef result = HAL_TIM_OC_Stop(timerTriggerAdc, channelTriggerAdc);
+	HAL_StatusTypeDef result = HAL_TIM_Base_Stop(timerTriggerAdc);
 	return result;
 }
 

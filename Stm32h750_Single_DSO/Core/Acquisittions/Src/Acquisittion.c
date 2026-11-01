@@ -24,8 +24,9 @@ void AcquisittionSetupCallback(void (*functionCallback)(uint16_t *ptr, uint16_t 
 	acquisittionHaltTransferFinishPtr = functionCallback;
 }
 
-void AcquisittionStart(){
-	HAL_ADC_Start_DMA(adc, (uint32_t*)sample, ACQUISITTION_BUFFER_LENGTH);
+HAL_StatusTypeDef AcquisittionStart(){
+	HAL_StatusTypeDef result = HAL_ADC_Start_DMA(adc, (uint32_t*)sample, ACQUISITTION_BUFFER_LENGTH);
+	return result;
 }
 
 void AcquisittionStop(){

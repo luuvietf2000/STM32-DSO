@@ -25,7 +25,7 @@ static uint32_t detectedSampleCount;
 static uint32_t detectedSampleIndex;
 static uint32_t maxSample;
 static uint32_t minSample;
-static uint32_t samplePerPixel;
+static uint32_t samplePerPixel = 100;
 static uint32_t levelMax;
 static uint32_t levelMin;
 static uint32_t levelMaxChuck;
