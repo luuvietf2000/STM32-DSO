@@ -5,7 +5,6 @@ static QueueHandle_t free;
 static QueueHandle_t ready;
 static DsoCoreMsg pool[DSO_CORE_TASK_QUEUE_LENGTH];
 //----------------------------------------------------------------------------------------------------------//
-static void DsoCoreSetAcquisittionCopyBufferMsg(DsoCoreMsgParam *param, uint16_t *ptr, uint16_t size);
 static void DsoCoreFreeQueuePush(DsoCoreMsg *msg, TickType_t tick);
 static void DsoCoreFreeQueuePop(DsoCoreMsg **msg, TickType_t tick);
 static void DsoCoreReadyQueuePush(DsoCoreMsg *msg, TickType_t tick);
@@ -59,19 +58,16 @@ BaseType_t DsoCoreReadyQueuePushIsr(DsoCoreMsg *msg, BaseType_t *priority){
 	return xQueueSendFromISR(ready, &msg, priority);
 }
 
-static void DsoCoreSetAcquisittionCopyBufferMsg(DsoCoreMsgParam *param, uint16_t *ptr, uint16_t size){
-	param->acquisittionCopyBufferParam.ptr = ptr;
-	param->acquisittionCopyBufferParam.size = size;
-}
+void DsoCoreSendMsgFromIsr(DsoCoreMsgType type, DsoCoreMsgParam *arg){
+	DsoCoreMsg *msg = NULL;
+	BaseType_t priority = pdFALSE;
 
-void DsoCoreSendAcquisittionCopyBufferRequest(uint16_t *ptr, uint16_t size){
-	DsoCoreMsgParam param;
-	DsoCoreSetAcquisittionCopyBufferMsg(&param, ptr, size);
-	DsoCoreMsgSend(
-		DSO_CORE_MSG_ACQUISITTION_COPY_BUFFER,
-		&param,
-		DSO_CORE_TIME_FOREVER
-	);
+	if(DsoCoreFreeQueuePopIsr(&msg, &priority) == pdPASS){
+		msg->type = type;
+		if(arg != NULL)
+			msg->param = *arg;
+		DsoCoreReadyQueuePushIsr(msg, &priority);
+	}
+	portYIELD_FROM_ISR(priority);
 }
-
 

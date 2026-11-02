@@ -181,15 +181,11 @@ void GraphicsWaveformPushPoint(GraphicsWaveformWidget *waveform, GraphicsPoint *
 	}
 }
 
-static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, GraphicsPoint *new, GraphicsPoint *old, uint32_t contentX, uint32_t contentY, uint32_t x){
+static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, GraphicsPoint *new, GraphicsPoint *old, uint32_t contentX, uint32_t contentY, uint32_t x){\
+	if(new->end <= new->start)
+		return;
 	uint32_t yStart = GRAPHICS_GET_MIN(new->start, old->start);
 	uint32_t yEnd = GRAPHICS_GET_MAX(new->end, old->end);
-	GraphicsSetAreaRequest(
-		contentX + x,
-		contentX + x + GRAPHICS_WAVEFORM_POINT_LINE_SIZE,
-		contentY + yStart,
-		contentY + yEnd
-	);
 	uint8_t *data = NULL;
 	uint32_t prefecrredSize = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(GRAPHICS_WAVEFORM_POINT_LINE_SIZE, yEnd - yStart));
 	uint32_t pixelStart;
@@ -210,9 +206,14 @@ static void GraphicsWaveformUpdatePoint(GraphicsWaveformWidget *waveform, Graphi
 			}
 		}
 	}
-
 	uint32_t pixelNewSize = new->end - new->start;
 	pixelStart =  new->start - yStart;
+	GraphicsSetAreaRequest(
+		contentX + x,
+		contentX + x + GRAPHICS_WAVEFORM_POINT_LINE_SIZE,
+		contentY + yStart,
+		contentY + yEnd
+	);
 	GraphicsDma2dFillModeStart(GRAPHICS_WAVEFORM_ONE_PIXEL, pixelNewSize, data + GRAPHICS_GET_PIXEL_BYTE(pixelStart), waveform->pointLines->pointColor);
 	GraphicsTransfer(data, prefecrredSize, GRAPHICS_WAVEFORM_POINT_LINE_SIZE);
 }

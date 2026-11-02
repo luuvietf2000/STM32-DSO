@@ -17,8 +17,8 @@
 //-------------------------------------------------------------------------------------------------------------------------//
 __attribute__((section(".dma_buffer")))
 static uint16_t acquisittionBuffer[DSO_CORE_TASK_SAMPLE_BUFFER_LENGTH];
-static uint16_t writeIndex;
-static uint16_t readIndex;
+static uint32_t writeIndex;
+static uint32_t readIndex;
 static DsoCoreAcquisittionBufferState memoryState;
 static GraphicsPoint *point = NULL;
 static uint32_t detectedSampleCount;
@@ -26,8 +26,8 @@ static uint32_t detectedSampleIndex;
 static uint32_t maxSample;
 static uint32_t minSample;
 static uint32_t samplePerPixel = 100;
-static uint32_t levelMax;
-static uint32_t levelMin;
+static uint32_t levelMax = 65535;
+static uint32_t levelMin = 0;
 static uint32_t levelMaxChuck;
 static uint32_t levelMinChuck;
 //-------------------------------------------------------------------------------------------------------------------------//
@@ -35,8 +35,13 @@ static void DsoCoreGetPointPixel(uint32_t *pixel, uint32_t level, uint32_t offse
 static void DsoCoreGetPeakDetectedSamples(GraphicsPoint *ptr, uint32_t indexBufferStart, uint32_t *sampleIndex, uint32_t *maxSample, uint32_t *minSample, uint32_t *maxChuck, uint32_t *minChuck,  uint32_t levelMax, uint32_t levelMin, uint32_t scaleSample);
 //-------------------------------------------------------------------------------------------------------------------------//
 uint16_t *DsoCoreGetAcquisitionBufferNextWritePtr(uint32_t size){
-	memoryState = DSO_CORE_TASK_ACQUISITTION_BUFFER_MEMORY_AVAILABLE;
-	return acquisittionBuffer + DSO_CORE_ACQUISITITON_BUFFER_NEXT_INDEX(writeIndex, size);
+	if(memoryState == DSO_CORE_TASK_ACQUISITTION_BUFFER_MEMORY_EMPTY){
+		memoryState = DSO_CORE_TASK_ACQUISITTION_BUFFER_MEMORY_AVAILABLE;
+		return acquisittionBuffer;
+	}
+	uint32_t offset = DSO_CORE_ACQUISITITON_BUFFER_NEXT_INDEX(writeIndex, size);
+	writeIndex = offset;
+	return acquisittionBuffer + offset;
 }
 
 uint16_t *DsoCoreGetAcquisitionBufferPerWritePtr(uint32_t size){
@@ -50,7 +55,7 @@ static void DsoCoreGetPointPixel(uint32_t *pixel, uint32_t level, uint32_t offse
 		level = 0;
 	} else
 		level -= levelMin;
-	*pixel = DSO_CORE_ACQUISITION_BUFFER_GET_PIXEL(level, levelMax - levelMin) + offset;
+	*pixel = DSO_CORE_ACQUISITION_BUFFER_GET_PIXEL(level, (levelMax - levelMin)) + offset;
 }
 
 static void DsoCoreGetPeakDetectedSamples(GraphicsPoint *ptr, uint32_t indexBufferStart, uint32_t *sampleIndex, uint32_t *maxSample, uint32_t *minSample, uint32_t *maxChuck, uint32_t *minChuck,  uint32_t levelMax, uint32_t levelMin, uint32_t scaleSample){
@@ -102,10 +107,11 @@ void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, float *voltageMax,
 	if(size < samplesRequired)
 		return;
 	levelMaxChuck = levelMinChuck = acquisittionBuffer[readIndex];
+	detectedSampleCount = 0;
 	DsoCoreGetPeakDetectedSamples(
 		ptr,
 		readIndex,
-		&detectedSampleIndex,
+		&detectedSampleCount,
 		&levelMaxChuck,
 		&levelMinChuck,
 		&maxSample,
@@ -116,5 +122,5 @@ void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, float *voltageMax,
 	);
 	*voltageMax = DSO_CORE_ACQUISITTION_CONVERT_LEVEL(levelMaxChuck);
 	*voltageMin = DSO_CORE_ACQUISITTION_CONVERT_LEVEL(levelMinChuck);
-	readIndex += samplesRequired;
+	DsoCoreGetAcquisitionBufferPerWritePtr(samplesRequired);
 }

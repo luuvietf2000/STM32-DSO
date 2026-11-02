@@ -189,8 +189,8 @@ int main(void)
 	/* add queues, ... */
 	St7789QueueInit();
 	St7789DmaMemoryInit();
-	DsoCoreQueueInit();
 	UiControllerQueueInit();
+	DsoCoreQueueInit();
   /* USER CODE END RTOS_QUEUES */
 
   /* Create the thread(s) */

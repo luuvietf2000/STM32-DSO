@@ -34,5 +34,5 @@ void DsoCoreMsgRead(void (*callback)(DsoCoreMsg *msg), TickType_t tick);
 void DsoCoreMsgSend(DsoCoreMsgType type, DsoCoreMsgParam *arg, TickType_t tick);
 BaseType_t DsoCoreReadyQueuePushIsr(DsoCoreMsg *msg, BaseType_t *priority);
 BaseType_t DsoCoreFreeQueuePopIsr(DsoCoreMsg **msg, BaseType_t *priority);
-void DsoCoreSendAcquisittionCopyBufferRequest(uint16_t *ptr, uint16_t size);
+void DsoCoreSendMsgFromIsr(DsoCoreMsgType type, DsoCoreMsgParam *arg);
 #endif /* TASK_DSOCORETASK_INC_DSOCORETASKQUEUE_H_ */

@@ -15,6 +15,7 @@ static void DsoCoreAdcStop();
 static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim);
 static void DsoCoreUpdateUi();
 static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param);
+static void DsoCoreSendAcquisittionCopyBufferRequest(uint16_t *ptr, uint16_t size);
 //----------------------------------------------------------------------------------------------------------//
 void DsoCoreHandle(DsoCoreMsg *msg){
 	switch(msg->type){
@@ -44,8 +45,8 @@ void DsoCoreInit(){
 static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param){
 	uint16_t *desPtr = DsoCoreGetAcquisitionBufferNextWritePtr(param->size);
 	MdmaContinuousMemory(
-		(uint32_t*)param->ptr,
-		(uint32_t*)desPtr,
+		param->ptr,
+		desPtr,
 		DSO_CORE_TASK_MDMA_BLOCK_BUFFER_LENGTH(param->size),
 		DSO_CORE_TASK_MDMA_BLOCK_COUNT
 	);
@@ -71,14 +72,13 @@ static void DsoCoreAdcStop(){
 }
 
 static void DsoCoreUpdateUiSignal(TIM_HandleTypeDef *htim){
-	DsoCoreMsg *msg = NULL;
-	BaseType_t priority = pdFALSE;
-
-	if(DsoCoreFreeQueuePopIsr(&msg, &priority) == pdPASS){
-		msg->type = DSO_CORE_MSG_UPDATE_UI;
-		DsoCoreReadyQueuePushIsr(msg, &priority);
-	}
-	portYIELD_FROM_ISR(priority);
+	DsoCoreSendMsgFromIsr(DSO_CORE_MSG_UPDATE_UI, NULL);
 }
 
+static void DsoCoreSendAcquisittionCopyBufferRequest(uint16_t *ptr, uint16_t size){
+	DsoCoreMsgParam param;
+	param.acquisittionCopyBufferParam.ptr = ptr;
+	param.acquisittionCopyBufferParam.size = size;
+	DsoCoreSendMsgFromIsr(DSO_CORE_MSG_ACQUISITTION_COPY_BUFFER, &param);
+}
 

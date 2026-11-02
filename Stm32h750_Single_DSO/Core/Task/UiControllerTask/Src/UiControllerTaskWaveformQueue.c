@@ -13,7 +13,7 @@ void UiControllerWaveformQueueInit(){
 }
 
 void UiControllerWaveformFreeQueuePush(GraphicsPoint *point, TickType_t tick){
-    xQueueSend(free, &point, tick);
+	xQueueSend(free, &point, tick);
 }
 
 void UiControllerWaveformFreeQueuePop(GraphicsPoint **point, TickType_t tick){
