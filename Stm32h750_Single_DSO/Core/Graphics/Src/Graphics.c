@@ -23,11 +23,8 @@ static StaticSemaphore_t semaphoreBuffer;
 static SemaphoreHandle_t graphicsSemaphore;
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDma2dSetOffsetPixel(uint32_t size){
-	if(graphicsDma2d->Init.OutputOffset == size)
-		return;
 	CLEAR_BIT(graphicsDma2d->Instance->CR, DMA2D_CR_LOM);
 	MODIFY_REG(graphicsDma2d->Instance->OOR, DMA2D_OOR_LO, size);
-	graphicsDma2d->Init.OutputOffset = size;
 }
 static uint32_t GraphicsSwapByte(uint32_t color){
 	uint32_t red = color & GRAPHICS_RGB888_RED;
@@ -90,8 +87,6 @@ void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t heig
 
 
 static void GraphicsSetDma2dModeFill(){
-	if(graphicsDma2d->Init.Mode == DMA2D_R2M)
-		return;
 	graphicsDma2d->Init.Mode = DMA2D_R2M;
 	MODIFY_REG(graphicsDma2d->Instance->CR, DMA2D_CR_MODE, DMA2D_R2M);
 	graphicsDma2d->Init.ColorMode = DMA2D_OUTPUT_RGB565;
@@ -101,8 +96,6 @@ static void GraphicsSetDma2dModeFill(){
 }
 
 static void GraphicsSetDma2dModeBlendBg(GraphicsDma2dClutMode mode){
-	if(graphicsDma2d->Init.Mode == DMA2D_M2M_BLEND_BG)
-		return;
 	graphicsDma2d->Init.Mode = DMA2D_M2M_BLEND_BG;
 	MODIFY_REG(graphicsDma2d->Instance->CR, DMA2D_CR_MODE, DMA2D_M2M_BLEND_BG);
 	MODIFY_REG(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_CM, DMA2D_OUTPUT_RGB565);
@@ -167,7 +160,6 @@ void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bi
 	__HAL_DMA2D_ENABLE_IT(graphicsDma2d, DMA2D_IT_TC | DMA2D_IT_TE | DMA2D_IT_CE);
 	__HAL_DMA2D_ENABLE(graphicsDma2d);
 	GraphicsSleepTask();
-
 }
 
 void GraphicsInit(DMA2D_HandleTypeDef *dma2d){

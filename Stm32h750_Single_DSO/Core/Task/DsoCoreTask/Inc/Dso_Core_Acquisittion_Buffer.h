@@ -16,5 +16,5 @@ typedef enum{
 //---------------------------------------------------------------------------//
 uint16_t *DsoCoreGetAcquisitionBufferNextWritePtr(uint32_t size);
 uint16_t *DsoCoreGetAcquisitionBufferPerWritePtr(uint32_t size);
-void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, float *voltageMax, float *voltageMin);
+void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, uint32_t *voltageMax, uint32_t *voltageMin);
 #endif /* TASK_DSOCORETASK_INC_DSO_CORE_ACQUISITTION_BUFFER_H_ */

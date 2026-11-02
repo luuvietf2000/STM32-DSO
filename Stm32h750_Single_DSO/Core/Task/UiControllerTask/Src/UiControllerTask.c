@@ -18,15 +18,17 @@ void UiControllerTaskHandle(UiControllerMsg *msg){
 }
 
 static void UiControllerWaveformDraw(UiControllerMsg *msg){
+
 	WaveformUpdate(
 		msg->param.waveformParam.point,
 		msg->param.waveformParam.size
 	);
+
 	MeasurementBarConfig measurementBarConfig = (MeasurementBarConfig){
 		msg->param.waveformParam.voltageMax,
 		msg->param.waveformParam.voltageMin
 	};
-	//MeasurementBarRequestChanged(&measurementBarConfig);
+	MeasurementBarRequestChanged(&measurementBarConfig);
 	UiControllerWaveformFreeQueuePush(
 		msg->param.waveformParam.point,
 		UI_CONTROLLER_TASK_WAVEFORM_QUEUE_TIME_FOREVER

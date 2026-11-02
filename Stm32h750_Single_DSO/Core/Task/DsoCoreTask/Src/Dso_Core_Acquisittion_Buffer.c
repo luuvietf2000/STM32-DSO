@@ -101,7 +101,7 @@ static uint32_t DsoCoreGetAcquisittionBufferSize(){
 	return size;
 }
 
-void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, float *voltageMax, float *voltageMin){
+void DsoCoreProcessAcquisitionBufferChunk(GraphicsPoint *ptr, uint32_t *voltageMax, uint32_t *voltageMin){
 	uint32_t size = DsoCoreGetAcquisittionBufferSize();
 	uint32_t samplesRequired = samplePerPixel * DSO_CORE_ACQUISITTION_X_PIXELS_DISPLAY;
 	if(size < samplesRequired)

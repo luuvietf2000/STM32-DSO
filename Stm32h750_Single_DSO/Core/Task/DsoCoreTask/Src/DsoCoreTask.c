@@ -45,8 +45,8 @@ void DsoCoreInit(){
 static void DsoCoreAcquisittionCopyBuffer(DsoCoreAcquisittionCopyBufferMsg *param){
 	uint16_t *desPtr = DsoCoreGetAcquisitionBufferNextWritePtr(param->size);
 	MdmaContinuousMemory(
-		param->ptr,
-		desPtr,
+		(uint32_t*)param->ptr,
+		(uint32_t*)desPtr,
 		DSO_CORE_TASK_MDMA_BLOCK_BUFFER_LENGTH(param->size),
 		DSO_CORE_TASK_MDMA_BLOCK_COUNT
 	);
@@ -56,7 +56,7 @@ static void DsoCoreUpdateUi(){
 	GraphicsPoint *point;
 	// Get graphics point from Acquisition
 	UiControllerWaveformFreeQueuePop(&point, UI_CONTROLLER_TASK_WAVEFORM_QUEUE_TIME_FOREVER);
-	float voltageMax, voltageMin;
+	uint32_t voltageMax, voltageMin;
 	DsoCoreProcessAcquisitionBufferChunk(point, &voltageMax, &voltageMin);
 	UiControllerPushWaveformDrawMsg(point, UI_CONTROLLER_TASK_WAVEFORM_BUFFER_LENGTH, voltageMax, voltageMax);
 }
