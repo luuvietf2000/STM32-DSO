@@ -14,13 +14,14 @@
 #define GRAPHICS_TEXT_MASK													0x01
 #define GRAPHICS_TEXT_TRANSFER_COUNT										1
 //----------------------------------------------------------------------------------------------------------//
+
 typedef struct{
 	uint32_t x;
 	uint32_t y;
 	uint32_t width;
 	uint32_t height;
 	char *content;
-	GraphicsAlignment aligment;
+	GraphicsAlignment alignment;
 	uint32_t textColor;
 	uint32_t background;
 	uint32_t fontPixel;
@@ -29,5 +30,5 @@ typedef struct{
 extern uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawTextWidget(GraphicsTextWidget *text);
-
+void GraphicsTextWidgetUpdateContent(GraphicsTextWidget *text, char *textOld, char *textNew);
 #endif /* GRAPHICS_INC_GRAPHICSTEXTWIDGET_H_ */

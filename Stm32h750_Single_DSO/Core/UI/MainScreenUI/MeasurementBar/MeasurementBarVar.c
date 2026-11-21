@@ -7,7 +7,7 @@ static char voltageMinContent[VOLTAGE_MIN_TEXT_SIZE_CONTENT];
 static char voltageMaxContent[VOLTAGE_MAX_TEXT_SIZE_CONTENT];
 
 const GraphicsTextWidget voltageMaxText = {
-	.aligment =VOLTAGE_MAX_TEXT_WIDGET_ALIGNMENT,
+	.alignment =VOLTAGE_MAX_TEXT_WIDGET_ALIGNMENT,
 	.x =VOLTAGE_MAX_TEXT_WIDGET_X,
 	.y =VOLTAGE_MAX_TEXT_WIDGET_Y,
 	.width =VOLTAGE_MAX_TEXT_WIDGET_WIDTH,
@@ -19,7 +19,7 @@ const GraphicsTextWidget voltageMaxText = {
 };
 
 const GraphicsTextWidget voltageMinText = {
-	.aligment =VOLTAGE_MIN_TEXT_WIDGET_ALIGNMENT,
+	.alignment =VOLTAGE_MIN_TEXT_WIDGET_ALIGNMENT,
 	.x =VOLTAGE_MIN_TEXT_WIDGET_X,
 	.y =VOLTAGE_MIN_TEXT_WIDGET_Y,
 	.width =VOLTAGE_MIN_TEXT_WIDGET_WIDTH,

@@ -11,7 +11,7 @@ static char triggerEdgeContent[TRIGGER_EDGE_TEXT_SIZE_CONTENT];
 static char triggerLevelContent[TRIGGER_LEVEL_TEXT_SIZE_CONTENT];
 
 const GraphicsTextWidget voltagePerDivisionText = {
-	.aligment = VOLTAGE_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
+	.alignment = VOLTAGE_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
 	.x = VOLTAGE_PER_DIVISION_TEXT_WIDGET_X,
 	.y = VOLTAGE_PER_DIVISION_TEXT_WIDGET_Y,
 	.width = VOLTAGE_PER_DIVISION_TEXT_WIDGET_WIDTH,
@@ -23,7 +23,7 @@ const GraphicsTextWidget voltagePerDivisionText = {
 };
 
 const GraphicsTextWidget timePerDivisionText = {
-	.aligment = TIME_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
+	.alignment = TIME_PER_DIVISION_TEXT_WIDGET_ALIGNMENT,
 	.x = TIME_PER_DIVISION_TEXT_WIDGET_X,
 	.y = TIME_PER_DIVISION_TEXT_WIDGET_Y,
 	.width = TIME_PER_DIVISION_TEXT_WIDGET_WIDTH,
@@ -35,7 +35,7 @@ const GraphicsTextWidget timePerDivisionText = {
 };
 
 const GraphicsTextWidget acquisittionStatusText  = {
-	.aligment = ACQUISITTION_STATUS_TEXT_WIDGET_ALIGNMENT,
+	.alignment = ACQUISITTION_STATUS_TEXT_WIDGET_ALIGNMENT,
 	.x = ACQUISITTION_STATUS_TEXT_WIDGET_X,
 	.y = ACQUISITTION_STATUS_TEXT_WIDGET_Y,
 	.width = ACQUISITTION_STATUS_TEXT_WIDGET_WIDTH,
@@ -47,7 +47,7 @@ const GraphicsTextWidget acquisittionStatusText  = {
 };
 
 const GraphicsTextWidget zoomScaleText  = {
-	.aligment = ZOOM_SCALE_TEXT_WIDGET_ALIGNMENT,
+	.alignment = ZOOM_SCALE_TEXT_WIDGET_ALIGNMENT,
 	.x = ZOOM_SCALE_TEXT_WIDGET_X,
 	.y = ZOOM_SCALE_TEXT_WIDGET_Y,
 	.width = ZOOM_SCALE_TEXT_WIDGET_WIDTH,
@@ -59,7 +59,7 @@ const GraphicsTextWidget zoomScaleText  = {
 };
 
 const GraphicsTextWidget triggerModeText = {
-	.aligment = TRIGGER_MODE_TEXT_WIDGET_ALIGNMENT,
+	.alignment = TRIGGER_MODE_TEXT_WIDGET_ALIGNMENT,
 	.x = TRIGGER_MODE_TEXT_WIDGET_X,
 	.y = TRIGGER_MODE_TEXT_WIDGET_Y,
 	.width = TRIGGER_MODE_TEXT_WIDGET_WIDTH,
@@ -71,7 +71,7 @@ const GraphicsTextWidget triggerModeText = {
 };
 
 const GraphicsTextWidget triggerEdgeText = {
-	.aligment = TRIGGER_EDGE_TEXT_WIDGET_ALIGNMENT,
+	.alignment = TRIGGER_EDGE_TEXT_WIDGET_ALIGNMENT,
 	.x = TRIGGER_EDGE_TEXT_WIDGET_X,
 	.y = TRIGGER_EDGE_TEXT_WIDGET_Y,
 	.width = TRIGGER_EDGE_TEXT_WIDGET_WIDTH,
@@ -83,7 +83,7 @@ const GraphicsTextWidget triggerEdgeText = {
 };
 
 const GraphicsTextWidget triggerLevelText = {
-	.aligment = TRIGGER_LEVEL_TEXT_WIDGET_ALIGNMENT,
+	.alignment = TRIGGER_LEVEL_TEXT_WIDGET_ALIGNMENT,
 	.x = TRIGGER_LEVEL_TEXT_WIDGET_X,
 	.y = TRIGGER_LEVEL_TEXT_WIDGET_Y,
 	.width = TRIGGER_LEVEL_TEXT_WIDGET_WIDTH,

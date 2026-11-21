@@ -32,6 +32,10 @@
 #include "Timer.h"
 #include "MdmaCopy.h"
 #include "Acquisittion.h"
+#include "Benchmark.h"
+
+#include "GraphicsTextWidget.h"
+#include "GraphicsRectangleWidget.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -109,14 +113,6 @@ static void St7789DriverSetup(St7789Config *config);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void EnableDwt() {
-	CoreDebug->DEMCR |= CoreDebug_DEMCR_TRCENA_Msk;
-	DWT->CYCCNT = 0;
-	DWT->CTRL |= DWT_CTRL_CYCCNTENA_Msk;
-}
-static uint32_t DWT_GetElapsedUs(uint32_t start, uint32_t end) {
-	return (uint32_t) ((end - start) / (SystemCoreClock / 1000000U));
-}
 /* USER CODE END 0 */
 
 /**
@@ -165,7 +161,7 @@ int main(void)
   MX_DMA2D_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-	EnableDwt();
+	DWT_Enable();
 	TimerInit(&htim1, &htim2);
 	AcquisittionInit(&hadc3);
   /* USER CODE END 2 */
@@ -662,9 +658,35 @@ void UiControllerCallback(void *argument)
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
+	static GraphicsRectangleWidget rectangleWidget = {
+	    .x = 0,
+	    .y = 0,
+	    .width = 320,
+	    .height = 240,
+	    .color = 0x0000,
+	    .borderColor = 0xFFFF,
+	    .borderWidth = 1
+	};
+	GraphicsDrawRectangleWidget(&rectangleWidget);
+	char old[] = "Hello STM32 Graphics!";
+	char new[] = "Good";
+	char new1[] = "Goodbye";
+	GraphicsTextWidget textWidget = {
+	    .x = 0,
+	    .y = 0,
+	    .width = 320,
+	    .height = 240,
+	    .content = old,
+	    .alignment = GRAPHICS_ALIGNMENT_CENTER,
+	    .textColor = 0xFFFF,
+	    .background = 0x0000,
+	    .fontPixel = 5
+	};
+	GraphicsDrawTextWidget(&textWidget);
+	GraphicsTextWidgetUpdateContent(&textWidget, old, new);
+	GraphicsTextWidgetUpdateContent(&textWidget, old, new1);
 	for (;;) {
-		UiControllerMsgRead(UiControllerTaskHandle,
-				UI_CONTROLLER_TASK_TIME_FOREVER);
+		UiControllerMsgRead(UiControllerTaskHandle, UI_CONTROLLER_TASK_TIME_FOREVER);
 	}
   /* USER CODE END 5 */
 }
@@ -680,6 +702,7 @@ void DsoCoreTaskCallback(void *argument)
 {
   /* USER CODE BEGIN DsoCoreTaskCallback */
 	/* Infinite loop */
+	ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 	DsoCoreInit();
 	MdmaCopyInit(&hmdma_mdma_channel0_sw_0);
 	for (;;) {
