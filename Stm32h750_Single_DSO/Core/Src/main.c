@@ -709,7 +709,7 @@ void UiControllerCallback(void *argument)
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
+	//GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
@@ -726,15 +726,15 @@ void UiControllerCallback(void *argument)
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
 	for (;;) {
-		UiControllerMsgRead(UiControllerTaskHandle, UI_CONTROLLER_TASK_TIME_FOREVER);
+  		UiControllerMsgRead(UiControllerTaskHandle, UI_CONTROLLER_TASK_TIME_FOREVER);
 	}
   /* USER CODE END 5 */
 }

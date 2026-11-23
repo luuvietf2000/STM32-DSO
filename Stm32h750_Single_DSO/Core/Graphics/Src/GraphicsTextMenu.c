@@ -61,22 +61,24 @@ void GraphicsTextMenuPrevious(GraphicsTextMenuWidget *textMenuConfig){
 	if(GraphicsTextMenuGetRenderState(textMenuConfig) == GRAPHICS_TEXT_MENU_ITEM_UNAVAILABLE)
 		return;
 	uint32_t yOffset = 0;
-	if(textMenuConfig->items.indexStart == 0){
-		if(textMenuConfig->items.selectedIndex == 0)
-			return;
+	GraphicsTextMenuItems *infoItems = &textMenuConfig->items;
+	if(infoItems->selectedIndex == 0){
+		return;
+	}
+	if(infoItems->indexStart < infoItems->selectedIndex){
 		yOffset = GRAPHICS_TEXT_MENU_SELECTED_Y_OFFSET(
-		    textMenuConfig->textStyle.height,
-		    textMenuConfig->spacing,
-		    textMenuConfig->items.selectedIndex,
-			1
+			textMenuConfig->textStyle.height,
+			textMenuConfig->spacing,
+			infoItems->selectedIndex - 1,
+			infoItems->indexStart
 		);
 		GraphicsTextMenuUpdate(
 			textMenuConfig,
 			yOffset,
-			textMenuConfig->items.selectedIndex - 1,
-			textMenuConfig->items.selectedIndex - 1,
-			textMenuConfig->items.selectedIndex - 1,
-			textMenuConfig->items.selectedIndex + 1
+			infoItems->selectedIndex - 1,
+			infoItems->selectedIndex - 1,
+			infoItems->selectedIndex - 1,
+			infoItems->selectedIndex + 1
 		);
 		textMenuConfig->items.selectedIndex--;
 	} else{
@@ -97,39 +99,39 @@ void GraphicsTextMenuPrevious(GraphicsTextMenuWidget *textMenuConfig){
 void GraphicsTextMenuNext(GraphicsTextMenuWidget *textMenuConfig){
 	if(GraphicsTextMenuGetRenderState(textMenuConfig) == GRAPHICS_TEXT_MENU_ITEM_UNAVAILABLE)
 		return;
-	uint32_t items = GraphicsTextMenuGetAvailableItemCount(textMenuConfig);
-	uint32_t indexStartLimit = textMenuConfig->items.size - items;
+	GraphicsTextMenuItems *infoItems = &textMenuConfig->items;
 	uint32_t yOffset = 0;
-	if(textMenuConfig->items.indexStart < indexStartLimit){
-		GraphicsTextMenuUpdate(
-			textMenuConfig,
-			yOffset,
-			textMenuConfig->items.selectedIndex + 1,
-			textMenuConfig->items.indexStart,
-			textMenuConfig->items.indexStart + 1,
-			textMenuConfig->items.indexEnd + 1
-		);
- 		textMenuConfig->items.selectedIndex++;
-		textMenuConfig->items.indexStart++;
-		textMenuConfig->items.indexEnd++;
-	} else{
-		if(textMenuConfig->items.selectedIndex >= (textMenuConfig->items.size - 1))
-			return;
+	if((infoItems->size - 1) == infoItems->selectedIndex){
+		return;
+	}
+	if((infoItems->selectedIndex + 1) < infoItems->indexEnd){
 		yOffset = GRAPHICS_TEXT_MENU_SELECTED_Y_OFFSET(
-		    textMenuConfig->textStyle.height,
-		    textMenuConfig->spacing,
-		    textMenuConfig->items.selectedIndex,
-		    textMenuConfig->items.indexStart
+			textMenuConfig->textStyle.height,
+			textMenuConfig->spacing,
+			infoItems->selectedIndex,
+			infoItems->indexStart
 		);
 		GraphicsTextMenuUpdate(
 			textMenuConfig,
 			yOffset,
-			textMenuConfig->items.selectedIndex + 1,
-			textMenuConfig->items.selectedIndex,
-			textMenuConfig->items.selectedIndex,
-			textMenuConfig->items.selectedIndex + 2
+			infoItems->selectedIndex + 1,
+			infoItems->selectedIndex,
+			infoItems->selectedIndex,
+			infoItems->selectedIndex + 2
 		);
-		textMenuConfig->items.selectedIndex++;
+		infoItems->selectedIndex++;
+	} else{
+		GraphicsTextMenuUpdate(
+			textMenuConfig,
+			yOffset,
+			infoItems->selectedIndex + 1,
+			infoItems->indexStart,
+			infoItems->indexStart + 1,
+			infoItems->indexEnd + 1
+		);
+		infoItems->selectedIndex++;
+		infoItems->indexStart++;
+		infoItems->indexEnd++;
 	}
 }
 
@@ -138,9 +140,10 @@ static void GraphicsTextMenuUpdate(GraphicsTextMenuWidget *textMenuConfig, uint3
 	textWidget.y = y;
 	GraphicsTextMenuItem *itemStartOld = textMenuConfig->items.content + indexStartOld;
 	GraphicsTextMenuItem *itemStartNew = textMenuConfig->items.content + indexStartNew;
+	uint32_t highlight;
 	for(uint32_t i = indexStartNew; i < indexEndNew; i++){
-		textWidget.background = selectedIndex == i ? textMenuConfig->highlightColor : textMenuConfig->textStyle.background;
-		GraphicsTextWidgetUpdateContent(&textWidget, itemStartOld->text, itemStartNew->text);
+		highlight = selectedIndex == i ? textMenuConfig->highlightColor : textMenuConfig->textStyle.background;
+		GraphicsTextWidgetUpdateContent(&textWidget, itemStartOld->text, itemStartNew->text, highlight);
 		textWidget.y += textMenuConfig->textStyle.height + textMenuConfig->spacing;
 		itemStartOld++;
 		itemStartNew++;
