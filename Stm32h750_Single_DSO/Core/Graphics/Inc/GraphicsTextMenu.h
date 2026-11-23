@@ -4,7 +4,10 @@
 #include "GraphicsRectangleWidget.h"
 #include "GraphicsTextWidget.h"
 //----------------------------------------------------------------------------------------------------------//
-
+typedef enum {
+    GRAPHICS_TEXT_MENU_ITEM_AVAILABLE,
+    GRAPHICS_TEXT_MENU_ITEM_UNAVAILABLE
+} GraphicsTextMenuRenderState;
 //----------------------------------------------------------------------------------------------------------//
 typedef struct{
 	char *text;
@@ -32,6 +35,7 @@ typedef struct{
 	GraphicsTextMenuItems items;
 } GraphicsTextMenuWidget;
 //----------------------------------------------------------------------------------------------------------//
-
-
+void GraphicsTextMenuDraw(GraphicsTextMenuWidget *textMenuConfig);
+void GraphicsTextMenuNext(GraphicsTextMenuWidget *textMenuConfig);
+void GraphicsTextMenuPrevious(GraphicsTextMenuWidget *textMenuConfig);
 #endif /* GRAPHICS_INC_GRAPHICSTEXTMENU_H_ */

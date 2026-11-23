@@ -31,4 +31,5 @@ extern uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
 //----------------------------------------------------------------------------------------------------------//
 void GraphicsDrawTextWidget(GraphicsTextWidget *text);
 void GraphicsTextWidgetUpdateContent(GraphicsTextWidget *text, char *textOld, char *textNew);
+void GraphicsTextWidgetSetText(GraphicsTextWidget *text, char *content);
 #endif /* GRAPHICS_INC_GRAPHICSTEXTWIDGET_H_ */

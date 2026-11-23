@@ -6,8 +6,8 @@
 #define GRAPHICS_TEXT_CALCULATO_POSITIVE_DIFFERENCE(one, two)											(one > two ? one - two : 0)
 //----------------------------------------------------------------------------------------------------------//
 static void CalculatorTextDisplaySize(GraphicsTextWidget *text, uint32_t length, uint32_t *columnDisplay, uint32_t *rowDisplay);
-static void ConvertBitMask8bit(uint8_t *data, GraphicsTextWidget *text, uint32_t rowCurrent, uint32_t columnDrawAreaStart, uint32_t columnDrawAreaEnd, uint32_t rowDrawAreaStart, uint32_t rowDrawAreaEnd, uint32_t columnEnd, uint32_t rowEnd);
-static void GraphicsRenderTextContent(GraphicsTextWidget *text, uint16_t xDisplay, uint16_t yDisplay, uint16_t columnDisplay, uint16_t rowDisplay, uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
+static void ConvertBitMask8bit(uint8_t *data, char *content, GraphicsTextWidget *text, uint32_t rowCurrent, uint32_t columnDrawAreaStart, uint32_t columnDrawAreaEnd, uint32_t rowDrawAreaStart, uint32_t rowDrawAreaEnd, uint32_t columnEnd, uint32_t rowEnd);
+static void GraphicsRenderTextContent(GraphicsTextWidget *text, char *content, uint16_t xDisplay, uint16_t yDisplay, uint16_t columnDisplay, uint16_t rowDisplay, uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd);
 static void GraphicsCalculateTextDisplayPosition(GraphicsTextWidget *text, uint32_t length, uint32_t *xDisplay, uint32_t *yDisplay, uint32_t *columnDisplay, uint32_t *rowDisplay);
 //----------------------------------------------------------------------------------------------------------//
 
@@ -27,6 +27,7 @@ void GraphicsDrawTextWidget(GraphicsTextWidget *text){
 	);
 	GraphicsRenderTextContent(
 		text,
+		text->content,
 		xDisplay,
 		yDisplay,
 		columnDisplay,
@@ -53,7 +54,7 @@ static void GraphicsCalculateTextDisplayPosition(GraphicsTextWidget *text, uint3
 	);
 }
 
-static void GraphicsRenderTextContent(GraphicsTextWidget *text, uint16_t xDisplay, uint16_t yDisplay, uint16_t columnDisplay, uint16_t rowDisplay, uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd){
+static void GraphicsRenderTextContent(GraphicsTextWidget *text, char *content, uint16_t xDisplay, uint16_t yDisplay, uint16_t columnDisplay, uint16_t rowDisplay, uint16_t columnStart, uint16_t columnEnd, uint16_t rowStart, uint16_t rowEnd){
     if(rowDisplay == 0 || columnDisplay == 0)
         return;
     GraphicsSetAreaRequest(
@@ -73,6 +74,7 @@ static void GraphicsRenderTextContent(GraphicsTextWidget *text, uint16_t xDispla
         row = i + (preferredSize  == size ? rowDisplay : 1);
         ConvertBitMask8bit(
             buffer,
+			content,
             text,
             i,
             columnStart,
@@ -94,6 +96,11 @@ static void GraphicsRenderTextContent(GraphicsTextWidget *text, uint16_t xDispla
         GraphicsTransfer( data, size, GRAPHICS_TEXT_TRANSFER_COUNT);
     }
 }
+void GraphicsTextWidgetSetText(GraphicsTextWidget *text, char *content){
+	GraphicsTextWidgetUpdateContent(text, text->content, content);
+	strcpy(text->content, content);
+}
+
 void GraphicsTextWidgetUpdateContent(GraphicsTextWidget *text, char *textOld, char *textNew){
 	GraphicsSetMode(GRAPHICS_DMA2D_MODE_BLEND_BG);
 	uint32_t row, column;
@@ -107,11 +114,11 @@ void GraphicsTextWidgetUpdateContent(GraphicsTextWidget *text, char *textOld, ch
 	GraphicsCalculateTextDisplayPosition(text, lengthMax, &xDisplay, &yDisplay, &column, &row);
 	GraphicsCalculateTextDisplayPosition(text, lengthNew, &xDisplayNew, &yDisplayNew, &columnDisplayNew, &rowDisplayNew);
 
-	strcpy(textOld, textNew);
 	uint32_t columnStart = GRAPHICS_TEXT_CALCULATO_POSITIVE_DIFFERENCE(xDisplayNew, xDisplay);
 	uint32_t rowStart = GRAPHICS_TEXT_CALCULATO_POSITIVE_DIFFERENCE(yDisplayNew, yDisplay);
 	GraphicsRenderTextContent(
 		text,
+		textNew,
 		xDisplay,
 		yDisplay,
 		column,
@@ -124,7 +131,7 @@ void GraphicsTextWidgetUpdateContent(GraphicsTextWidget *text, char *textOld, ch
 }
 
 
-static void ConvertBitMask8bit(uint8_t *data, GraphicsTextWidget *text, uint32_t rowCurrent, uint32_t columnDrawAreaStart, uint32_t columnDrawAreaEnd, uint32_t rowDrawAreaStart, uint32_t rowDrawAreaEnd, uint32_t columnEnd, uint32_t rowEnd){
+static void ConvertBitMask8bit(uint8_t *data, char *content, GraphicsTextWidget *text, uint32_t rowCurrent, uint32_t columnDrawAreaStart, uint32_t columnDrawAreaEnd, uint32_t rowDrawAreaStart, uint32_t rowDrawAreaEnd, uint32_t columnEnd, uint32_t rowEnd){
 	uint32_t pos = 0;
 	uint32_t indexContent, indexBitMap, indexColumnBitMap, columnBitMap, shift;
 	uint32_t indexData = 0;
@@ -141,7 +148,7 @@ static void ConvertBitMask8bit(uint8_t *data, GraphicsTextWidget *text, uint32_t
 					data[indexData] = GRAPHICS_BIT_MASK_8_BIT_MIN;
 				else {
 					indexContent = columnOffset / text->fontPixel / GRAPHICS_TEXT_COLUMN_SIZE_DEFFAULT;
-					indexBitMap = text->content[indexContent] * GRAPHICS_TEXT_FONT_COLUMN_SIZE;
+					indexBitMap = content[indexContent] * GRAPHICS_TEXT_FONT_COLUMN_SIZE;
 					indexColumnBitMap = indexBitMap + pos;
 					columnBitMap = GRAPHICS_ACSII(indexColumnBitMap);
 					data[indexData] = GRAPHICS_GET_BIT(columnBitMap, shift, GRAPHICS_TEXT_MASK) == GRAPHICS_TEXT_MASK ? GRAPHICS_BIT_MASK_8_BIT_MAX : GRAPHICS_BIT_MASK_8_BIT_MIN;

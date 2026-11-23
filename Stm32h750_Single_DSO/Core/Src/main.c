@@ -36,6 +36,7 @@
 
 #include "GraphicsTextWidget.h"
 #include "GraphicsRectangleWidget.h"
+#include "GraphicsTextMenu.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -658,33 +659,80 @@ void UiControllerCallback(void *argument)
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
-	static GraphicsRectangleWidget rectangleWidget = {
+	static GraphicsTextMenuItem menuItems[] = {
+	    { .text = "Oscilloscope" },
+	    { .text = "Signal Generator" },
+	    { .text = "Protocol Analyzer" },
+	    { .text = "UART Monitor" },
+	    { .text = "SPI Monitor" },
+	    { .text = "I2C Monitor" },
+	    { .text = "Settings" },
+	    { .text = "About" },
+	    { .text = "GPIO Monitor" },
+	    { .text = "PWM Generator" },
+	    { .text = "ADC Monitor" }
+	};
+	static GraphicsTextMenuWidget textMenu = {
 	    .x = 0,
 	    .y = 0,
 	    .width = 320,
 	    .height = 240,
-	    .color = 0x0000,
-	    .borderColor = 0xFFFF,
-	    .borderWidth = 1
+
+	    .spacing = 0,
+	    .padding = 0,
+
+	    .background = 0x00,
+	    .highlightColor = 0x00FF,
+
+	    .textStyle = {
+	        .x = 0,
+	        .y = 0,
+	        .width = 320,
+	        .height = 24,
+	        .content = NULL,
+	        .alignment = GRAPHICS_ALIGNMENT_MIDDLE_LEFT,
+	        .textColor = 0xFFFF,
+	        .background = 0x00,
+	        .fontPixel = 2
+	    },
+	    .itemsDisplay = 10,
+	    .items = {
+	        .content = menuItems,
+	        .size = sizeof(menuItems) / sizeof(menuItems[0]),
+	        .indexStart = 0,
+	        .indexEnd = 4,
+	        .selectedIndex = 0
+	    }
 	};
-	GraphicsDrawRectangleWidget(&rectangleWidget);
-	char old[] = "Hello STM32 Graphics!";
-	char new[] = "Good";
-	char new1[] = "Goodbye";
-	GraphicsTextWidget textWidget = {
-	    .x = 0,
-	    .y = 0,
-	    .width = 320,
-	    .height = 240,
-	    .content = old,
-	    .alignment = GRAPHICS_ALIGNMENT_CENTER,
-	    .textColor = 0xFFFF,
-	    .background = 0x0000,
-	    .fontPixel = 5
-	};
-	GraphicsDrawTextWidget(&textWidget);
-	GraphicsTextWidgetUpdateContent(&textWidget, old, new);
-	GraphicsTextWidgetUpdateContent(&textWidget, old, new1);
+	GraphicsTextMenuDraw(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+
+
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
 	for (;;) {
 		UiControllerMsgRead(UiControllerTaskHandle, UI_CONTROLLER_TASK_TIME_FOREVER);
 	}
