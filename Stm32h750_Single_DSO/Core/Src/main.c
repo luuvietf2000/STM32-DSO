@@ -683,7 +683,7 @@ void UiControllerCallback(void *argument)
 
 	    .background = 0x00,
 	    .highlightColor = 0x00FF,
-
+		.selectionState = GRAPHICS_MENU_ITEM_SELECTED,
 	    .textStyle = {
 	        .x = 0,
 	        .y = 0,
@@ -695,8 +695,10 @@ void UiControllerCallback(void *argument)
 	        .background = 0x00,
 	        .fontPixel = 2
 	    },
+		.lastSelectedColor = 0xFF00,
 	    .itemsDisplay = 10,
 	    .items = {
+	    	.lastSelectedIndex = 1,
 	        .content = menuItems,
 	        .size = sizeof(menuItems) / sizeof(menuItems[0]),
 	        .indexStart = 0,
@@ -709,26 +711,32 @@ void UiControllerCallback(void *argument)
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
-	//GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsTextMenuSelected(&textMenu);
+	GraphicsTextMenuSelected(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuSelected(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuSelected(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuDraw(&textMenu);
 
-
 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuNext(&textMenu);
+	GraphicsTextMenuSelected(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
 	GraphicsTextMenuPrevious(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);
+ 	GraphicsTextMenuSelected(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);
  	GraphicsTextMenuPrevious(&textMenu);

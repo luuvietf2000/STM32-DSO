@@ -8,6 +8,11 @@ typedef enum {
     GRAPHICS_TEXT_MENU_ITEM_AVAILABLE,
     GRAPHICS_TEXT_MENU_ITEM_UNAVAILABLE
 } GraphicsTextMenuRenderState;
+
+typedef enum {
+    GRAPHICS_MENU_ITEM_UNSELECTED,
+    GRAPHICS_MENU_ITEM_SELECTED
+} GraphicsMenuItemSelectionState;
 //----------------------------------------------------------------------------------------------------------//
 typedef struct{
 	char *text;
@@ -19,6 +24,7 @@ typedef struct{
 	uint32_t indexStart;
 	uint32_t indexEnd;
 	uint32_t selectedIndex;
+	uint32_t lastSelectedIndex;
 } GraphicsTextMenuItems;
 
 typedef struct{
@@ -30,7 +36,9 @@ typedef struct{
 	uint32_t padding;
 	uint32_t background;
 	uint32_t highlightColor;
+	uint32_t lastSelectedColor;
 	GraphicsTextWidget textStyle;
+	GraphicsMenuItemSelectionState selectionState;
 	uint32_t itemsDisplay;
 	GraphicsTextMenuItems items;
 } GraphicsTextMenuWidget;
@@ -38,4 +46,5 @@ typedef struct{
 void GraphicsTextMenuDraw(GraphicsTextMenuWidget *textMenuConfig);
 void GraphicsTextMenuNext(GraphicsTextMenuWidget *textMenuConfig);
 void GraphicsTextMenuPrevious(GraphicsTextMenuWidget *textMenuConfig);
+void GraphicsTextMenuSelected(GraphicsTextMenuWidget *textMenuConfig);
 #endif /* GRAPHICS_INC_GRAPHICSTEXTMENU_H_ */
