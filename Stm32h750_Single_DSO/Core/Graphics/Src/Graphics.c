@@ -14,7 +14,8 @@ static void Dma2dTransferCompleteCallback(DMA2D_HandleTypeDef *ptr);
 static void GraphicsSleepTask();
 static void GraphicsSetDma2dModeBlendBg(GraphicsDma2dClutMode mode);
 static void GraphicsSetDma2dModeFill();
-static uint32_t GraphicsSwapByte(uint32_t color);
+static uint32_t GraphicsConvertRgb565(uint32_t color);
+static void GraphicsSetDma2dOutputSwapByte(GraphicsDma2dOutputSwapByte state);
 //----------------------------------------------------------------------------------------------------------//
 __attribute__((section(".dma_buffer")))
 uint8_t graphicsBuffer[GRAPHICS_BUFFER_SIZE];
@@ -26,7 +27,15 @@ void GraphicsDma2dSetOffsetPixel(uint32_t size){
 	CLEAR_BIT(graphicsDma2d->Instance->CR, DMA2D_CR_LOM);
 	MODIFY_REG(graphicsDma2d->Instance->OOR, DMA2D_OOR_LO, size);
 }
-static uint32_t GraphicsSwapByte(uint32_t color){
+static void GraphicsSetDma2dOutputSwapByte(GraphicsDma2dOutputSwapByte state){
+    if(state == GRAPHICS_DMA2D_OUTPUT_SWAP_BYTE_ENABLE)
+        SET_BIT(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_SB);
+    else
+        CLEAR_BIT(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_SB);
+}
+
+
+static uint32_t GraphicsConvertRgb565(uint32_t color){
 	uint32_t red = color & GRAPHICS_RGB888_RED;
 	uint32_t green = color & GRAPHICS_RGB888_GREEN;
 	uint32_t blue = color & GRAPHICS_RGB888_BLUE;
@@ -38,7 +47,7 @@ void GraphicsDma2dFillModeStart(uint32_t height, uint32_t width, uint8_t *addres
 	  WRITE_REG(graphicsDma2d->Instance->OMAR, (uint32_t) address);
 	  WRITE_REG(
 		  graphicsDma2d->Instance->OCOLR,
-		  GraphicsSwapByte(color)
+		  GraphicsConvertRgb565(color)
 	  );
 	__HAL_DMA2D_ENABLE_IT(graphicsDma2d, DMA2D_IT_TC | DMA2D_IT_TE | DMA2D_IT_CE);
 	__HAL_DMA2D_ENABLE(graphicsDma2d);
@@ -88,6 +97,7 @@ void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t heig
 
 static void GraphicsSetDma2dModeFill(){
 	graphicsDma2d->Init.Mode = DMA2D_R2M;
+	GraphicsSetDma2dOutputSwapByte(GRAPHICS_DMA2D_OUTPUT_SWAP_BYTE_DISABLE);
 	MODIFY_REG(graphicsDma2d->Instance->CR, DMA2D_CR_MODE, DMA2D_R2M);
 	graphicsDma2d->Init.ColorMode = DMA2D_OUTPUT_RGB565;
 	MODIFY_REG(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_CM, DMA2D_OUTPUT_RGB565);
@@ -97,13 +107,14 @@ static void GraphicsSetDma2dModeFill(){
 
 static void GraphicsSetDma2dModeBlendBg(GraphicsDma2dClutMode mode){
 	graphicsDma2d->Init.Mode = DMA2D_M2M_BLEND_BG;
+	GraphicsSetDma2dOutputSwapByte(GRAPHICS_DMA2D_OUTPUT_SWAP_BYTE_ENABLE);
 	MODIFY_REG(graphicsDma2d->Instance->CR, DMA2D_CR_MODE, DMA2D_M2M_BLEND_BG);
 	MODIFY_REG(graphicsDma2d->Instance->OPFCCR, DMA2D_OPFCCR_CM, DMA2D_OUTPUT_RGB565);
 	MODIFY_REG(graphicsDma2d->Instance->FGPFCCR, DMA2D_FGPFCCR_CM | DMA2D_FGPFCCR_AM, mode | DMA2D_NO_MODIF_ALPHA);
 	MODIFY_REG(graphicsDma2d->Instance->FGOR, DMA2D_FGOR_LO, 0);
 }
 
-void GraphiscsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, uint32_t rowParent, uint32_t columnChild, uint32_t rowChild, uint32_t xSet, uint32_t ySet, uint32_t *xDisplay, uint32_t *yDisplay){
+void GraphicsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, uint32_t rowParent, uint32_t columnChild, uint32_t rowChild, uint32_t xSet, uint32_t ySet, uint32_t *xDisplay, uint32_t *yDisplay){
 	uint32_t x, y;
 	switch (alignment) {
 		case GRAPHICS_ALIGNMENT_TOP_LEFT:

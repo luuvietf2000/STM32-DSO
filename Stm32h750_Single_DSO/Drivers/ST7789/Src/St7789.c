@@ -41,7 +41,6 @@ static HAL_StatusTypeDef St7789WriteCommand(uint8_t command){
 }
 
 HAL_StatusTypeDef St7789WriteData(uint8_t *data, uint32_t size){
-	ulTaskNotifyTake(pdTRUE, 0);
 	HAL_StatusTypeDef result = HAL_SPI_Transmit_DMA(config.spi, data, size);
     if (result != HAL_OK){
         return result;

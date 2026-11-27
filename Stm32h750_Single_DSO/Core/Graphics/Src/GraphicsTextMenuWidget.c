@@ -1,4 +1,4 @@
-#include <GraphicsTextMenu.h>
+#include <GraphicsTextMenuWidget.h>
 #include "GraphicsRectangleWidget.h"
 //----------------------------------------------------------------------------------------------------------//
 #define GRAPHICS_TEXT_MENU_BORDER_WIDTH_DEFFAULT														0

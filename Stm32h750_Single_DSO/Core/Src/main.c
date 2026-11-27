@@ -17,6 +17,7 @@
  */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <GraphicsTextMenuWidget.h>
 #include "main.h"
 #include "cmsis_os.h"
 
@@ -34,9 +35,7 @@
 #include "Acquisittion.h"
 #include "Benchmark.h"
 
-#include "GraphicsTextWidget.h"
-#include "GraphicsRectangleWidget.h"
-#include "GraphicsTextMenu.h"
+#include "GraphicsDigitSectorWidget.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -659,88 +658,41 @@ void UiControllerCallback(void *argument)
   /* USER CODE BEGIN 5 */
 	/* Infinite loop */
 	GraphicsInit(&hdma2d);
-	static GraphicsTextMenuItem menuItems[] = {
-	    { .text = "Oscilloscope" },
-	    { .text = "Signal Generator" },
-	    { .text = "Protocol Analyzer" },
-	    { .text = "UART Monitor" },
-	    { .text = "SPI Monitor" },
-	    { .text = "I2C Monitor" },
-	    { .text = "Settings" },
-	    { .text = "About" },
-	    { .text = "GPIO Monitor" },
-	    { .text = "PWM Generator" },
-	    { .text = "ADC Monitor" }
-	};
-	static GraphicsTextMenuWidget textMenu = {
+	static GraphicsDigitSectorWidget digitSectorWidget = {
 	    .x = 0,
 	    .y = 0,
 	    .width = 320,
 	    .height = 240,
-
-	    .spacing = 0,
-	    .padding = 0,
-
 	    .background = 0x00,
-	    .highlightColor = 0x00FF,
-		.selectionState = GRAPHICS_MENU_ITEM_SELECTED,
-	    .textStyle = {
-	        .x = 0,
-	        .y = 0,
-	        .width = 320,
-	        .height = 24,
-	        .content = NULL,
-	        .alignment = GRAPHICS_ALIGNMENT_MIDDLE_LEFT,
-	        .textColor = 0xFFFF,
-	        .background = 0x00,
-	        .fontPixel = 2
+	    .itemsDisplay = 3,
+	    .padding = 10,
+	    .selectorControlStyle = {
+	        .width = 70,
+	        .height = 200,
+	        .borderColor = 0xFF,
+	        .borderWidth = 5,
+	        .fontPixel = 3,
+	        .increment = {
+	            .size = 4,
+	            .color = 0xFF0000
+	        },
+	        .decrement = {
+	            .size = 4,
+	            .color = 0x0000FF
+	        },
+	        .background = 0xFFFFFF,
+	        .borderHighlightColor = 0xF0F0,
+	        .textColor = 0x0000,
+	        .paddingLeftRight = 10,
+			.paddingTopBottom = 10
 	    },
-		.lastSelectedColor = 0xFF00,
-	    .itemsDisplay = 10,
-	    .items = {
-	    	.lastSelectedIndex = 1,
-	        .content = menuItems,
-	        .size = sizeof(menuItems) / sizeof(menuItems[0]),
-	        .indexStart = 0,
-	        .indexEnd = 4,
-	        .selectedIndex = 0
-	    }
+	    .value = 1234,
+	    .maxValue = 6000,
+	    .minValue = 1,
+	    .spacing = 5,
+	    .selectedIndex = 0
 	};
-	GraphicsTextMenuDraw(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuSelected(&textMenu);
-	GraphicsTextMenuSelected(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuSelected(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuSelected(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuDraw(&textMenu);
-
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuNext(&textMenu);
-	GraphicsTextMenuSelected(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuSelected(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
- 	GraphicsTextMenuPrevious(&textMenu);
-	GraphicsTextMenuPrevious(&textMenu);
+	GraphicsDrawDigitSectorWidget(&digitSectorWidget);
 	for (;;) {
   		UiControllerMsgRead(UiControllerTaskHandle, UI_CONTROLLER_TASK_TIME_FOREVER);
 	}

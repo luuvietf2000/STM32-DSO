@@ -1,5 +1,5 @@
-#ifndef GRAPHICS_INC_GRAPHICSTEXTMENU_H_
-#define GRAPHICS_INC_GRAPHICSTEXTMENU_H_
+#ifndef GRAPHICS_INC_GRAPHICSTEXTMENUWIDGET_H_
+#define GRAPHICS_INC_GRAPHICSTEXTMENUWIDGET_H_
 
 #include "GraphicsRectangleWidget.h"
 #include "GraphicsTextWidget.h"
@@ -47,4 +47,4 @@ void GraphicsTextMenuDraw(GraphicsTextMenuWidget *textMenuConfig);
 void GraphicsTextMenuNext(GraphicsTextMenuWidget *textMenuConfig);
 void GraphicsTextMenuPrevious(GraphicsTextMenuWidget *textMenuConfig);
 void GraphicsTextMenuSelected(GraphicsTextMenuWidget *textMenuConfig);
-#endif /* GRAPHICS_INC_GRAPHICSTEXTMENU_H_ */
+#endif /* GRAPHICS_INC_GRAPHICSTEXTMENUWIDGET_H_ */

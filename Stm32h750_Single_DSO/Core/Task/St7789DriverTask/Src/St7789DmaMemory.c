@@ -98,7 +98,6 @@ static void St7789DmaMemoryMergeBlock(uint32_t start, uint32_t end){
 	St7789DmaMemoryBlock *block = St7789DmaMemoryGetBlockNotUsed();
 	block->start = start;
 	block->end = end;
-
 	if(headBlockFree == NULL){
 		headBlockFree = block;
 	    block->per = NULL;
@@ -114,7 +113,8 @@ static void St7789DmaMemoryMergeBlock(uint32_t start, uint32_t end){
 		if(current != NULL)
 			current->per = block;
 	}
-	St7789DmaMemoryTaskWake(current->end - current->start + ST7789_DMA_MEMORY_ONE_INDEX);
+	//St7789DmaMemoryTaskWake(current->end - current->start + ST7789_DMA_MEMORY_ONE_INDEX);
+	St7789DmaMemoryTaskWake(end - start + ST7789_DMA_MEMORY_ONE_INDEX);
 }
 
 static void St7789DmaMemoryPushBlockNotUsed(St7789DmaMemoryBlock *block){
@@ -141,11 +141,9 @@ static uint32_t St7789DmaMemoryAllocBlock(St7789DmaMemoryBlock *block, uint32_t 
 			pre->next = next;
 		else
 			headBlockFree = next;
-
 		if (next != NULL)
 			next->per = pre;
 		St7789DmaMemoryPushBlockNotUsed(block);
-
 	}
 	return index;
 }

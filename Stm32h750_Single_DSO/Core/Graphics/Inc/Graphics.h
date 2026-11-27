@@ -5,6 +5,7 @@
 #include "GraphicsConf.h"
 //----------------------------------------------------------------------------------------------------------//
 #define GRAPHICS_COLOR_BYTE																	8
+#define GRAPHICS_SET_RGB888(red, green, blue) 												(((uint32_t)(red) << 16U) | ((uint32_t)(green) << 8U) | (uint32_t)(blue))
 #if(GRAPHICS_RGB_FORMAT == GRAPHICS_RGB565_FORMAT)
 	#define GRAPHICS_SET_COLOR(red, green, blue)											((red << (GRAPHICS_COLOR_RED * GRAPHICS_COLOR_BYTE)\
 																							| green << (GRAPHICS_COLOR_GREEN * GRAPHICS_COLOR_BYTE) \
@@ -59,6 +60,11 @@ typedef enum{
 	GRAPHICS_DMA2D_USING_CLUT                               = DMA2D_INPUT_L8,
 	GRAPHICS_DMA2D_NOT_USING_CLUT							= DMA2D_INPUT_A8
 } GraphicsDma2dClutMode;
+
+typedef enum {
+    GRAPHICS_DMA2D_OUTPUT_SWAP_BYTE_DISABLE = 0,
+    GRAPHICS_DMA2D_OUTPUT_SWAP_BYTE_ENABLE
+} GraphicsDma2dOutputSwapByte;
 //----------------------------------------------------------------------------------------------------------//
 
 typedef struct{
@@ -80,6 +86,6 @@ void GraphicsDrawRectangle(uint32_t x, uint32_t y, uint32_t width, uint32_t heig
 void GraphicsConvertColors(uint32_t foreground, uint32_t background, uint8_t *bitMask, uint8_t *destination, uint32_t width, uint32_t height);
 void GraphicsInit(DMA2D_HandleTypeDef *dma2d);
 void GraphicsFillColor(uint32_t color, uint8_t *address, uint32_t size);
-void GraphiscsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, uint32_t rowParent, uint32_t columnChild, uint32_t rowChild, uint32_t xSet, uint32_t ySet, uint32_t *xDisplay, uint32_t *yDisplay);
+void GraphicsSetAlignment(GraphicsAlignment alignment, uint32_t columnParent, uint32_t rowParent, uint32_t columnChild, uint32_t rowChild, uint32_t xSet, uint32_t ySet, uint32_t *xDisplay, uint32_t *yDisplay);
 //----------------------------------------------------------------------------------------------------------//
 #endif /* GRAPHICS_INC_GRAPHICS_H_ */

@@ -37,7 +37,7 @@ void GraphicsDrawTextWidget(GraphicsTextWidget *text){
 
 static void GraphicsCalculateTextDisplayPosition(GraphicsTextWidget *text, uint32_t length, uint32_t *xDisplay, uint32_t *yDisplay, uint32_t *columnDisplay, uint32_t *rowDisplay){
     CalculatorTextDisplaySize(text, length, columnDisplay, rowDisplay);
-    GraphiscsSetAlignment(
+    GraphicsSetAlignment(
     	text->alignment,
 		text->width,
 		text->height,
@@ -50,32 +50,50 @@ static void GraphicsCalculateTextDisplayPosition(GraphicsTextWidget *text, uint3
 	);
 }
 
-static void GraphicsRenderTextContent(GraphicsTextWidget *text, char *content, uint32_t bgColor, uint16_t xDisplay, uint16_t yDisplay, uint16_t columnDisplay, uint16_t rowDisplay){
-    if(rowDisplay == 0 || columnDisplay == 0)
+static void GraphicsRenderTextContent(GraphicsTextWidget *text, char *content,
+                                      uint32_t bgColor,
+                                      uint16_t xDisplay, uint16_t yDisplay,
+                                      uint16_t columnDisplay, uint16_t rowDisplay){
+
+    if(rowDisplay == 0U || columnDisplay == 0U)
         return;
+
     GraphicsSetAreaRequest(
-        xDisplay,
-        xDisplay + columnDisplay,
-        yDisplay,
-        yDisplay + rowDisplay
+        xDisplay, xDisplay + columnDisplay,
+        yDisplay, yDisplay + rowDisplay
     );
+
     GraphicsSetMode(GRAPHICS_DMA2D_MODE_BLEND_BG);
-	uint32_t preferredSize  = GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_PIXEL(columnDisplay, rowDisplay));
-	uint32_t fallbackSize = GRAPHICS_GET_MIN(GRAPHICS_GET_PIXEL_BYTE(GRAPHICS_GET_MAX(columnDisplay, rowDisplay)), GRAPHICS_BUFFER_SIZE);
+
+    uint32_t preferredSize = GRAPHICS_GET_PIXEL_BYTE(
+        GRAPHICS_GET_PIXEL(columnDisplay, rowDisplay)
+    );
+
+    uint32_t fallbackSize = GRAPHICS_GET_MIN(
+        GRAPHICS_GET_PIXEL_BYTE(columnDisplay),
+        GRAPHICS_BUFFER_SIZE
+    );
     uint8_t *buffer = graphicsBuffer;
     uint8_t *data = NULL;
-    uint32_t size = preferredSize ;
-    uint32_t row = 0;
-    for(uint32_t i = 0; i < preferredSize / size; i++){
-        size = GraphicsGetPointerMemory(&data, size, fallbackSize);
-        row = i + (preferredSize  == size ? rowDisplay : 1);
+    uint32_t remainingSize = preferredSize;
+    uint32_t size;
+    uint32_t rowCurrent;
+
+    while(remainingSize > 0U){
+        size = GraphicsGetPointerMemory(
+            &data,
+            remainingSize,
+            fallbackSize
+        );
+
+        rowCurrent = (preferredSize - remainingSize) / fallbackSize;
         ConvertBitMask8bit(
             buffer,
-			content,
+            content,
             text,
-            i,
+            rowCurrent,
             columnDisplay,
-            row
+            rowCurrent + size / fallbackSize
         );
 
         GraphicsConvertColors(
@@ -84,11 +102,19 @@ static void GraphicsRenderTextContent(GraphicsTextWidget *text, char *content, u
             buffer,
             data,
             size / GRAPHICS_PIXEL_PER_BYTE,
-            1
+            1U
         );
-        GraphicsTransfer( data, size, GRAPHICS_TEXT_TRANSFER_COUNT);
+
+        GraphicsTransfer(
+            data,
+            size,
+            GRAPHICS_TEXT_TRANSFER_COUNT
+        );
+
+        remainingSize -= size;
     }
 }
+
 void GraphicsTextWidgetSetText(GraphicsTextWidget *text, char *content){
 	GraphicsTextWidgetUpdateContent(text, text->content, content, text->background);
 	strcpy(text->content, content);
